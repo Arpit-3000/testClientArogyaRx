@@ -1,16 +1,17 @@
 // components/Home.js
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Header from '../components/Header';
-import Midcard from '../components/Midcard';
-import Midi from '../components/Midi';
-import Midinext from '../components/Midinext';
-import Middileone from '../components/Middileone';
-import Middletwo from '../components/Middletwo';
-import Email from '../components/Email';
-import Customer from '../components/Customer';
-import Question from '../components/Question';
-import Border from '../components/Border';
+import Navbar from '../components/home/Navbar';
+import Header from '../components/home/Header';
+import Midcard from '../components/home/Midcard';
+import Midi from '../components/home/Midi';
+import Midinext from '../components/home/Midinext';
+import Middileone from '../components/home/Middileone';
+import Middletwo from '../components/home/Middletwo';
+import Email from '../components/home/Email';
+import Customer from '../components/home/Customer';
+import Question from '../components/home/Question';
+import Border from '../components/home/Border';
+
 
 const Home = () => {
     return (
@@ -26,6 +27,7 @@ const Home = () => {
             <Customer/>
             <Question/>
             <Border/>
+           
         </div>
     )
 }
