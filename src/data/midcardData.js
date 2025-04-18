@@ -1,25 +1,33 @@
 // data/Midcarddata.js
+import medicineImage from '../assets/b1.png';
+import labTestImage from '../assets/b2.png';
+import doctorsImage from '../assets/b3.png';
+import recordsImage from '../assets/b4.png';
+
+
 const midcardData = [
     {
-        title: "Medicines",
-        description: "Essentials at your doorstep",
-        imageUrl: "https://source.unsplash.com/featured/?medicine", // Replace with actual image URLs
+      title: "Medicines",
+      // 2. USE the imported variable for imageUrl
+      imageUrl: medicineImage,
+      description: "Essentials at your doorstep",
     },
     {
-        title: "Lab Tests",
-        description: "Sample pickup at your home",
-        imageUrl: "https://source.unsplash.com/featured/?lab",     // Replace with actual image URLs
+      title: "Lab Tests",
+      imageUrl: labTestImage,
+      description: "Sample pickup at your home",
     },
     {
-        title: "Doctors",
-        description: "Confirmed appointments",
-        imageUrl: "https://source.unsplash.com/featured/?doctor",  // Replace with actual image URLs
+      title: "Doctors",
+      imageUrl: doctorsImage,
+      description: "Confirmed appointments",
     },
     {
-        title: "Add Health Records",
-        description: "Connect within 60 secs",
-        imageUrl: "https://source.unsplash.com/featured/?health",    // Replace with actual image URLs
+      title: "Add Health Records",
+      imageUrl: recordsImage,
+      description: "Connect within 60 secs",
     },
-];
-
-export default midcardData;
+    // ... other card data objects
+  ];
+  
+  export default midcardData;

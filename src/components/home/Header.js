@@ -1,24 +1,33 @@
-// components/Header.js
-import React from 'react';
+import React, { useState } from "react";
+import her from "../../assets/her.png";
+import { useNavigate } from "react-router-dom";
 
+const Hero = () => {
+  const navigate = useNavigate();
 
-const Header = () => {
   return (
-    <header className="bg-gray-100 py-20">
-      <div className="container mx-auto flex items-center justify-around">
-        <div className="text-left">
-          <h1 className="text-4xl font-bold text-green-600 mb-4">Holistic Healthcare Experience</h1>
-          <button className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600">Book now</button>
+    <div
+      className="bg-cover bg-center bg-no-repeat w-full min-h-[80vh] pt-[6rem] lg:px-20 px-10 flex justify-start items-center"
+      style={{ backgroundImage: `url(${her})` }}
+    >
+      <div className="flex flex-col justify-center items-start gap-10 lg:w-[60%]">
+        <div className="flex flex-col justify-center items-start">
+          <h1 className="lg:text-6xl md:text-4xl text-2xl font-semibold">
+            Holistic Healthcare
+          </h1>
+          <h1 className="lg:text-6xl md:text-4xl text-2xl font-semibold">
+            Experience
+          </h1>
         </div>
-        <div>
-            <image>
-                
-            </image>
-        </div>
-  
+        <button
+          onClick={() => navigate("/labs")}
+          className="px-16 ml-4 bg-black text-white py-4 lg:text-xl text-lg font-semibold rounded-[20px] italic shadow-md hover:shadow-xl hover:scale-[1.05] transition-all duration-300 ease-in-out"
+        >
+          Book now
+        </button>
       </div>
-    </header>
+    </div>
   );
 };
 
-export default Header;
+export default Hero;
