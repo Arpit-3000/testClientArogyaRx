@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-// import Pharmacy from './components/Pharmacy';
+import Pharmacy from './pages/Pharmacy';
 // import Medicines from './components/Medicines';
 // import LabTest from './components/LabTest';
 // import Contact from './components/Contact';
@@ -15,8 +15,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/pharmacy" element={<Pharmacy />} />
-        <Route path="/medicines" element={<Medicines />} />
+        <Route path="/pharmacy" element={<Pharmacy />} />
+        {/*<Route path="/medicines" element={<Medicines />} />
         <Route path="/labtest" element={<LabTest />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/hospitals" element={<Hospitals />} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
-import customerData from '../data/customerData';
+import customerData from '../../data/customerData';
 
 const CARDS_PER_PAGE = 3;
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PlusCircle, MinusCircle } from 'lucide-react';
-import questionData from '../data/questionData';
+import questionData from '../../data/questionData'; // Corrected import path
 
 const Question = () => {
     const [activeIndex, setActiveIndex] = useState(null);

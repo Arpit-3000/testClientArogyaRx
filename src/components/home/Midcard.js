@@ -1,6 +1,6 @@
 // components/Midcard.js
 import React from 'react';
-import midcardData from '../data/midcardData'; // adjust path based on your structure
+import midcardData from '../../data/midcardData'; // adjust path based on your structure
 
 const Midcard = () => {
     return (
