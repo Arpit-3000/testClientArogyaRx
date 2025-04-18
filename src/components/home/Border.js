@@ -7,9 +7,9 @@ const Border = () => {
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
                 {/* HealthSaathi Info */}
                 <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">HEALTHSAATHI</h3>
+                    <h3 className="text-lg font-semibold text-white mb-4">AROGYA RX</h3>
                     <p className="text-sm">
-                        Meet HealthSaathi! We&apos;re here to revolutionize healthcare and bring your clinic experience online.
+                        Meet Arogya RX! We&apos;re here to revolutionize healthcare and bring your clinic experience online.
                     </p>
                 </div>
 

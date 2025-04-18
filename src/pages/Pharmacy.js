@@ -3,7 +3,9 @@ import React from 'react';
 import Navbar from '../components/home/Navbar';
 import Headerp from '../components/Pharmacy/Headerp';
 import Frequentlybooked from '../components/Pharmacy/Frequentlybooked';
-
+import Midi from '../components/Pharmacy/Midi';
+import Middileone from '../components/Pharmacy/Middileone';
+import Middletwo from '../components/Pharmacy/Middletwo';
 
 
 const Pharmacy = () => {
@@ -15,6 +17,9 @@ const Pharmacy = () => {
       <Navbar/>
       <Headerp/>
       <Frequentlybooked/>
+      <Midi/>
+      <Middileone/>
+      <Middletwo/>
     </div>
   );
 };
