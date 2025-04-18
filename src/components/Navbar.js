@@ -4,16 +4,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  // Updated font size to lg, padding py-3
-  const linkClasses = "text-gray-700 hover:text-teal-600 px-3 py-3 rounded-md text-lg font-medium transition-colors duration-150 whitespace-nowrap";
+  // Styles for links based on your provided code
+  const linkClasses = "text-black hover:text-teal-600 px-3 py-3 rounded-md text-lg font-thin transition-colors duration-150 whitespace-nowrap";
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50">
+    <nav className="bg-white shadow-sm sticky top-0 z-50 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Navbar container height set to h-24 */}
         <div className="flex justify-between items-center h-24">
 
-          {/* Logo Section */}
+          {/* Logo Section (Stays on Left) */}
           <div className="flex-shrink-0">
             <Link to="/">
               {/* --- Replace with your actual logo --- */}
@@ -27,35 +27,36 @@ const Navbar = () => {
           </div>
 
           {/* Combined Links and Buttons Section (Grouped on Right) */}
-          {/* Hidden below md breakpoint */}
-          <div className="hidden md:flex md:items-center md:space-x-6"> {/* Adjust space-x- here */}
+          {/* Hidden below md breakpoint. Outer div centers items vertically. */}
+          <div className="hidden md:flex md:items-center">
 
-             {/* Navigation Links */}
-            <Link to="/" className={linkClasses}>Home</Link>
-            <Link to="/pharmacy" className={linkClasses}>Pharmacy</Link>
-            <Link to="/medicines" className={linkClasses}>Medicines</Link>
-            <Link to="/labtest" className={linkClasses}>Lab Test</Link>
-            <Link to="/contact" className={linkClasses}>Contact</Link>
-            <Link to="/hospitals" className={linkClasses}>Find Hospitals</Link>
+            {/* Navigation Links Group */}
+            <div className="flex items-center space-x-4"> {/* Spacing between links */}
+                <Link to="/" className={linkClasses}>Home</Link>
+                <Link to="/pharmacy" className={linkClasses}>Pharmacy</Link>
+                <Link to="/medicines" className={linkClasses}>Medicines</Link>
+                <Link to="/labtest" className={linkClasses}>Lab Test</Link>
+                <Link to="/contact" className={linkClasses}>Contact</Link>
+                <Link to="/hospitals" className= {linkClasses}>Find Hospitals</Link>
+            </div>
 
-             {/* Spacer between links and buttons */}
-             <div className="ml-2">
-                 <div className="flex items-center space-x-6">
-                     <Link
-                       to="/signin"
-                       // Updated font size to lg, padding px-5 py-3, kept rounded-full
-                       className="text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 px-5 py-3 rounded-full text-lg font-medium transition-colors duration-150 whitespace-nowrap"
-                     >
-                       Sign in
-                     </Link>
-                     <Link
-                       to="/signup"
-                       // Updated font size to lg, padding px-5 py-3, kept rounded-full
-                       className="text-white bg-teal-500 hover:bg-teal-600 px-5 py-3 rounded-full text-lg font-medium transition-colors duration-150 shadow-sm whitespace-nowrap"
-                     >
-                       Sign Up
-                     </Link>
-                 </div>
+            {/* Buttons Group */}
+             {/* Added ml-6 for space between Links group and Buttons group */}
+            <div className="ml-6 flex items-center space-x-4 -mr-32"> {/* Spacing between buttons */}
+                <Link
+                  to="/signin"
+                  // Styles for buttons based on your provided code (font thin, size base)
+                  className="text-gray-700 bg-white border-2  border-teal-700  hover:bg-gray-50 px-5 py-3 rounded-full text-base font-thin transition-colors duration-150 whitespace-nowrap"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/signup"
+                  // Styles for buttons based on your provided code (font thin, size base)
+                  className="text-white bg-teal-700 hover:bg-teal-600 px-5 border border-teal-900 py-3 rounded-full text-base font-thin transition-colors duration-150 shadow-sm whitespace-nowrap"
+                >
+                  Sign Up
+                </Link>
             </div>
           </div>
 
