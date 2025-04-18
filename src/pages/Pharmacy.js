@@ -1,7 +1,9 @@
 import React from 'react';
 // import { useNavigate } from 'react-router-dom'; 
-import Headerp from '../components/Pharmacy/Headerp';
 import Navbar from '../components/home/Navbar';
+import Headerp from '../components/Pharmacy/Headerp';
+import Frequentlybooked from '../components/Pharmacy/Frequentlybooked';
+
 
 
 const Pharmacy = () => {
@@ -12,6 +14,7 @@ const Pharmacy = () => {
     <div>
       <Navbar/>
       <Headerp/>
+      <Frequentlybooked/>
     </div>
   );
 };
