@@ -10,6 +10,7 @@ import Middletwo from '../components/Middletwo';
 import Email from '../components/Email';
 import Customer from '../components/Customer';
 import Question from '../components/Question';
+import Border from '../components/Border';
 
 const Home = () => {
     return (
@@ -24,6 +25,7 @@ const Home = () => {
             <Email/>
             <Customer/>
             <Question/>
+            <Border/>
         </div>
     )
 }
