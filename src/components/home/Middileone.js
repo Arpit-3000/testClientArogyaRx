@@ -1,48 +1,86 @@
 // components/Middileone.js
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { useInView } from 'react-intersection-observer';
+import { ArrowRight } from 'lucide-react'; 
+
+
+import doctorIllustration from '../../assets/icon01.png';
+import appointmentIllustration from '../../assets/icon02.png'; 
+import locationIllustration from '../../assets/icon03.png'; 
+
+const itemsData = [
+    {
+        id: 1,
+        title: "Find a Doctor",
+        description: "World-class care for everyone. Our health system offers unmatched, expert healthcare.",
+        imageUrl: doctorIllustration, 
+        linkUrl: "/find-doctor" 
+    },
+    {
+        id: 2,
+        title: "Book Appointments",
+        description: "World-class care for everyone. Our health system offers unmatched, expert healthcare.", 
+        imageUrl: appointmentIllustration, 
+        linkUrl: "/appointments" 
+    },
+    {
+        id: 3,
+        title: "Find a Location",
+        description: "World-class care for everyone. Our health system offers unmatched, expert healthcare.", 
+        imageUrl: locationIllustration,
+        linkUrl: "/locations" 
+    },
+];
+// ---
 
 const Middileone = () => {
+    
+    const { ref: sectionRef, inView: sectionInView } = useInView({
+        threshold: 0.3, 
+    });
+
     return (
-        <section className="py-16 bg-gray-50">
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Find a Doctor Card */}
-                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
-                    {/* Replace with your actual doctor image path */}
-                    <img src="/path/to/doctor-image.jpg" alt="Find a Doctor" className="w-32 h-32 rounded-full mb-4 object-cover" />
-                    <h3 className="text-xl font-semibold text-blue-600 mb-2">Find a Doctor</h3>
-                    <p className="text-gray-600 text-sm text-center mb-4">
-                        World-class care for everyone. Our health system offers unmatched, expert healthcare.
-                    </p>
-                    <button className="flex items-center text-blue-500 hover:text-blue-700 transition-colors">
-                        Learn More <ArrowRight className="ml-2 w-4 h-4" />
-                    </button>
-                </div>
 
-                {/* Book Appointments Card */}
-                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
-                    {/* Replace with your actual appointment image path */}
-                    <img src="/path/to/appointment-image.jpg" alt="Book Appointments" className="w-32 h-32 rounded-full mb-4 object-cover" />
-                    <h3 className="text-xl font-semibold text-blue-600 mb-2">Book Appointments</h3>
-                    <p className="text-gray-600 text-sm text-center mb-4">
-                        World-class care for everyone. Our health system offers unmatched, expert healthcare.
-                    </p>
-                    <button className="flex items-center text-blue-500 hover:text-blue-700 transition-colors">
-                        Learn More <ArrowRight className="ml-2 w-4 h-4" />
-                    </button>
-                </div>
+        <section ref={sectionRef} className="bg-white py-24">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16"> 
 
-                {/* Find a Location Card */}
-                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
-                    {/* Replace with your actual location image path */}
-                    <img src="/path/to/location-image.jpg" alt="Find a Location" className="w-32 h-32 rounded-full mb-4 object-cover" />
-                    <h3 className="text-xl font-semibold text-blue-600 mb-2">Find a Location</h3>
-                    <p className="text-gray-600 text-sm text-center mb-4">
-                        World-class care for everyone. Our health system offers unmatched, expert healthcare.
-                    </p>
-                    <button className="flex items-center text-blue-500 hover:text-blue-700 transition-colors">
-                        Learn More <ArrowRight className="ml-2 w-4 h-4" />
-                    </button>
+               
+                    {itemsData.map((item, index) => (
+                        <div
+                            key={item.id}
+                            
+                            className={`
+                                flex flex-col items-center text-center
+                                transition-all duration-700 ease-out
+                                ${sectionInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+                            `}
+                            
+                            style={{ transitionDelay: `${index * 150}ms` }}
+                        >
+                            <img
+                                src={item.imageUrl} 
+                                alt={item.title}
+                                
+                                className="w-auto h-40 mb-6 object-contain" 
+                            />
+                            
+                            <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                             
+                            <p className="text-base text-gray-600 mb-6 leading-relaxed max-w-xs mx-auto">
+                                {item.description}
+                            </p>
+                             
+                            <a
+                                href={item.linkUrl || '#'} 
+                                className="mt-auto flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 text-gray-500 hover:border-teal-500 hover:text-teal-500 transition-colors duration-300"
+                                aria-label={item.title} 
+                            >
+                                <ArrowRight className="w-5 h-5" />
+                            </a>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
