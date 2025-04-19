@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import { useNavigate } from 'react-router-dom'; 
 import Navbar from '../components/home/Navbar';
 import Searchbar from '../components/medicines/Searchbar';
@@ -8,12 +8,13 @@ import Services from '../components/medicines/Services';
 import Middle from '../components/medicines/Middle';
 import Lastcomp from '../components/medicines/Lastcomp';
 import Border from '../components/home/Border';
-
+import SignupPopup from '../components/home/SignupPopup';
 
 const Medicines = () => {
+  const [showPopup, setShowPopup] = useState(false);
   return (
     <div>
-      <Navbar/>
+        <Navbar onSignUpClick={() => setShowPopup(true)} />
       <Searchbar/>
       <Product/>
       <Offers/>
@@ -21,7 +22,7 @@ const Medicines = () => {
       <Middle/>
       <Lastcomp/>
       <Border/>
-
+      {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
     </div>
   );
 };
