@@ -1,5 +1,5 @@
 // components/Home.js
-import React from 'react';
+import React, {useState} from 'react';
 import Navbar from '../components/home/Navbar';
 import Header from '../components/home/Header';
 import Midcard from '../components/home/Midcard';
@@ -10,12 +10,14 @@ import Middletwo from '../components/home/Middletwo';
 import Customer from '../components/home/Customer';
 import Question from '../components/home/Question';
 import Border from '../components/home/Border';
+import SignupPopup from '../components/home/SignupPopup';
 
 
 const Home = () => {
+    const [showPopup, setShowPopup] = useState(false);
     return (
         <div>
-            <Navbar />
+            <Navbar onSignUpClick={() => setShowPopup(true)} />
             <Header />
             <Midcard/>
             <Midi/>
@@ -26,6 +28,7 @@ const Home = () => {
             <Question/>
             <Border/>
            
+            {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
         </div>
     )
 }
