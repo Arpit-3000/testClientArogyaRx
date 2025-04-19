@@ -37,7 +37,6 @@ const Navbar = () => {
                 <Link to="/medicines" className={linkClasses}>Medicines</Link>
                 <Link to="/labtest" className={linkClasses}>Lab Test</Link>
                 <Link to="/contact" className={linkClasses}>Contact</Link>
-                <Link to="/hospitals" className= {linkClasses}>Find Hospitals</Link>
             </div>
 
             {/* Buttons Group */}

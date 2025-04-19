@@ -25,8 +25,8 @@ const itemsData = [
     },
     {
         id: 3,
-        title: "Find a Location",
-        description: "World-class care for everyone. Our health system offers unmatched, expert healthcare.", 
+        title: "Upload Prescription",
+        description: "Upload prescription and connect to a doctor", 
         imageUrl: locationIllustration,
         linkUrl: "/locations" 
     },

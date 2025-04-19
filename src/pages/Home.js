@@ -7,7 +7,6 @@ import Midi from '../components/home/Midi';
 import Midinext from '../components/home/Midinext';
 import Middileone from '../components/home/Middileone';
 import Middletwo from '../components/home/Middletwo';
-import Email from '../components/home/Email';
 import Customer from '../components/home/Customer';
 import Question from '../components/home/Question';
 import Border from '../components/home/Border';
@@ -23,7 +22,6 @@ const Home = () => {
             <Midinext/>
             <Middileone/>
             <Middletwo />
-            <Email/>
             <Customer/>
             <Question/>
             <Border/>
