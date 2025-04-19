@@ -12,11 +12,13 @@ const Midi = () => {
 
     
     const { ref: ref1, inView: inView1 } = useInView({
+        triggerOnce: true,
         threshold: 0.1,
     });
 
    
     const { ref: ref2, inView: inView2 } = useInView({
+        triggerOnce: true,
         threshold: 0.1,
     });
 
