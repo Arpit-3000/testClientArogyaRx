@@ -55,7 +55,7 @@ const Middileone = () => {
         <motion.section
             // ... (section attributes remain the same)
         >
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 mt-8">
                 <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12"
                     // ... (grid attributes remain the same)

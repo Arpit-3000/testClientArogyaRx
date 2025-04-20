@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'; // Optional: Add motion if desired
 
 // --- IMPORT YOUR LOCAL IMAGES HERE ---
 // Adjust the paths and filenames to match your actual files
-import easyOrderImage from '../../assets/pharmacyimages/eo.png';
+import easyOrderImage from '../../assets/pharmacyimages/Easyorderpharmacy.jpg';
 import trackOrderImage from '../../assets/pharmacyimages/trackpharmacy.jpg';
-import support247Image from '../../assets/pharmacyimages/24.png';
-import discountsImage from '../../assets/pharmacyimages/discountspharmacy.jpg';
+import support247Image from '../../assets/pharmacyimages/24x7pharmacy.jpg';
+import discountsImage from '../../assets/pharmacyimages/discountpicpharmacy.jpg';
 
 const Middletwo = () => {
 
@@ -61,7 +61,7 @@ const Middletwo = () => {
 
 
     return (
-        <section className="py-16 md:py-20 bg-gray-100"> {/* Slightly increased padding */}
+        <section className="mt-10 py-16 md:py-20 bg-gray-100"> {/* Slightly increased padding */}
             <div className="container mx-auto px-4">
                 <div className="space-y-8 md:space-y-10"> {/* Increased vertical space */}
 
