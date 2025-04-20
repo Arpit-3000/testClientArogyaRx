@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logo from "../../assets/logo-Photoroom.png";
 
 const Navbar = ({ onSignUpClick }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const linkClasses = "text-black hover:text-teal-600 px-3 py-3 rounded-md text-lg font-thin transition-colors duration-150 whitespace-nowrap";
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-between items-center h-24">
-        <div className="flex-shrink-0">
-          <Link to="/">
-            <img className="h-36 w-auto" src={logo} alt="Logo" />
-          </Link>
-        </div>
+    <nav className={`bg-white shadow-sm sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "backdrop-blur-md bg-white/80" : ""}`}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-24">
+          <div className="flex-shrink-0">
+            <Link to="/">
+              <img className="h-36 w-auto" src={logo} alt="Logo" />
+            </Link>
+          </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex md:items-center space-x-4">
