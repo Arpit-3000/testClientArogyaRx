@@ -64,10 +64,10 @@ const Border = () => {
                 <div>
                     <h3 className="text-lg font-semibold text-white mb-4">Contact</h3>
                     <ul className="text-sm space-y-2 text-gray-400">
-                        <li>📞 +91 123456789</li>
-                        <li>🌐 HealthSaathi.com</li>
-                        <li>🏢 HealthSaathi Solutions Pvt. Ltd.</li>
-                        <li>📍 Punjab, 140041</li>
+                        <li>📞 +91 9758123585</li>
+                        <li>🌐 ArogyaRx</li>
+                        <li>🏢 ArogyaRx</li>
+                        <li>📍 Allahbad, 140041</li>
                     </ul>
                 </div>
             </div>
