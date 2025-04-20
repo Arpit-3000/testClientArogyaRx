@@ -1,5 +1,6 @@
 // App.js
-import React from 'react';
+import React, {useState} from 'react';
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Pharmacy from './pages/Pharmacy';
@@ -11,7 +12,10 @@ import Medicines from './pages/Medicines';
 // import SignUp from './components/SignUp';
 
 function App() {
+
   return (
+    <>
+    <Toaster/>
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -26,6 +30,9 @@ function App() {
         <Route path="/signup" element={<SignUp />} /> */}
       </Routes>
     </Router>
+    
+    </>
+   
   );
 }
 
