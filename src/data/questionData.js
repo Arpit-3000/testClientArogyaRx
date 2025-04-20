@@ -1,6 +1,6 @@
 const questionData = [
     {
-        question: "How does HealthSaathi ensure quality?",
+        question: "How does Arogya RX ensure quality?",
         answer: "Our high-quality products pass through strict quality checks before being sent to our customers."
     },
     {
