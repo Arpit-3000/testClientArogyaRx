@@ -1,61 +1,96 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { FaArrowRight, FaShoppingCart, FaFlask } from 'react-icons/fa';
+
+import medicinesImage from '../../assets/pharmacyimages/medicinespharmacy.jpg';
+import healthcareImage from '../../assets/pharmacyimages/healthcarepharmacy.jpg'; 
+import labTestsImage from '../../assets/pharmacyimages/labtestpharmacy.jpg'; 
+
 
 const Middileone = () => {
+
+   
+    const containerVariants = { /* ... */ };
+    const itemVariants = { /* ... */ };
+    const cardHoverEffect = { /* ... */ };
+    const cardTransition = { /* ... */ };
+
+
+   
+    const cardData = [
+        {
+            title: "Order Medicines",
+            discount: "FLAT 15% OFF",
+            imgSrc: medicinesImage, 
+            alt: "Order Medicines",
+            buttonText: "Order Now",
+            buttonIcon: FaShoppingCart,
+            badgeColor: "bg-red-500/90",
+            buttonColor: "bg-emerald-600 hover:bg-emerald-700"
+        },
+        {
+            title: "Healthcare Products",
+            discount: "UPTO 60% OFF",
+            imgSrc: healthcareImage, // Use the imported variable here
+            alt: "Healthcare Products",
+            buttonText: "Explore Now",
+            buttonIcon: FaArrowRight,
+            badgeColor: "bg-orange-500/90",
+            buttonColor: "bg-emerald-600 hover:bg-emerald-700"
+        },
+        {
+            title: "Lab Tests",
+            discount: "UPTO 70% OFF",
+            imgSrc: labTestsImage , // Use the imported variable here
+            alt: "Lab Tests",
+            buttonText: "Book Now",
+            buttonIcon: FaFlask,
+            badgeColor: "bg-pink-500/90",
+            buttonColor: "bg-blue-600 hover:bg-blue-700"
+        }
+    ];
+
+
     return (
-        <section className="py-16 bg-gray-50">
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Order Medicines Card */}
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="relative">
-                         <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs">
-                            FLAT 15% OFF
-                        </div>
-                       {/* Replace with your actual medicines image path */}
-                        <img src="/path/to/medicines-image.jpg" alt="Order Medicines" className="w-full h-48 object-cover" />
-                    </div>
-                    <div className="p-4">
-                        <h3 className="text-xl font-semibold text-blue-600 mb-2">Order Medicines</h3>
-                        <button className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700 transition-colors w-full">
-                            Order Now
-                        </button>
-                    </div>
-                </div>
-
-                {/* Healthcare Products Card */}
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="relative">
-                         <div className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-md text-xs">
-                            UPTO 60% OFF
-                        </div>
-                    {/* Replace with your actual healthcare products image path */}
-                    <img src="/path/to/healthcare-products-image.jpg" alt="Healthcare Products" className="w-full h-48 object-cover" />
-                    </div>
-                    <div className="p-4">
-                        <h3 className="text-xl font-semibold text-blue-600 mb-2">Healthcare Products</h3>
-                        <button className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700 transition-colors w-full">
-                            Order Now
-                        </button>
-                    </div>
-                </div>
-
-                {/* Lab Tests Card */}
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                     <div className="relative">
-                         <div className="absolute top-2 left-2 bg-pink-500 text-white px-2 py-1 rounded-md text-xs">
-                            UPTO 70% OFF
-                        </div>
-                    {/* Replace with your actual lab tests image path */}
-                    <img src="/path/to/lab-tests-image.jpg" alt="Lab Tests" className="w-full h-48 object-cover" />
-                     </div>
-                    <div className="p-4">
-                        <h3 className="text-xl font-semibold text-blue-600 mb-2">Lab Tests</h3>
-                        <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-700 transition-colors w-full">
-                            Book Now
-                        </button>
-                    </div>
-                </div>
+        <motion.section
+            // ... (section attributes remain the same)
+        >
+            <div className="container mx-auto px-4">
+                <motion.div
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12"
+                    // ... (grid attributes remain the same)
+                >
+                     {/* Map over the updated cardData */}
+                    {cardData.map((card, index) => (
+                        <motion.div
+                            key={index}
+                            className="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col"
+                            // ... (card motion attributes remain the same)
+                        >
+                            <div className="relative overflow-hidden">
+                                <div className={`absolute top-3 left-3 ${card.badgeColor} text-white px-2.5 py-1 rounded-md text-xs font-medium z-10 backdrop-blur-sm`}>
+                                    {card.discount}
+                                </div>
+                                <img
+                                    src={card.imgSrc} // This now uses the imported image variable
+                                    alt={card.alt}
+                                    className="w-full h-56 object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
+                                />
+                            </div>
+                            <div className="p-5 flex flex-col flex-grow">
+                                <h3 className="text-xl lg:text-2xl font-semibold text-gray-800 mb-3">{card.title}</h3>
+                                <div className="mt-auto pt-3">
+                                    <button className={`${card.buttonColor} text-white px-6 py-3 rounded-lg hover:shadow-md transition-all duration-300 w-full inline-flex items-center justify-center gap-2 font-medium`}>
+                                        <card.buttonIcon />
+                                        {card.buttonText}
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
             </div>
-        </section>
+        </motion.section>
     );
 };
 
