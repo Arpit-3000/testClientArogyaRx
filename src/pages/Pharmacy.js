@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import { useNavigate } from 'react-router-dom'; 
 import Navbar from '../components/home/Navbar';
 import Headerp from '../components/Pharmacy/Headerp';
@@ -11,12 +11,13 @@ import Explore from '../components/Pharmacy/Explore';
 import Prescription from '../components/Pharmacy/Prescription';
 import Question from '../components/Pharmacy/Question';
 import Border from '../components/home/Border';
-
+import SignupPopup from '../components/home/SignupPopup';
 
 const Pharmacy = () => {
+  const [showPopup, setShowPopup] = useState(false);
   return (
     <div>
-      <Navbar/>
+        <Navbar onSignUpClick={() => setShowPopup(true)} />
       <Headerp/>
       <Frequentlybooked/>
       <Midi/>
@@ -27,6 +28,7 @@ const Pharmacy = () => {
       <Prescription/>
       <Question/>
       <Border/>
+      {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
     </div>
   );
 };
