@@ -1,5 +1,5 @@
 import React from 'react';
-// import exploreImage from './assets/images/explore-image.jpg';
+import exploreImage from '../../assets/pharmacyimages/feel.png'; // Ensure this path is correct relative to your file
 
 const Explore = () => {
     return (
@@ -23,14 +23,14 @@ const Explore = () => {
 
                 <div className="relative mt-10 md:mt-0 flex justify-center items-center min-h-[350px] md:min-h-[450px]">
                     <div className="absolute inset-0 flex justify-center items-center">
-                         <div className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] bg-teal-600 rounded-full transform -rotate-12 opacity-30 blur-xl"></div>
-                         <div className="w-[320px] h-[320px] md:w-[450px] md:h-[450px] bg-cyan-600 rounded-full transform rotate-12 opacity-20 blur-2xl -ml-10 -mt-10"></div>
+                         <div className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full transform -rotate-12 opacity-30 blur-xl"></div>
+                         <div className="w-[320px] h-[320px] md:w-[450px] md:h-[450px]  rounded-full transform rotate-12 opacity-20 blur-2xl -ml-10 -mt-10"></div>
                     </div>
 
                     <img
-                        src="/path/to/your/explore-image.jpg"
+                        src={exploreImage} 
                         alt="Mother and child taking medicine"
-                        className="relative z-10 w-[80%] md:w-[90%] max-w-md h-auto rounded-lg object-cover shadow-lg"
+                        className="relative z-10 w-[160] md:w-[100] max-w-md h-auto rounded-lg object-cover shadow-lg"
                     />
                 </div>
 

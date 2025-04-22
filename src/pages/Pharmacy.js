@@ -25,7 +25,6 @@ const Pharmacy = () => {
       <Middletwo/>
       <Midilethree/>
       <Explore/>
-      <Prescription/>
       <Question/>
       <Border/>
       {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}

@@ -1,27 +1,20 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// Removed Framer Motion import
 import { FaArrowRight, FaShoppingCart, FaFlask } from 'react-icons/fa';
-
 import medicinesImage from '../../assets/pharmacyimages/medicinespharmacy.jpg';
-import healthcareImage from '../../assets/pharmacyimages/healthcarepharmacy.jpg'; 
-import labTestsImage from '../../assets/pharmacyimages/labtestpharmacy.jpg'; 
+import healthcareImage from '../../assets/pharmacyimages/healthcarepharmacy.jpg';
+import labTestsImage from '../../assets/pharmacyimages/labtestpharmacy.jpg';
 
 
 const Middileone = () => {
 
-   
-    const containerVariants = { /* ... */ };
-    const itemVariants = { /* ... */ };
-    const cardHoverEffect = { /* ... */ };
-    const cardTransition = { /* ... */ };
+    // Removed Framer Motion variants declarations
 
-
-   
     const cardData = [
         {
             title: "Order Medicines",
             discount: "FLAT 15% OFF",
-            imgSrc: medicinesImage, 
+            imgSrc: medicinesImage,
             alt: "Order Medicines",
             buttonText: "Order Now",
             buttonIcon: FaShoppingCart,
@@ -31,7 +24,7 @@ const Middileone = () => {
         {
             title: "Healthcare Products",
             discount: "UPTO 60% OFF",
-            imgSrc: healthcareImage, // Use the imported variable here
+            imgSrc: healthcareImage,
             alt: "Healthcare Products",
             buttonText: "Explore Now",
             buttonIcon: FaArrowRight,
@@ -41,7 +34,7 @@ const Middileone = () => {
         {
             title: "Lab Tests",
             discount: "UPTO 70% OFF",
-            imgSrc: labTestsImage , // Use the imported variable here
+            imgSrc: labTestsImage ,
             alt: "Lab Tests",
             buttonText: "Book Now",
             buttonIcon: FaFlask,
@@ -52,28 +45,29 @@ const Middileone = () => {
 
 
     return (
-        <motion.section
-            // ... (section attributes remain the same)
-        >
+        // Changed motion.section back to section, removed animation props
+        <section className="py-16 md:py-20"> {/* Example padding, adjust if needed */}
             <div className="container mx-auto px-4 mt-8">
-                <motion.div
+                {/* Changed motion.div back to div, removed animation props */}
+                <div
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12"
-                    // ... (grid attributes remain the same)
-                >
-                     {/* Map over the updated cardData */}
+                 >
                     {cardData.map((card, index) => (
-                        <motion.div
+                        // Changed motion.div back to div, removed animation props
+                        <div
                             key={index}
                             className="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col"
-                            // ... (card motion attributes remain the same)
+                            // Keep existing layout and styling classes
                         >
                             <div className="relative overflow-hidden">
                                 <div className={`absolute top-3 left-3 ${card.badgeColor} text-white px-2.5 py-1 rounded-md text-xs font-medium z-10 backdrop-blur-sm`}>
                                     {card.discount}
                                 </div>
                                 <img
-                                    src={card.imgSrc} // This now uses the imported image variable
+                                    loading="lazy" // Keep lazy loading for performance
+                                    src={card.imgSrc}
                                     alt={card.alt}
+                                    // Kept hover scale effect and other image classes
                                     className="w-full h-56 object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
                                 />
                             </div>
@@ -86,12 +80,16 @@ const Middileone = () => {
                                     </button>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
-                </motion.div>
+                </div>
             </div>
-        </motion.section>
+        </section>
     );
 };
+
+// Consider wrapping in React.memo if performance requires it due to parent re-renders
+// const MemoizedMiddileone = React.memo(Middileone);
+// export default MemoizedMiddileone;
 
 export default Middileone;
