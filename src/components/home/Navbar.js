@@ -2,12 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logo from "../../assets/logo-Photoroom.png";
 import { ShoppingCart, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
 
 const Navbar = ({ onSignUpClick }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [userName, setUserName] = useState(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+
+  const navigate=useNavigate();
+
+  const handleCartClick = () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Please login to access your cart.");
+      return;
+    }
+    navigate("/cart");
+  };
 
   const linkClasses = "text-black hover:text-teal-600 px-3 py-3 rounded-md text-lg font-thin transition-colors duration-150 whitespace-nowrap";
 
@@ -69,12 +82,15 @@ const Navbar = ({ onSignUpClick }) => {
             <Link to="/labtest" className={linkClasses}>Lab Test</Link>
             <Link to="/contact" className={linkClasses}>Contact</Link>
 
-            <Link to="/cart" className="relative text-black hover:text-teal-600 transition-all duration-300">
-              <ShoppingCart className="w-6 h-6" />
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full">
-                2
-              </span>
-            </Link>
+            <button
+  onClick={handleCartClick}
+  className="relative text-black hover:text-teal-600 transition-all duration-300"
+>
+  <ShoppingCart className="w-6 h-6" />
+  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+    2
+  </span>
+</button>
 
             {/* Auth Button */}
             {userName ? (
