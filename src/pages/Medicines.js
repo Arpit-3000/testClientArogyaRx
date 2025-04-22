@@ -9,6 +9,7 @@ import Middle from '../components/medicines/Middle';
 import Lastcomp from '../components/medicines/Lastcomp';
 import Border from '../components/home/Border';
 import SignupPopup from '../components/home/SignupPopup';
+import MedicineList from '../components/medicines/MedicineList';
 
 const Medicines = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -18,9 +19,11 @@ const Medicines = () => {
       <Searchbar/>
       <Product/>
       <Offers/>
+      <MedicineList/>
       <Services/>
       <Middle/>
       <Lastcomp/>
+      
       <Border/>
       {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
     </div>
