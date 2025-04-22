@@ -1,5 +1,7 @@
 // App.js
 import React, {useState} from 'react';
+
+
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
@@ -7,6 +9,8 @@ import Pharmacy from './pages/Pharmacy';
 import Contact from './pages/Contact';
 import Medicines from './pages/Medicines';
 import Labtest from './pages/Labtest';
+import Cart from './pages/Cart';
+
 // import Hospitals from './components/Hospitals';
 // import SignIn from './components/SignIn';
 // import SignUp from './components/SignUp';
@@ -23,6 +27,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/medicines" element={<Medicines />} />
         <Route path="/labtest" element={<Labtest />} />
+        <Route path="/cart" element={<Cart />} />
+     
         {/*
   
        
