@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import API from '../../services/api';
 import MedicineCard from '../medicines/MedicineCard';
 import MedicineDetailsModal from './MedicineDetailsModal';
+import { useNavigate } from 'react-router-dom';
 
 const MedicineList = () => {
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -24,9 +26,32 @@ const MedicineList = () => {
   }, []);
 
   const handleAddToCart = (medicine) => {
-    // Placeholder logic; integrate with cart context or backend if needed
-    console.log('Added to cart:', medicine.productName);
-    alert(`"${medicine.productName}" added to cart`);
+    // Check if user is logged in
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('Please login to add items to your cart');
+      return;
+    }
+    
+    // If logged in, navigate to cart or add to cart
+    // Here you have two options:
+    
+    // Option 1: Navigate directly to cart
+    navigate('/cart');
+    
+    // Option 2: Add to cart first, then navigate (requires API implementation)
+    /*
+    try {
+      await API.post('/cart/add', { medicineId: medicine._id });
+      navigate('/cart');
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      alert('Failed to add item to cart');
+    }
+    */
+    
+    // For now, using Option 1 with a success message
+    alert(`"${medicine.productName}" added to cart. Redirecting to cart page...`);
   };
 
   return (
