@@ -1,34 +1,27 @@
 import { useNavigate } from 'react-router-dom';
+import API from '../../services/api'; // Make sure API is imported
 
 const MedicineDetailsModal = ({ medicine, onClose }) => {
   const navigate = useNavigate();
 
   const handleAddToCart = async () => {
-    // Check if user is logged in
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
+    const isLoggedIn = !!localStorage.getItem('accessToken');
+    if (!isLoggedIn) {
       alert('Please login to add items to your cart');
       return;
     }
-    
-    // Option 1: Navigate directly to cart
-    navigate('/cart');
-    alert(`"${medicine.productName}" added to cart. Redirecting to cart page...`);
 
-    /* 
-    // Option 2: Add to cart via API first, then navigate (uncomment if implemented)
     try {
-      await API.post('/cart/add', { 
+      await API.post('/cart/add', {
         medicineId: medicine._id,
-        quantity: 1 // You might want to add quantity selection
+        quantity: 1, // Default quantity
       });
-      alert(`"${medicine.productName}" added to cart successfully!`);
+      alert(`"${medicine.productName}" added to cart successfully! Redirecting to cart...`);
       navigate('/cart');
     } catch (err) {
       console.error('Error adding to cart:', err);
       alert('Failed to add item to cart. Please try again.');
     }
-    */
   };
 
   return (
@@ -50,13 +43,11 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
           <p><strong>Generic Name:</strong> {medicine.genericName}</p>
           <p><strong>Category:</strong> {medicine.category}</p>
           <p><strong>Prescription Required:</strong> {medicine.prescriptionRequired ? 'Yes' : 'No'}</p>
-
           <p><strong>Composition:</strong> {JSON.stringify(medicine.composition)}</p>
           <p><strong>Dosage:</strong> {JSON.stringify(medicine.dosage)}</p>
           <p><strong>Pricing:</strong> MRP ₹{medicine.pricing?.mrp}, Discount ₹{medicine.pricing?.discount}</p>
           <p><strong>Stock:</strong> {medicine.stock?.quantity} units, Min Qty: {medicine.stock?.minQuantity}</p>
           <p><strong>Packaging:</strong> {medicine.packaging?.packSize} (Exp: {medicine.packaging?.expiryDate?.split("T")[0]})</p>
-
           <p><strong>Regulatory Info:</strong> {JSON.stringify(medicine.regulatory)}</p>
 
           {medicine.additionalFeatures?.faqs?.length > 0 && (
