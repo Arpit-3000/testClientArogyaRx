@@ -1,32 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-
-// IMPORTANT: Ensure these images are optimized (compressed, correctly sized, consider .webp format)
-import medicalCareImage from '../../assets/pharmacyimages/medicalboxpharmacy.jpg';
-import healthCareImage from '../../assets/pharmacyimages/healthcareimg.jpg';
-import instantDeliveryImage from '../../assets/pharmacyimages/instantpharmacy.jpg';
-
-const containerVariants = {
-    hidden: {}, // Can add initial opacity: 0 here if preferred, but stagger handles visibility
-    visible: {
-        transition: {
-            staggerChildren: 0.15, // Adjust timing as needed
-            delayChildren: 0.1,
-        },
-    },
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 0.5,
-            ease: 'easeOut',
-        },
-    },
-};
+import medicalCareImage from '../../assets/pharmacyimages/e2.png';
+import healthCareImage from '../../assets/pharmacyimages/l4.png';
+import instantDeliveryImage from '../../assets/pharmacyimages/e3.png';
 
 const cardData = [
     {
@@ -49,32 +24,24 @@ const cardData = [
     },
 ];
 
-
-
 const Midilethree = React.memo(() => {
 
     return (
-        <motion.section
+        <section
             className="py-16 md:py-20 bg-gradient-to-b from-white to-gray-50"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }} 
-            variants={containerVariants} 
         >
             <div className="container mx-auto px-4">
-                {/* The grid container itself doesn't need motion if the section handles staggering */}
                 <div
                     className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10"
                  >
                     {cardData.map((card, index) => (
-                        <motion.div
+                        <div
                             key={index}
-                            className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col group transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.03]"
-                            variants={itemVariants} // Apply item animation variants directly
+                            className="group bg-white rounded-xl shadow-md overflow-hidden flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.03]"
                         >
                             <div className="overflow-hidden">
                                 <img
-                                    loading="lazy" // Add native lazy loading
+                                    loading="lazy"
                                     src={card.imgSrc}
                                     alt={card.alt}
                                     className="w-full h-48 object-cover transform transition-transform duration-500 ease-in-out group-hover:scale-110"
@@ -84,12 +51,12 @@ const Midilethree = React.memo(() => {
                                 <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-2">{card.title}</h3>
                                 <p className="text-gray-500 text-sm flex-grow">{card.description}</p>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>
-        </motion.section>
+        </section>
     );
-}); // End of React.memo wrapping
+});
 
 export default Midilethree;
