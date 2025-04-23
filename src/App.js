@@ -1,7 +1,5 @@
 // App.js
-import React, {useState} from 'react';
-
-
+import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
@@ -10,36 +8,24 @@ import Contact from './pages/Contact';
 import Medicines from './pages/Medicines';
 import Labtest from './pages/Labtest';
 import Cart from './pages/Cart';
-
-// import Hospitals from './components/Hospitals';
-// import SignIn from './components/SignIn';
-// import SignUp from './components/SignUp';
+import Checkout from './components/cart/Checkout'; // 🔁 Import Checkout
 
 function App() {
-
   return (
     <>
-    <Toaster/>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/pharmacy" element={<Pharmacy />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/medicines" element={<Medicines />} />
-        <Route path="/labtest" element={<Labtest />} />
-        <Route path="/cart" element={<Cart />} />
-     
-        {/*
-  
-       
-        <Route path="/hospitals" element={<Hospitals />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} /> */}
-      </Routes>
-    </Router>
-    
+      <Toaster />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/pharmacy" element={<Pharmacy />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/medicines" element={<Medicines />} />
+          <Route path="/labtest" element={<Labtest />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} /> {/* ✅ Add Checkout Route */}
+        </Routes>
+      </Router>
     </>
-   
   );
 }
 

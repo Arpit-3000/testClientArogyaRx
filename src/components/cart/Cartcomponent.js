@@ -1,3 +1,4 @@
+// components/cart/Cartcomponent.js
 import React, { useState, useEffect } from 'react';
 import API from '../../services/api';
 import { useNavigate } from 'react-router-dom';
@@ -43,11 +44,10 @@ function CartComponent() {
       } else {
         await API.post('/cart/add', { 
           medicineId: itemId,
-          quantity: change // Send the change amount (1 or -1)
+          quantity: change
         });
       }
       
-      // Refresh cart data
       const res = await API.get('/cart');
       setCartItems(res.data.items.map(item => ({
         ...item,
@@ -74,7 +74,13 @@ function CartComponent() {
   };
 
   const handleCheckout = () => {
-    navigate('/checkout');
+    navigate('/checkout', {
+      state: {
+        subtotal,
+        deliveryFee,
+        total
+      }
+    });
   };
 
   if (loading) {
