@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
+import API from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 const SignupPopup = ({ onClose }) => {
@@ -25,21 +25,26 @@ const SignupPopup = ({ onClose }) => {
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       if (isSignup) {
-        await axios.post("https://pharma-ecommerce.onrender.com/api/auth/register", formData);
+        await API.post("/auth/register", formData);
         toast.success("User registered successfully!");
       } else {
-        await axios.post("https://pharma-ecommerce.onrender.com/api/auth/login", {
+        const response = await API.post("/auth/login", {
           email: formData.email,
           password: formData.password,
         });
+        
+        // Store token and user data in localStorage
+        localStorage.setItem("accessToken", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         toast.success("Welcome back!");
       }
-
+  
       onClose();
       navigate("/");
+      window.location.reload(); // Refresh to update the navbar
     } catch (err) {
       const msg = err.response?.data?.message || "Something went wrong";
       toast.error(msg);
@@ -47,7 +52,6 @@ const SignupPopup = ({ onClose }) => {
       setLoading(false);
     }
   };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
