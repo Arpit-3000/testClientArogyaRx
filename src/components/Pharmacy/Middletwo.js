@@ -60,11 +60,12 @@ const Middletwo = React.memo(() => {
                                             <p className="text-gray-600 text-sm mb-4">{card.description2}</p>
                                         )}
                                     </div>
+                                    {/* Example Adjustment: Changed h- and object-cover to object-contain */}
                                     <img
                                         loading="lazy"
                                         src={card.imgSrc}
                                         alt={card.alt}
-                                        className="w-full h-48 md:h-52 lg:h-60 object-cover rounded-xl mt-auto"
+                                        className="w-full h-52 md:h-56 lg:h-64 object-fill rounded-xl mt-auto bg-gray-50" // Changed height, changed to object-contain, added subtle bg
                                     />
                                 </div>
                             ))}
