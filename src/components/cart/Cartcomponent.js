@@ -1,24 +1,24 @@
-// components/cart/Cartcomponent.js
+// components/cart/CartComponent.js
 import React, { useState, useEffect } from 'react';
 import API from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/cartContext';
 
 function CartComponent() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [subtotal, setSubtotal] = useState(0);
-  const [total, setTotal] = useState(0);
-  const deliveryFee = 50;
   const navigate = useNavigate();
+  const { subtotal, setSubtotal, total, setTotal, deliveryFee } = useCart();
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const res = await API.get('/cart');
-        setCartItems(res.data.items.map(item => ({
+        const items = res.data.items.map(item => ({
           ...item,
           total: item.price * item.quantity
-        })));
+        }));
+        setCartItems(items);
       } catch (err) {
         console.error('Error fetching cart:', err);
       } finally {
@@ -38,7 +38,7 @@ function CartComponent() {
     try {
       const item = cartItems.find(item => item.medicineId._id === itemId);
       const newQuantity = item.quantity + change;
-      
+
       if (newQuantity <= 0) {
         await API.post('/cart/remove', { medicineId: itemId });
       } else {
@@ -47,7 +47,7 @@ function CartComponent() {
           quantity: change
         });
       }
-      
+
       const res = await API.get('/cart');
       setCartItems(res.data.items.map(item => ({
         ...item,
@@ -74,13 +74,8 @@ function CartComponent() {
   };
 
   const handleCheckout = () => {
-    navigate('/checkout', {
-      state: {
-        subtotal,
-        deliveryFee,
-        total
-      }
-    });
+    navigate('/checkout', { state: { cartItems } });
+
   };
 
   if (loading) {
