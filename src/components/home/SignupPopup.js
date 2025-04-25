@@ -28,7 +28,9 @@ const SignupPopup = ({ onClose }) => {
   
     try {
       if (isSignup) {
-        await API.post("/auth/register", formData);
+        const respons= await API.post("/auth/register", formData);
+        localStorage.setItem("accessToken", respons.data.token);
+        localStorage.setItem("user", JSON.stringify(respons.data.user));
         toast.success("User registered successfully!");
       } else {
         const response = await API.post("/auth/login", {
