@@ -1,8 +1,14 @@
 import React from 'react';
 import { FaShoppingBasket } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // 🛜 Import useNavigate
 
-// Wrap component in React.memo
 const Midi = React.memo(() => {
+  const navigate = useNavigate(); // 🛜 Hook for navigation
+
+  // 🛜 Function to handle button click
+  const handleShopClick = () => {
+    navigate('/medicines');
+  };
 
   return (
     <section
@@ -22,6 +28,7 @@ const Midi = React.memo(() => {
         </p>
 
         <button
+          onClick={handleShopClick} // 🛜 Add onClick event
           className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out inline-flex items-center gap-2 group"
         >
           <FaShoppingBasket className="transition-transform duration-300 group-hover:rotate-[-5deg]" />
@@ -30,6 +37,6 @@ const Midi = React.memo(() => {
       </div>
     </section>
   );
-}); // End of React.memo wrapping
+});
 
 export default Midi;

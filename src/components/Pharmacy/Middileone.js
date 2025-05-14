@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaArrowRight, FaShoppingCart, FaFlask } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // 🛜 Import useNavigate
 import medicinesImage from '../../assets/pharmacyimages/d4.png';
 import healthcareImage from '../../assets/pharmacyimages/listimage3.png';
 import labTestsImage from '../../assets/pharmacyimages/l4.png';
@@ -38,6 +39,17 @@ const cardData = [
 ];
 
 const Middileone = React.memo(() => {
+    const navigate = useNavigate(); // 🛜 Initialize navigate
+
+    // 🛜 Handle button click based on title
+    const handleButtonClick = (title) => {
+        if (title === "Order Medicines" || title === "Healthcare Products") {
+            navigate('/medicines');
+        } else if (title === "Lab Tests") {
+            navigate('/labtest');
+        }
+    };
+
     return (
         <section className="py-16 md:py-20 bg-gray-50">
             <div className="container mx-auto px-4">
@@ -62,7 +74,10 @@ const Middileone = React.memo(() => {
                             <div className="p-5 flex flex-col flex-grow">
                                 <h3 className="text-xl font-semibold text-gray-800 mb-3">{title}</h3>
                                 <div className="mt-auto">
-                                    <button className={`${buttonColor} text-white px-6 py-3 rounded-lg w-full flex items-center justify-center gap-2 font-medium transition duration-300 ease-in-out`}>
+                                    <button
+                                        onClick={() => handleButtonClick(title)} // 🛜 Add onClick
+                                        className={`${buttonColor} text-white px-6 py-3 rounded-lg w-full flex items-center justify-center gap-2 font-medium transition duration-300 ease-in-out`}
+                                    >
                                         <Icon className="text-base" />
                                         {buttonText}
                                     </button>
