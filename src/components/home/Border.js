@@ -22,6 +22,7 @@ const Border = () => {
                             { name: 'About Us', href: '/about' },
                             { name: 'Event Calendar', href: '/events' },
                             { name: 'Contact Us', href: '/contact' },
+                            {name: 'Developer Details', href: '/devl'}
                         ].map((link, idx) => (
                             <li key={idx}>
                                 <a

@@ -10,6 +10,7 @@ import Labtest from './pages/Labtest';
 import Cart from './pages/Cart';
 import Checkout from './components/cart/Checkout'; // 🔁 Import Checkout
 import OrderConfirmation from './components/cart/OrderConfirmation';
+import Developer from './pages/Developer';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation" element={<OrderConfirmation/>} />
+          <Route path="/devl" element={<Developer/>}/>
         </Routes>
       </Router>
     </>

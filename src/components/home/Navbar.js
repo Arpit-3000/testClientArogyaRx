@@ -43,7 +43,7 @@ const Navbar = ({ onSignUpClick }) => {
   }, []);
 
   const handleLogout = (e) => {
-    e.stopPropagation();
+    if (e?.stopPropagation) e.stopPropagation();
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
     window.location.reload(); // Or navigate to login: useNavigate()
@@ -129,43 +129,61 @@ const Navbar = ({ onSignUpClick }) => {
               onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               className="text-gray-700 hover:text-gray-900 focus:outline-none"
             >
-              <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+             <div className="w-6 h-6 relative">
+  <span
+    className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
+      isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1'
+    }`}
+  ></span>
+  <span
+    className={`block absolute h-0.5 w-full bg-black transition-opacity duration-300 ease-in-out ${
+      isMobileMenuOpen ? 'opacity-0' : 'top-2.5'
+    }`}
+  ></span>
+  <span
+    className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
+      isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-4'
+    }`}
+  ></span>
+</div>
+
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-2 space-y-2">
-            <Link to="/" className={linkClasses}>Home</Link>
-            <Link to="/pharmacy" className={linkClasses}>Pharmacy</Link>
-            <Link to="/medicines" className={linkClasses}>Medicines</Link>
-            <Link to="/labtest" className={linkClasses}>Lab Test</Link>
-            <Link to="/contact" className={linkClasses}>Contact</Link>
-            <Link to="/cart" className={linkClasses}>Cart</Link>
+  // <div className="md:hidden  mt-2 space-y-2 pb-4">
+     <div className="md:hidden  inset-0 bg-white z-40 pt-20 px-6 space-y-4 ">
+    {/* Add padding-bottom to prevent cutoff */}
+    <Link to="/" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+          <Link to="/pharmacy" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Pharmacy</Link>
+          <Link to="/medicines" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Medicines</Link>
+          <Link to="/labtest" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Lab Test</Link>
+          <Link to="/cart" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Cart</Link>
 
-            {userName ? (
-              <>
-                <div className="text-black px-3 py-2">Hello, {userName}</div>
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-red-600 bg-gray-100 hover:bg-gray-200 px-5 py-3 rounded-md text-base font-medium transition"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={onSignUpClick}
-                className="w-full text-white bg-teal-700 hover:bg-teal-600 px-5 border border-teal-900 py-3 rounded-full text-base font-thin transition-colors duration-150 shadow-sm"
-              >
-                Get Started
-              </button>
-            )}
-          </div>
+          {userName ? (
+            <button
+              onClick={() => {
+                handleLogout();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full mt-4 py-3 bg-red-600 text-white rounded-lg"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                onSignUpClick();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full mt-4 py-3 bg-teal-600 text-white rounded-lg"
+            >
+              Get Started
+            </button>
+          )}
+        </div>
         )}
       </div>
     </nav>

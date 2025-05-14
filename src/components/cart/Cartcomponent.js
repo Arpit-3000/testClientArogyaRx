@@ -135,12 +135,14 @@ function CartComponent() {
                   </td>
                   <td className="py-4 px-2 text-gray-700">₹{item.total.toFixed(2)}</td>
                   <td className="py-4 px-2 text-center">
-                    <button
-                      onClick={() => handleRemoveItem(item.medicineId._id)}
-                      className="text-red-500 hover:text-red-700 cursor-pointer"
-                    >
-                      x
-                    </button>
+                  <button
+  onClick={() => handleRemoveItem(item.medicineId._id)}
+  className="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50 transition duration-200"
+>
+  <span className="block sm:hidden">🗑️</span>
+  <span className="hidden sm:block">Remove</span>
+</button>
+
                   </td>
                 </tr>
               ))
