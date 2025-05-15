@@ -8,14 +8,15 @@ import Middileone from '../components/Pharmacy/Middileone';
 import Middletwo from '../components/Pharmacy/Middletwo';
 import Midilethree from '../components/Pharmacy/Midilethree';
 import Explore from '../components/Pharmacy/Explore';
-import Prescription from '../components/Pharmacy/Prescription';
 import Question from '../components/Pharmacy/Question';
 import Border from '../components/home/Border';
 import SignupPopup from '../components/home/SignupPopup';
+import { CartProvider } from '../context/cartContext'; // Import CartProvider
 
 const Pharmacy = () => {
   const [showPopup, setShowPopup] = useState(false);
   return (
+    <CartProvider> 
     <div>
         <Navbar onSignUpClick={() => setShowPopup(true)} />
       <Headerp/>
@@ -29,6 +30,7 @@ const Pharmacy = () => {
       <Border/>
       {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
     </div>
+        </CartProvider>
   );
 };
 

@@ -1,81 +1,22 @@
 // components/cart/CartComponent.js
-import React, { useState, useEffect } from 'react';
-import API from '../../services/api';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/cartContext';
 
 function CartComponent() {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    cartItems,
+    subtotal,
+    total,
+    deliveryFee,
+    loading,
+    handleQuantityChange,
+    handleRemoveItem,
+  } = useCart();
   const navigate = useNavigate();
-  const { subtotal, setSubtotal, total, setTotal, deliveryFee } = useCart();
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await API.get('/cart');
-        const items = res.data.items.map(item => ({
-          ...item,
-          total: item.price * item.quantity
-        }));
-        setCartItems(items);
-      } catch (err) {
-        console.error('Error fetching cart:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCart();
-  }, []);
-
-  useEffect(() => {
-    const newSubtotal = cartItems.reduce((sum, item) => sum + item.total, 0);
-    setSubtotal(newSubtotal);
-    setTotal(newSubtotal + deliveryFee);
-  }, [cartItems]);
-
-  const handleQuantityChange = async (itemId, change) => {
-    try {
-      const item = cartItems.find(item => item.medicineId._id === itemId);
-      const newQuantity = item.quantity + change;
-
-      if (newQuantity <= 0) {
-        await API.post('/cart/remove', { medicineId: itemId });
-      } else {
-        await API.post('/cart/add', { 
-          medicineId: itemId,
-          quantity: change
-        });
-      }
-
-      const res = await API.get('/cart');
-      setCartItems(res.data.items.map(item => ({
-        ...item,
-        total: item.price * item.quantity
-      })));
-    } catch (err) {
-      console.error('Error updating cart:', err);
-      alert('Failed to update cart. Please try again.');
-    }
-  };
-
-  const handleRemoveItem = async (itemId) => {
-    try {
-      await API.post('/cart/remove', { medicineId: itemId });
-      const res = await API.get('/cart');
-      setCartItems(res.data.items.map(item => ({
-        ...item,
-        total: item.price * item.quantity
-      })));
-    } catch (err) {
-      console.error('Error removing item:', err);
-      alert('Failed to remove item. Please try again.');
-    }
-  };
 
   const handleCheckout = () => {
     navigate('/checkout', { state: { cartItems } });
-
   };
 
   if (loading) {
@@ -135,14 +76,13 @@ function CartComponent() {
                   </td>
                   <td className="py-4 px-2 text-gray-700">₹{item.total.toFixed(2)}</td>
                   <td className="py-4 px-2 text-center">
-                  <button
-  onClick={() => handleRemoveItem(item.medicineId._id)}
-  className="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50 transition duration-200"
->
-  <span className="block sm:hidden">🗑️</span>
-  <span className="hidden sm:block">Remove</span>
-</button>
-
+                    <button
+                      onClick={() => handleRemoveItem(item.medicineId._id)}
+                      className="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50 transition duration-200"
+                    >
+                      <span className="block sm:hidden">🗑️</span>
+                      <span className="hidden sm:block">Remove</span>
+                    </button>
                   </td>
                 </tr>
               ))

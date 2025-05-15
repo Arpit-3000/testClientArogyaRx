@@ -12,6 +12,7 @@ import Checkout from './components/cart/Checkout'; // 🔁 Import Checkout
 import OrderConfirmation from './components/cart/OrderConfirmation';
 import Developer from './pages/Developer';
 
+
 function App() {
   return (
     <>

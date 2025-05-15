@@ -11,11 +11,13 @@ import Customer from '../components/home/Customer';
 import Question from '../components/home/Question';
 import Border from '../components/home/Border';
 import SignupPopup from '../components/home/SignupPopup';
+import { CartProvider } from '../context/cartContext'; // Import CartProvider
 
 
 const Home = () => {
     const [showPopup, setShowPopup] = useState(false);
     return (
+        <CartProvider> 
         <div>
             <Navbar onSignUpClick={() => setShowPopup(true)} />
             <Header />
@@ -30,6 +32,7 @@ const Home = () => {
            
             {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
         </div>
+            </CartProvider>
     )
 }
 

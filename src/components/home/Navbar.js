@@ -1,16 +1,17 @@
+// components/home/Navbar.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logo from "../../assets/logo-Photoroom.png";
 import { ShoppingCart, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import { useCart } from '../../context/cartContext'; // Import the hook
 
 const Navbar = ({ onSignUpClick }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [userName, setUserName] = useState(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-
+  const { cartItems } = useCart(); // Access cartItems from the context
   const navigate=useNavigate();
 
   const handleCartClick = () => {
@@ -83,19 +84,21 @@ const Navbar = ({ onSignUpClick }) => {
             <Link to="/contact" className={linkClasses}>Contact</Link>
 
             <button
-  onClick={handleCartClick}
-  className="relative text-black hover:text-teal-600 transition-all duration-300"
->
-  <ShoppingCart className="w-6 h-6" />
-  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full">
-    2
-  </span>
-</button>
+              onClick={handleCartClick}
+              className="relative text-black hover:text-teal-600 transition-all duration-300"
+            >
+              <ShoppingCart className="w-6 h-6" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
 
             {/* Auth Button */}
             {userName ? (
               <div className="relative user-dropdown">
-                <button 
+                <button
                   onClick={toggleUserDropdown}
                   className="ml-4 text-white bg-teal-800 hover:bg-teal-600 px-5 border border-teal-900 py-3 rounded-full text-base font-thin transition-colors duration-150 shadow-sm flex items-center"
                 >
@@ -129,61 +132,59 @@ const Navbar = ({ onSignUpClick }) => {
               onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               className="text-gray-700 hover:text-gray-900 focus:outline-none"
             >
-             <div className="w-6 h-6 relative">
-  <span
-    className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
-      isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1'
-    }`}
-  ></span>
-  <span
-    className={`block absolute h-0.5 w-full bg-black transition-opacity duration-300 ease-in-out ${
-      isMobileMenuOpen ? 'opacity-0' : 'top-2.5'
-    }`}
-  ></span>
-  <span
-    className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
-      isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-4'
-    }`}
-  ></span>
-</div>
-
+              <div className="w-6 h-6 relative">
+                <span
+                  className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
+                    isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1'
+                  }`}
+                ></span>
+                <span
+                  className={`block absolute h-0.5 w-full bg-black transition-opacity duration-300 ease-in-out ${
+                    isMobileMenuOpen ? 'opacity-0' : 'top-2.5'
+                  }`}
+                ></span>
+                <span
+                  className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
+                    isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-4'
+                  }`}
+                ></span>
+              </div>
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-  // <div className="md:hidden  mt-2 space-y-2 pb-4">
-     <div className="md:hidden  inset-0 bg-white z-40 pt-20 px-6 space-y-4 ">
-    {/* Add padding-bottom to prevent cutoff */}
-    <Link to="/" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-          <Link to="/pharmacy" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Pharmacy</Link>
-          <Link to="/medicines" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Medicines</Link>
-          <Link to="/labtest" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Lab Test</Link>
-          <Link to="/cart" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Cart</Link>
+          <div className="md:hidden inset-0 bg-white z-40 pt-20 px-6 space-y-4 ">
+            {/* Add padding-bottom to prevent cutoff */}
+            <Link to="/" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+            <Link to="/pharmacy" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Pharmacy</Link>
+            <Link to="/medicines" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Medicines</Link>
+            <Link to="/labtest" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Lab Test</Link>
+            <Link to="/cart" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Cart</Link>
 
-          {userName ? (
-            <button
-              onClick={() => {
-                handleLogout();
-                setMobileMenuOpen(false);
-              }}
-              className="w-full mt-4 py-3 bg-red-600 text-white rounded-lg"
-            >
-              Logout
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                onSignUpClick();
-                setMobileMenuOpen(false);
-              }}
-              className="w-full mt-4 py-3 bg-teal-600 text-white rounded-lg"
-            >
-              Get Started
-            </button>
-          )}
-        </div>
+            {userName ? (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full mt-4 py-3 bg-red-600 text-white rounded-lg"
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  onSignUpClick();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full mt-4 py-3 bg-teal-600 text-white rounded-lg"
+              >
+                Get Started
+              </button>
+            )}
+          </div>
         )}
       </div>
     </nav>

@@ -10,11 +10,12 @@ import Lastcomp from '../components/medicines/Lastcomp';
 import Border from '../components/home/Border';
 import SignupPopup from '../components/home/SignupPopup';
 import MedicineList from '../components/medicines/MedicineList';
-
+import { CartProvider } from '../context/cartContext'; // Import CartProvider
 const Medicines = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   return (
+    <CartProvider> 
     <div className="">
       <Navbar onSignUpClick={() => setShowPopup(true)} />
       <Searchbar />
@@ -27,6 +28,7 @@ const Medicines = () => {
       <Border />
       {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
     </div>
+        </CartProvider>
   );
 };
 

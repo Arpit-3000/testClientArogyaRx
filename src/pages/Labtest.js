@@ -8,12 +8,14 @@ import Middleone from '../components/labtest/Middleone';
 import Middletwo from '../components/labtest/Middletwo';
 import Border from '../components/home/Border';
 import SignupPopup from '../components/home/SignupPopup';
+import { CartProvider } from '../context/cartContext'; // Import CartProvider
 
 
 
 const Labtest = () => {
     const [showPopup, setShowPopup] = useState(false);
     return (
+        <CartProvider> 
         <div>
             <Navbar onSignUpClick={() => setShowPopup(true)} />
             <Header />
@@ -25,6 +27,7 @@ const Labtest = () => {
            
             {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
         </div>
+            </CartProvider>
     )
 }
 
