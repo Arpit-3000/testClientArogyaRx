@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'; // for smooth entry animation
 
 const Lastcomp = () => {
     return (
-        <section className="py-20 bg-gradient-to-b from-blue-50 via-white to-green-50">
+        <section className="py-20">
             <div className="container mx-auto text-center px-6">
                 
                 <motion.h2
