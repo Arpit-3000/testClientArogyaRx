@@ -82,6 +82,7 @@ const Navbar = ({ onSignUpClick }) => {
             <Link to="/medicines" className={linkClasses}>Medicines</Link>
             <Link to="/labtest" className={linkClasses}>Lab Test</Link>
             <Link to="/contact" className={linkClasses}>Contact</Link>
+             <Link to="/profilesection" className={linkClasses}>Profile</Link>
 
             <button
               onClick={handleCartClick}
@@ -94,6 +95,8 @@ const Navbar = ({ onSignUpClick }) => {
                 </span>
               )}
             </button>
+            
+
 
             {/* Auth Button */}
             {userName ? (
@@ -125,6 +128,13 @@ const Navbar = ({ onSignUpClick }) => {
               </button>
             )}
           </div>
+          {/* I change here */}
+          {/* I change here */}
+          {/* I change here */}
+         
+          {/* I change here */}
+          {/* I change here */}
+          {/* I change here */}
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
