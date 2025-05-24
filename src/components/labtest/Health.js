@@ -1,49 +1,50 @@
 import React from 'react';
 
+// Local image imports
+import FeverImg from '../../assets/labtestimages/f5.png';
+import DiabetesImg from '../../assets/labtestimages/f4.png';
+import SkinImg from '../../assets/labtestimages/f3.png';
+import KidneyImg from '../../assets/labtestimages/f2.png';
+import DigestionImg from '../../assets/labtestimages/f1.png';
+
+const healthConcerns = [
+  { name: 'Fever', image: FeverImg },
+  { name: 'Diabetes', image: DiabetesImg },
+  { name: 'Skin', image: SkinImg },
+  { name: 'Kidney', image: KidneyImg },
+  { name: 'Digestion', image: DigestionImg },
+];
+
 const Health = () => {
-    return (
-        <section className="py-16">
-            <div className="container mx-auto">
-                <h2 className="text-2xl font-semibold text-blue-700 mb-8 text-left">Find Tests by Health Concern</h2>
-                <div className="flex flex-wrap justify-between gap-4">
-                    {/* Fever */}
-                    <div className="flex flex-col items-center">
-                        {/* Replace with your actual fever image path */}
-                        <img src="/path/to/fever.jpg" alt="Fever" className="w-24 h-24 object-contain rounded-full mb-2" />
-                        <p className="text-gray-700">Fever</p>
-                    </div>
+  return (
+    <section className="py-20 text-white">
+      <div className="container mx-auto px-6">
+        <h2 className="text-4xl font-bold text-left text-blue-600 mb-12">
+          Find Tests by Health Concern
+        </h2>
 
-                    {/* Diabetes */}
-                    <div className="flex flex-col items-center">
-                         {/* Replace with your actual diabetes image path */}
-                        <img src="/path/to/diabetes.jpg" alt="Diabetes" className="w-24 h-24 object-contain rounded-full mb-2" />
-                        <p className="text-gray-700">Diabetes</p>
-                    </div>
-
-                    {/* Skin */}
-                    <div className="flex flex-col items-center">
-                         {/* Replace with your actual skin image path */}
-                        <img src="/path/to/skin.jpg" alt="Skin" className="w-24 h-24 object-contain rounded-full mb-2" />
-                        <p className="text-gray-700">Skin</p>
-                    </div>
-
-                    {/* Kidney */}
-                    <div className="flex flex-col items-center">
-                         {/* Replace with your actual kidney image path */}
-                        <img src="/path/to/kidney.jpg" alt="Kidney" className="w-24 h-24 object-contain rounded-full mb-2" />
-                        <p className="text-gray-700">Kidney</p>
-                    </div>
-
-                    {/* Digestion */}
-                    <div className="flex flex-col items-center">
-                         {/* Replace with your actual digestion image path */}
-                        <img src="/path/to/digestion.jpg" alt="Digestion" className="w-24 h-24 object-contain rounded-full mb-2" />
-                        <p className="text-gray-700">Digestion</p>
-                    </div>
-                </div>
+        <div className="flex flex-wrap justify-center gap-10">
+          {healthConcerns.map((item, index) => (
+            <div
+              key={index}
+              className="bg-white text-black w-60 p-6 rounded-3xl shadow-xl flex flex-col items-center transition-all duration-300 transform hover:scale-105 hover:shadow-blue-400/50"
+            >
+              <div className="rounded-full border-4 border-transparent bg-gradient-to-tr from-blue-400 via-purple-500 to-pink-500 p-1 hover:rotate-1 transition-transform duration-300">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-32 h-32 object-cover rounded-full border-4 border-white"
+                />
+              </div>
+              <p className="mt-4 text-lg font-semibold text-center text-gray-800">
+                {item.name}
+              </p>
             </div>
-        </section>
-    );
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Health;
