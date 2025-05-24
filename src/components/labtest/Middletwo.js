@@ -1,55 +1,40 @@
 import React from 'react';
-// Make sure to install lucide-react: npm install lucide-react
 import { FlaskConical, FileText, User } from 'lucide-react';
 
-// Define the data for the steps
 const stepsData = [
   {
-    icon: <FlaskConical className="w-8 h-8 text-blue-500" />, // Icon for the first step
-    description: 'Search for tests and packages and seamlessly book a home sample collection.', // Description for the first step
+    icon: <FlaskConical className="w-8 h-8 text-blue-500 animate-float" />,
+    description: 'Search for tests and packages and seamlessly book a home sample collection.',
   },
   {
-    icon: <FileText className="w-8 h-8 text-blue-500" />, // Icon for the second step
-    description: 'We will send a certified professional to your place to assist you with the sample collection.', // Description for the second step
+    icon: <FileText className="w-8 h-8 text-blue-500 animate-float delay-100" />,
+    description: 'We will send a certified professional to your place to assist you with the sample collection.',
   },
   {
-    icon: <User className="w-8 h-8 text-blue-500" />, // Icon for the third step
-    description: 'We will email you the reports. You can also access your reports within your account on the Practo app.', // Description for the third step
+    icon: <User className="w-8 h-8 text-blue-500 animate-float delay-200" />,
+    description: 'We will email you the reports. You can also access your reports within your account on the Practo app.',
   },
 ];
 
-/**
- * Middletwo Component
- * Displays a "How it works?" section with three steps in cards.
- */
 function Middletwo() {
   return (
-    // Outer container for the section with padding
-    <div className="py-12 bg-white font-sans">
-      {/* Inner container to center content */}
-      <div className="container mx-auto px-4">
-        {/* Section Title */}
-        <h2 className="text-3xl font-semibold text-center mb-10 text-gray-800">
+    <div className="py-16  font-sans">
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12 tracking-tight">
           How it works?
         </h2>
 
-        {/* Grid container for the steps cards */}
-        {/* Uses grid layout, adjusts columns for different screen sizes */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Map through the steps data to render each card */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
           {stepsData.map((step, index) => (
-            // Individual card container
             <div
-              key={index} // Unique key for each card
-              className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition-shadow duration-300"
+              key={index}
+              className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col items-center text-center"
             >
-              {/* Icon container */}
-              <div className="mb-4 p-3 bg-blue-50 rounded-full inline-block">
-                {step.icon} {/* Render the icon */}
+              <div className="mb-6 p-4 bg-blue-100 rounded-full shadow-md">
+                {step.icon}
               </div>
-              {/* Description text */}
-              <p className="text-gray-600 text-sm leading-relaxed">
-                {step.description} {/* Render the description */}
+              <p className="text-gray-700 text-base font-medium leading-relaxed">
+                {step.description}
               </p>
             </div>
           ))}
@@ -59,5 +44,4 @@ function Middletwo() {
   );
 }
 
-// Export the component for use in other parts of the application
 export default Middletwo;
