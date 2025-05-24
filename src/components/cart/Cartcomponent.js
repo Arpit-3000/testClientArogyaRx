@@ -75,7 +75,7 @@ function CartComponent() {
                   <td className="py-4 px-4 text-center">
                     <button
                       onClick={() => handleRemoveItem(item.medicineId._id)}
-                      className="inline-flex items-center gap-1 text-sm font-medium text-red-600 border border-red-300 rounded px-3 py-1 hover:bg-red-50 transition"
+                      className="inline-flex items-center gap-1 text-sm font-medium text-green-600 border border-green-300 rounded px-3 py-1 hover:bg-green-50 transition"
                     >
                       <span className="block sm:hidden">🗑️</span>
                       <span className="hidden sm:block">Remove</span>
@@ -107,7 +107,7 @@ function CartComponent() {
           </div>
           <button
             onClick={handleCheckout}
-            className={`mt-8 w-full md:w-auto bg-orange-500 text-white py-3 px-6 rounded-md font-semibold hover:bg-orange-600 transition duration-300 ${
+            className={`mt-8 w-full md:w-auto bg-green-600 text-white py-3 px-6 rounded-md font-semibold hover:bg-green-700 transition duration-300 ${
               cartItems.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={cartItems.length === 0}
