@@ -172,6 +172,7 @@ const Navbar = ({ onSignUpClick }) => {
             <Link to="/medicines" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Medicines</Link>
             <Link to="/labtest" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Lab Test</Link>
             <Link to="/cart" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Cart</Link>
+            <Link to="/profilesection" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Profile</Link>
 
             {userName ? (
               <button

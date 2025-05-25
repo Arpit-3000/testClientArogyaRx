@@ -38,7 +38,9 @@ const MyOrders = () => {
   return (
     <div className="space-y-6">
       {orders.map((order) => (
-        <div key={order.id} className="bg-white rounded shadow p-4 space-y-2">
+        <div 
+        onClick={() => handleClick(order)}
+        key={order.id} className="bg-white rounded shadow p-4 space-y-2 cursor-pointer">
           <div className="text-green-600 font-semibold flex items-center gap-2">
             🚚 {order.status}
           </div>
