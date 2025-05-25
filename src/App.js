@@ -12,6 +12,8 @@ import Cart from './pages/Cart';
 import Checkout from './components/cart/Checkout'; // 🔁 Import Checkout
 import OrderConfirmation from './components/cart/OrderConfirmation';
 import Developer from './pages/Developer';
+import Orders from "./pages/Orders"; // Adjust the path
+import Adress from "./pages/Adress"; // Adjust the path
 
 
 function App() {
@@ -30,6 +32,9 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation" element={<OrderConfirmation/>} />
           <Route path="/devl" element={<Developer/>}/>
+            {/* other routes */}
+         <Route path="/order" element={<Orders />} />
+         <Route path="/adress" element={<Adress />} />
         </Routes>
       </Router>
     </>
