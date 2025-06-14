@@ -1,11 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EditProfile from "./EditProfile";
 import MyOrders from "./MyOrders";
 import MyAddresses from "./MyAddresses";
 import { motion } from "framer-motion";
+import API from "../../services/api";
+
 
 const MyProfile = () => {
   const [activeSection, setActiveSection] = useState("");
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await API.get("/profile/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserProfile(res.data);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+        alert("Failed to load profile info.");
+      }
+    };
+  
+    fetchProfile();
+  }, []);
+  
 
   const handleSidebarClick = (section) => setActiveSection(section);
   const handleCloseSection = () => setActiveSection("");
@@ -70,16 +93,23 @@ const MyProfile = () => {
                 transition={{ duration: 0.4 }}
                 className="bg-green-100 p-6 rounded-2xl shadow-md flex-1"
               >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-2xl font-bold shadow">
-                    S
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-bold">Shivam</h2>
-                    <p className="text-sm">shivamkumar12345@gmail.com</p>
-                    <p className="text-sm">9876345674</p>
-                  </div>
-                </div>
+               {userProfile ? (
+  <div className="flex items-center gap-4 mb-4">
+    <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-2xl font-bold shadow">
+      {userProfile.firstName?.[0] || "U"}
+    </div>
+    <div>
+      <h2 className="text-lg font-bold">
+        {userProfile.firstName} {userProfile.lastName}
+      </h2>
+      <p className="text-sm">{userProfile.email}</p>
+      <p className="text-sm">{userProfile.contact}</p>
+    </div>
+  </div>
+) : (
+  <p className="text-sm text-gray-500">Loading profile...</p>
+)}
+
                 <button
                   className="w-full bg-green-400 text-white py-2 rounded-md font-medium hover:bg-green-500 transition"
                   onClick={() => setActiveSection("profile")}

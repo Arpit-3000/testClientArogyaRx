@@ -1,27 +1,53 @@
-// src/components/Profile/EditProfile.js
-
 import React, { useState, useEffect } from "react";
-
-// ✅ Moved outside to prevent redefinition and suppress eslint warning
-const initialProfile = {
-  firstName: "Shivam",
-  lastName: "Kumar",
-  email: "shivamkumar27052003@gmail.com",
-  phone: "+918791762374",
-  dob: "2003-05-27",
-  gender: "Male",
-};
+import API from "../../services/api.js";
 
 const EditProfile = () => {
-  const [profile, setProfile] = useState(initialProfile);
+  const [profile, setProfile] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    dob: "",
+    gender: ""
+  });
+
+  const [originalProfile, setOriginalProfile] = useState(null);
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
-    const changed = Object.keys(initialProfile).some(
-      (key) => profile[key] !== initialProfile[key]
+    const fetchProfile = async () => {
+      try {
+        const res = await API.get("/profile/", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const { firstName, lastName, email, contact, dob, gender } = res.data;
+        const data = {
+          firstName,
+          lastName,
+          email,
+          phone: contact,
+          dob: dob?.split("T")[0] || "",
+          gender,
+        };
+        setProfile(data);
+        setOriginalProfile(data);
+      } catch (err) {
+        alert("Failed to load profile.");
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    if (!originalProfile) return;
+    const changed = Object.keys(originalProfile).some(
+      (key) => profile[key] !== originalProfile[key]
     );
     setIsChanged(changed);
-  }, [profile]);
+  }, [profile, originalProfile]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,9 +58,29 @@ const EditProfile = () => {
     setProfile((prev) => ({ ...prev, gender }));
   };
 
-  const handleSave = () => {
-    console.log("Saved changes:", profile);
-    // TODO: Add API call or logic to persist changes
+  const handleSave = async () => {
+    try {
+      const payload = {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        dob: profile.dob,
+        email: profile.email,
+        contact: profile.phone,
+        gender: profile.gender,
+      };
+
+      await API.put("/profile/", payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      alert("Profile updated successfully.");
+      setOriginalProfile(profile);
+      setIsChanged(false);
+    } catch (err) {
+      alert("Failed to update profile.");
+    }
   };
 
   return (
@@ -86,7 +132,13 @@ const EditProfile = () => {
             className="w-full border rounded px-3 py-2"
           />
         </div>
-        <button className="text-blue-500 font-semibold mt-6">CHANGE</button>
+        <button
+          type="button"
+          className="text-blue-500 font-semibold mt-6"
+          onClick={() => alert("Phone number change flow not implemented")}
+        >
+          CHANGE
+        </button>
       </div>
 
       <div className="mb-4">
