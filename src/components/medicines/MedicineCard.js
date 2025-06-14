@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
   const [addedToCart, setAddedToCart] = useState(false);
+  const [showGoToCart, setShowGoToCart] = useState(false);
+  const [cartAnimation, setCartAnimation] = useState('');
 
   const discountPercentage =
     medicine.pricing?.mrp && medicine.pricing?.discount
@@ -13,12 +15,23 @@ const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
       ? medicine.pricing.mrp - medicine.pricing.discount
       : medicine.pricing?.mrp;
 
-  const handleToggleCart = () => {
+  const handleToggleCart = async () => {
     if (!addedToCart) {
-      onAddToCart(medicine, 1); // Always add quantity 1
-      setAddedToCart(true);
+      try {
+        await onAddToCart(medicine, 1);
+        setAddedToCart(true);
+        setCartAnimation('animate-bounce');
+        setTimeout(() => {
+          setCartAnimation('');
+          setShowGoToCart(true);
+        }, 1000);
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Failed to add item to cart. Please try again.');
+        setShowGoToCart(false);
+      }
     } else {
-      setAddedToCart(false); // Reset state only in UI (optional: remove from cart via API if needed)
+      setAddedToCart(false);
     }
   };
 
@@ -88,16 +101,28 @@ const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
             View Details
           </button>
 
-          <button
-            onClick={handleToggleCart}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              addedToCart
-                ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
-                : 'bg-green-600 text-white hover:bg-green-700'
-            }`}
-          >
-            {addedToCart ? 'Selected' : 'Add to Cart'}
-          </button>
+          <div className="relative">
+            {!addedToCart && (
+              <button
+                onClick={handleToggleCart}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  cartAnimation
+                    ? 'bg-green-600 text-white hover:bg-green-700 animate-bounce'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
+              >
+                Add to Cart
+              </button>
+            )}
+            {addedToCart && (
+              <div className="flex items-center gap-2">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-green-600 font-medium">Added to Cart</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
