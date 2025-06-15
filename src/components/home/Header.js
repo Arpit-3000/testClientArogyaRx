@@ -1,9 +1,9 @@
 import React from "react";
 import her from "../../assets/her.png";
-import { useNavigate } from "react-router-dom";
+
 
 const Hero = () => {
-  const navigate = useNavigate();
+
 
   return (
     <div
@@ -20,10 +20,10 @@ const Hero = () => {
           </h1>
         </div>
         <button
-          onClick={() => navigate("/labtest")} // 🔥 Fixed path here
+          
           className="px-8 sm:px-10 md:px-12 lg:px-16 ml-2 sm:ml-4 bg-black text-white py-3 sm:py-4 text-base sm:text-lg lg:text-xl font-semibold rounded-[20px] italic shadow-md hover:shadow-xl hover:scale-[1.05] transition-all duration-300 ease-in-out"
         >
-          Book now
+          Explore now
         </button>
       </div>
     </div>
