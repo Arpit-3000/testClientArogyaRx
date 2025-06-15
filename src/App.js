@@ -3,7 +3,7 @@ import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Pharmacy from './pages/Pharmacy';
+// import Pharmacy from './pages/Pharmacy';
 import Contact from './pages/Contact';
 import Profilesection from './pages/Profilesection';
 import Medicines from './pages/Medicines';
@@ -24,7 +24,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/pharmacy" element={<Pharmacy />} />
+          {/* <Route path="/pharmacy" element={<Pharmacy />} /> */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/medicines" element={<Medicines />} />
           <Route path="/labtest" element={<Labtest />} />

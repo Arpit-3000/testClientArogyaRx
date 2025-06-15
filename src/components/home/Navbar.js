@@ -78,7 +78,7 @@ const Navbar = ({ onSignUpClick }) => {
           {/* Desktop Menu */}
           <div className="hidden md:flex md:items-center space-x-4">
             <Link to="/" className={linkClasses}>Home</Link>
-            <Link to="/pharmacy" className={linkClasses}>Pharmacy</Link>
+            {/* <Link to="/pharmacy" className={linkClasses}>Pharmacy</Link> */}
             <Link to="/medicines" className={linkClasses}>Medicines</Link>
             <Link to="/labtest" className={linkClasses}>Lab Test</Link>
             <Link to="/contact" className={linkClasses}>Contact</Link>
@@ -168,7 +168,7 @@ const Navbar = ({ onSignUpClick }) => {
           <div className="md:hidden inset-0 bg-white z-40 pt-20 px-6 space-y-4 ">
             {/* Add padding-bottom to prevent cutoff */}
             <Link to="/" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-            <Link to="/pharmacy" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Pharmacy</Link>
+            {/* <Link to="/pharmacy" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Pharmacy</Link> */}
             <Link to="/medicines" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Medicines</Link>
             <Link to="/labtest" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Lab Test</Link>
             <Link to="/cart" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Cart</Link>

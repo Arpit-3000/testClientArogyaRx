@@ -12,7 +12,10 @@ import Question from '../components/home/Question';
 import Border from '../components/home/Border';
 import SignupPopup from '../components/home/SignupPopup';
 import { CartProvider } from '../context/cartContext'; // Import CartProvider
-
+import PharmacyMiddileone from '../components/Pharmacy/Middileone';
+import PharmacyMiddletwo from '../components/Pharmacy/Middletwo';
+import PharmacyMidilethree from '../components/Pharmacy/Midilethree';
+import PharmacyExplore from '../components/Pharmacy/Explore';
 
 const Home = () => {
     const [showPopup, setShowPopup] = useState(false);
@@ -23,8 +26,12 @@ const Home = () => {
             <Header />
             <Midcard/>
             <Midi/>
+            <PharmacyMiddileone/>
             <Midinext/>
             <Middileone/>
+            <PharmacyMiddletwo/>
+            <PharmacyMidilethree/>
+            <PharmacyExplore/>
             <Middletwo />
             <Customer/>
             <Question/>
