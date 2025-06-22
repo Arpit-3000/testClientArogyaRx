@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'; // Adding some subtle animation
 const Middle = () => {
     return (
         <section className="py-20">
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-16 px-6 md:px-12">
+            <div className="container mx-auto justify-items-center  ">
                 
                 {/* Text Section */}
                 <motion.div 
@@ -23,23 +23,6 @@ const Middle = () => {
                         Whether you're refilling a prescription or trying a new supplement, you can feel confident knowing you're getting the best value for your health. 
                         With HealthSaathi, staying healthy is always within reach.
                     </p>
-                </motion.div>
-
-                {/* Image Section */}
-                <motion.div 
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="relative rounded-3xl overflow-hidden shadow-2xl group"
-                >
-                    <img
-                        src="/path/to/your/health-affordable-image.jpg"
-                        alt="Couple smiling"
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                    />
-                    {/* Optional gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                 </motion.div>
 
             </div>
