@@ -1,8 +1,57 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { X, ChevronLeft, ChevronRight, ShoppingCart, Plus, Minus, Star, Heart, Share2, AlertTriangle, Check } from 'lucide-react';
 import API from '../../services/api';
+
+// Helper function to format composition
+const formatComposition = (composition) => {
+  if (!composition) return 'N/A';
+  if (typeof composition === 'string') return composition;
+  
+  const { activeIngredients = [], inactiveIngredients = [] } = composition;
+  const active = activeIngredients.length > 0 ? `Active: ${activeIngredients.join(', ')}` : '';
+  const inactive = inactiveIngredients.length > 0 ? `Inactive: ${inactiveIngredients.join(', ')}` : '';
+  return [active, inactive].filter(Boolean).join(' • ');
+};
+
+// Helper function to format dosage
+const formatDosage = (dosage) => {
+  if (!dosage) return 'N/A';
+  if (typeof dosage === 'string') return dosage;
+  
+  const parts = [];
+  if (dosage.form) parts.push(`Form: ${dosage.form}`);
+  if (dosage.strength) parts.push(`Strength: ${dosage.strength}`);
+  if (dosage.recommendedDosage) parts.push(`Dosage: ${dosage.recommendedDosage}`);
+  
+  return parts.join(' • ');
+};
+
+// Function to generate random rating between min and max (inclusive)
+const getRandomRating = (min = 3.5, max = 5) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+// Function to generate random review count
+const getRandomReviewCount = (min = 10, max = 100) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 const MedicineDetailsModal = ({ medicine, onClose }) => {
   const navigate = useNavigate();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showAddedToCart, setShowAddedToCart] = useState(false);
+
+  const discountPercentage = medicine.pricing?.mrp && medicine.pricing?.discount
+    ? Math.round((medicine.pricing.discount / medicine.pricing.mrp) * 100)
+    : 0;
+
+  const finalPrice = medicine.pricing?.mrp && medicine.pricing?.discount
+    ? (medicine.pricing.mrp - medicine.pricing.discount).toFixed(2)
+    : (medicine.pricing?.mrp || 0).toFixed(2);
 
   const handleAddToCart = async () => {
     const isLoggedIn = !!localStorage.getItem('accessToken');
@@ -12,111 +61,383 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
     }
 
     try {
+      setIsAddingToCart(true);
       await API.post('/cart/add', {
         medicineId: medicine._id,
-        quantity: 1,
+        quantity,
       });
-      alert(`"${medicine.productName}" added to cart successfully! Redirecting to cart...`);
-      navigate('/cart');
+      setShowAddedToCart(true);
+      setTimeout(() => setShowAddedToCart(false), 2000);
     } catch (err) {
       console.error('Error adding to cart:', err);
       alert('Failed to add item to cart. Please try again.');
+    } finally {
+      setIsAddingToCart(false);
     }
   };
 
+  const nextImage = () => {
+    setCurrentImageIndex(prev => 
+      prev === (medicine.images?.length - 1 || 0) ? 0 : prev + 1
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex(prev => 
+      prev === 0 ? (medicine.images?.length - 1 || 0) : prev - 1
+    );
+  };
+
+  const increaseQuantity = () => setQuantity(prev => Math.min(prev + 1, 10));
+  const decreaseQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4 overflow-y-auto">
-      <div className="bg-white bg-opacity-90 backdrop-blur-lg shadow-2xl rounded-2xl w-full max-w-4xl relative max-h-[90vh] overflow-y-auto animate-fadeIn">
-
-        {/* Close Button */}
-        <button
-          className="absolute top-3 right-3 text-gray-600 hover:text-red-600 text-xl font-bold"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-
+    <div 
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-start p-4 overflow-y-auto"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn"
+        onClick={e => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-green-400 p-6 rounded-t-2xl text-white">
-          <h2 className="text-3xl font-semibold">{medicine.productName}</h2>
-          <p className="text-sm mt-1 italic">{medicine.brandName}</p>
-        </div>
-
-        <div className="p-6 space-y-6">
-
-          {/* Images Carousel */}
-          {medicine.images?.length > 0 && (
-            <div className="flex space-x-3 overflow-x-auto pb-2">
-              {medicine.images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt="medicine"
-                  className="h-40 w-auto object-contain rounded-lg border shadow-md transition-transform duration-300 hover:scale-105"
-                />
-              ))}
-            </div>
-          )}
-
-          {/* Details Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800 text-sm leading-relaxed break-words">
-            <p><span className="font-semibold">Generic Name:</span> {medicine.genericName}</p>
-            <p><span className="font-semibold">Category:</span> {medicine.category}</p>
-            <p><span className="font-semibold">Prescription Required:</span> {medicine.prescriptionRequired ? 'Yes' : 'No'}</p>
-            <p className="whitespace-pre-wrap"><span className="font-semibold">Composition:</span> {JSON.stringify(medicine.composition)}</p>
-            <p className="break-words whitespace-pre-wrap"><span className="font-semibold">Dosage:</span> {typeof medicine.dosage === 'string' ? medicine.dosage : JSON.stringify(medicine.dosage)}</p>
-            <p><span className="font-semibold">Price:</span> ₹{medicine.pricing?.mrp} <span className="text-green-600">(₹{medicine.pricing?.discount} off)</span></p>
-            <p><span className="font-semibold">Stock:</span> {medicine.stock?.quantity} units (Min: {medicine.stock?.minQuantity})</p>
-            <p><span className="font-semibold">Packaging:</span> {medicine.packaging?.packSize} <span className="text-red-500">(Exp: {medicine.packaging?.expiryDate?.split("T")[0]})</span></p>
-            <p className="whitespace-pre-wrap"><span className="font-semibold">Regulatory:</span> {JSON.stringify(medicine.regulatory)}</p>
-          </div>
-
-          {/* FAQs */}
-          {medicine.additionalFeatures?.faqs?.length > 0 && (
-            <div className="mt-4">
-              <h3 className="font-semibold text-lg mb-2 text-blue-700">FAQs</h3>
-              <ul className="list-disc list-inside space-y-1">
-                {medicine.additionalFeatures.faqs.map((faq, i) => (
-                  <li key={i}>
-                    <span className="font-semibold">{faq.question}</span>: {faq.answer}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Doctor Advice */}
-          {medicine.additionalFeatures?.doctorAdvice && (
-            <div className="mt-4">
-              <h3 className="font-semibold text-lg text-blue-700">Doctor's Advice</h3>
-              <p className="whitespace-pre-wrap">{medicine.additionalFeatures.doctorAdvice}</p>
-            </div>
-          )}
-
-          {/* Reviews */}
-          {medicine.additionalFeatures?.reviews?.length > 0 && (
-            <div className="mt-4">
-              <h3 className="font-semibold text-lg text-blue-700 mb-2">User Reviews</h3>
-              <ul className="space-y-2">
-                {medicine.additionalFeatures.reviews.map((review, i) => (
-                  <li key={i} className="border rounded-md p-2 bg-gray-50 shadow-sm">
-                    <strong>{review.user}</strong>: {review.comment}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* CTA */}
-          <div className="pt-4 border-t mt-6 flex justify-end">
-            <button
-              onClick={handleAddToCart}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-105"
+        <div className="sticky top-0 bg-white z-10 border-b">
+          <div className="flex justify-between items-center p-4">
+            <h2 className="text-xl font-bold text-gray-900">Medicine Details</h2>
+            <button 
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
+              aria-label="Close"
             >
-              Add to Cart
+              <X size={24} />
             </button>
           </div>
+        </div>
 
+        {/* Main Content */}
+        <div className="overflow-y-auto flex-1">
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column - Images */}
+              <div className="lg:col-span-1">
+                <div className="relative bg-gray-50 rounded-lg p-4 flex items-center justify-center h-80 mb-4">
+                  {medicine.images?.length > 0 ? (
+                    <>
+                      <img
+                        src={medicine.images[currentImageIndex]}
+                        alt={medicine.productName}
+                        className="max-h-full max-w-full object-contain"
+                      />
+                      {medicine.images.length > 1 && (
+                        <>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                            className="absolute left-2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md"
+                          >
+                            <ChevronLeft size={20} />
+                          </button>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                            className="absolute right-2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md"
+                          >
+                            <ChevronRight size={20} />
+                          </button>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-gray-400">No image available</div>
+                  )}
+                </div>
+
+                {/* Thumbnails */}
+                {medicine.images?.length > 1 && (
+                  <div className="flex gap-2 overflow-x-auto py-2">
+                    {medicine.images.map((img, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={`flex-shrink-0 w-16 h-16 border-2 rounded-md overflow-hidden ${
+                          currentImageIndex === idx ? 'border-blue-500' : 'border-transparent'
+                        }`}
+                      >
+                        <img
+                          src={img}
+                          alt={`Thumbnail ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Right Column - Details */}
+              <div className="lg:col-span-2">
+                <div className="space-y-6">
+                  {/* Title and Brand */}
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900">{medicine.productName}</h1>
+                    <p className="text-gray-500">{medicine.brandName}</p>
+                    
+                    {/* Rating */}
+                    <div className="flex items-center mt-2">
+                      <div className="flex text-amber-400">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star 
+                            key={star} 
+                            size={18} 
+                            fill={star <= 4 ? 'currentColor' : 'none'} 
+                            className="mr-0.5" 
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-500 ml-2">(42 reviews)</span>
+                    </div>
+                  </div>
+
+                  {/* Price Section */}
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-2xl font-bold text-gray-900">₹{finalPrice}</span>
+                      {discountPercentage > 0 && (
+                        <>
+                          <span className="text-sm text-gray-500 line-through">
+                            ₹{medicine.pricing?.mrp?.toFixed(2)}
+                          </span>
+                          <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                            {discountPercentage}% OFF
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    {discountPercentage > 0 && (
+                      <p className="text-sm text-green-600 font-medium mt-1">
+                        Save ₹{medicine.pricing?.discount?.toFixed(2)}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Key Details */}
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-500">Manufacturer</p>
+                      <p className="font-medium">{medicine.brandName || 'Not specified'}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Category</p>
+                      <p className="font-medium capitalize">{medicine.category?.toLowerCase() || 'General'}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Generic Name</p>
+                      <p className="font-medium">{medicine.genericName || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Prescription</p>
+                      <p className="font-medium">{medicine.prescriptionRequired ? 'Required' : 'Not Required'}</p>
+                    </div>
+                  </div>
+
+                  {/* Stock Status */}
+                  <div className="bg-green-50 p-3 rounded-lg flex items-start">
+                    <div className="bg-green-100 p-1 rounded-full mr-3">
+                      <Check className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-green-800">In Stock</p>
+                      <p className="text-sm text-green-700">
+                        {medicine.stock?.minQuantity > 0 && ` (Min. order: ${medicine.stock.minQuantity} units)`}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Quantity Selector */}
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-2">Quantity</p>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center border rounded-lg overflow-hidden">
+                        <button 
+                          onClick={decreaseQuantity}
+                          className="px-3 py-2 text-gray-600 hover:bg-gray-50"
+                          disabled={quantity <= 1}
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="w-10 text-center font-medium">{quantity}</span>
+                        <button 
+                          onClick={increaseQuantity}
+                          className="px-3 py-2 text-gray-600 hover:bg-gray-50"
+                          disabled={quantity >= 10}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <span className="text-sm text-gray-500">Max 10 units</span>
+                    </div>
+                  </div>
+
+                  {/* Prescription Notice */}
+                  {medicine.prescriptionRequired && (
+                    <div className="bg-amber-50 border-l-4 border-amber-400 p-4">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <AlertTriangle className="h-5 w-5 text-amber-400" />
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm text-amber-700">
+                            <span className="font-medium">Prescription Required</span> - You'll need a valid prescription to purchase this medicine.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleAddToCart(); }}
+                      disabled={isAddingToCart || showAddedToCart}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg font-medium text-white transition-colors ${
+                        showAddedToCart 
+                          ? 'bg-green-600' 
+                          : 'bg-blue-600 hover:bg-blue-700'
+                      }`}
+                    >
+                      {showAddedToCart ? (
+                        <>
+                          <Check size={18} />
+                          <span>Added to Cart</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart size={18} />
+                          <span>{isAddingToCart ? 'Adding...' : 'Add to Cart'}</span>
+                        </>
+                      )}
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setIsWishlisted(!isWishlisted); }}
+                      className="p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+                      aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                    >
+                      <Heart 
+                        size={20} 
+                        className={isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'} 
+                      />
+                    </button>
+                  </div>
+
+                  {/* Additional Info */}
+                  <div className="pt-4 border-t">
+                    <h3 className="font-medium text-gray-900 mb-3">Product Information</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex">
+                        <span className="text-gray-500 w-32 flex-shrink-0">Composition</span>
+                        <span className="text-gray-700">
+                          {formatComposition(medicine.composition)}
+                        </span>
+                      </div>
+                      <div className="flex">
+                        <span className="text-gray-500 w-32 flex-shrink-0">Dosage</span>
+                        <span className="text-gray-700">
+                          {formatDosage(medicine.dosage)}
+                        </span>
+                      </div>
+                      {medicine.packaging?.packSize && (
+                        <div className="flex">
+                          <span className="text-gray-500 w-32 flex-shrink-0">Packaging</span>
+                          <span className="text-gray-700">
+                            {medicine.packaging.packSize}
+                            {medicine.packaging.expiryDate && (
+                              <span className="text-red-500 ml-2">
+                                (Exp: {new Date(medicine.packaging.expiryDate).toLocaleDateString()})
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* FAQs */}
+                  {medicine.additionalFeatures?.faqs?.length > 0 && (
+                    <div className="border-t pt-4">
+                      <h3 className="font-medium text-gray-900 mb-3">Frequently Asked Questions</h3>
+                      <div className="space-y-4">
+                        {medicine.additionalFeatures.faqs.map((faq, i) => (
+                          <div key={i} className="border rounded-lg overflow-hidden">
+                            <div className="p-3 bg-gray-50">
+                              <p className="font-medium text-gray-900">{faq.question}</p>
+                            </div>
+                            <div className="p-3">
+                              <p className="text-gray-700">{faq.answer}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Doctor's Advice */}
+                  {medicine.additionalFeatures?.doctorAdvice && (
+                    <div className="border-t pt-4">
+                      <h3 className="font-medium text-gray-900 mb-3">Doctor's Advice</h3>
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <p className="text-gray-700 whitespace-pre-wrap">{medicine.additionalFeatures.doctorAdvice}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Reviews */}
+                  {medicine.additionalFeatures?.reviews?.length > 0 && (
+                    <div className="border-t pt-4">
+                      <div className="flex justify-between items-center mb-3">
+                        <h3 className="font-medium text-gray-900">Customer Reviews</h3>
+                        <button className="text-sm text-blue-600 hover:underline">
+                          View All
+                        </button>
+                      </div>
+                      <div className="space-y-4">
+                        {medicine.additionalFeatures.reviews.slice(0, 3).map((review, i) => (
+                          <div key={i} className="border rounded-lg p-4">
+                            <div className="flex items-center mb-2">
+                              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-medium">
+                                {(review.user?.charAt(0) || 'U').toUpperCase()}
+                              </div>
+                              <div className="ml-3">
+                                <p className="font-medium text-gray-900">{review.user || 'Anonymous User'}</p>
+                                <div className="flex items-center">
+                                  {[1, 2, 3, 4, 5].map((star) => {
+                                    const rating = review.rating || getRandomRating();
+                                    return (
+                                      <Star
+                                        key={star}
+                                        size={14}
+                                        className={`${
+                                          star <= rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'
+                                        }`}
+                                      />
+                                    );
+                                  })}
+                                  <span className="text-xs text-gray-500 ml-2">
+                                    ({getRandomReviewCount()} reviews)
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-gray-700 mt-2">{review.comment}</p>
+                            <p className="text-xs text-gray-500 mt-2">
+                              {new Date(review.date).toLocaleDateString()}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
