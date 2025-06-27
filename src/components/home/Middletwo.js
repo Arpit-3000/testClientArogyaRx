@@ -1,22 +1,14 @@
-// components/Middletwo.js
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import { CheckCircleIcon } from '@heroicons/react/24/solid'; 
-import virtualTreatmentImage from '../../assets/doctorimg.png'; 
-// ---
+import virtualTreatmentImage from '../../assets/doctorimg.png';
 
 const Middletwo = () => {
-    // Hook for the first section
     const { ref: ref1, inView: inView1 } = useInView({
-        threshold: 0.3,
+        threshold: 0.2,
+        triggerOnce: true
     });
 
-    // Hook for the second section
-    const { ref: ref2, inView: inView2 } = useInView({
-        threshold: 0.3,
-    });
-
-    // List items data (optional, keeps JSX cleaner)
     const listItems = [
         "Schedule the appointment directly.",
         "Search for your doctor by name, specialty, or location.",
@@ -24,47 +16,45 @@ const Middletwo = () => {
     ];
 
     return (
-        // Changed background, increased padding
-        <section className="bg-white py-24">
+        <section className="bg-white dark:bg-gray-900 py-16 sm:py-20 lg:py-24 transition-colors duration-300">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-
-                {/* --- First Section: Virtual Treatment (Text Left, Image Right) --- */}
                 <div
-                    ref={ref1} // Attach ref for scroll animation
+                    ref={ref1}
                     className={`
-                        grid grid-cols-1 md:grid-cols-2 items-center gap-12 lg:gap-16 mb-16 md:mb-24 // Increased gap & margin
-                        transition-all duration-1000 ease-out
+                        grid grid-cols-1 md:grid-cols-2 items-center gap-8 sm:gap-10 lg:gap-16
+                        transition-all duration-700 ease-out
                         ${inView1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
                     `}
                 >
                     {/* Left Column: Text Content */}
-                    <div>
-                        {/* Heading style updated */}
-                        <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">Get virtual treatment anytime.</h2>
+                    <div className="order-2 md:order-1">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
+                            Get virtual treatment anytime.
+                        </h2>
 
-                        {/* List style updated with icons */}
-                        <ul className="space-y-4 mb-8">
+                        <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                             {listItems.map((item, index) => (
                                 <li key={index} className="flex items-start">
-                                    <CheckCircleIcon className="flex-shrink-0 w-6 h-6 text-teal-500 mr-3 mt-1" aria-hidden="true" />
-                                    <span className="text-lg text-gray-600 leading-relaxed">{item}</span>
+                                    <CheckCircleIcon className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-teal-500 dark:text-teal-400 mr-3 mt-0.5" />
+                                    <span className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                                        {item}
+                                    </span>
                                 </li>
                             ))}
                         </ul>
 
-                        {/* Button style updated */}
-                        <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-base tracking-wide">
+                        <button className="bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white font-medium sm:font-bold py-2.5 px-6 sm:py-3 sm:px-8 rounded-full transition duration-300 text-sm sm:text-base tracking-wide">
                             LEARN MORE
                         </button>
                     </div>
 
                     {/* Right Column: Image */}
-                    {/* Image container style updated */}
-                    <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                    <div className="order-1 md:order-2 relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg dark:shadow-gray-800/50">
                         <img
-                            src={virtualTreatmentImage} // Use imported image
+                            src={virtualTreatmentImage}
                             alt="Virtual Treatment"
-                            className="w-full h-auto" // Removed rounding from img
+                            className="w-full h-auto object-cover"
+                            loading="lazy"
                         />
                     </div>
                 </div>

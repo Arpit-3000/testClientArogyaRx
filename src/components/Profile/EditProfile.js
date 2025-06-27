@@ -84,57 +84,65 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-md shadow-md w-full max-w-4xl mx-auto mt-6">
-      <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+    <div className="p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-md shadow-md w-full max-w-4xl mx-auto mt-4 sm:mt-6 transition-colors duration-300">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Edit Profile</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-sm font-medium mb-1">First Name *</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+            First Name *
+          </label>
           <input
             type="text"
             name="firstName"
             value={profile.firstName}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Last Name</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Last Name
+          </label>
           <input
             type="text"
             name="lastName"
             value={profile.lastName}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
         </div>
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Email Id *</label>
+        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+          Email Id *
+        </label>
         <input
           type="email"
           name="email"
           value={profile.email}
           onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
+          className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
         />
       </div>
 
-      <div className="mb-4 flex justify-between items-center gap-4">
+      <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
         <div className="flex-1">
-          <label className="block text-sm font-medium mb-1">Mobile Number *</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Mobile Number *
+          </label>
           <input
             type="tel"
             name="phone"
             value={profile.phone}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
         </div>
         <button
           type="button"
-          className="text-blue-500 font-semibold mt-6"
+          className="text-blue-500 dark:text-blue-400 font-semibold sm:mt-6 py-2 sm:py-0"
           onClick={() => alert("Phone number change flow not implemented")}
         >
           CHANGE
@@ -142,31 +150,35 @@ const EditProfile = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">DOB</label>
+        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+          DOB
+        </label>
         <input
           type="date"
           name="dob"
           value={profile.dob}
           onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
+          className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
         />
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Share your DOB to get special gifts on the 1st day of your birthday month
         </p>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Gender</label>
-        <div className="flex gap-4">
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+          Gender
+        </label>
+        <div className="flex flex-wrap gap-2 sm:gap-4">
           {["Male", "Female", "Other"].map((g) => (
             <button
               key={g}
               type="button"
               onClick={() => handleGenderSelect(g)}
-              className={`border rounded px-4 py-2 ${
+              className={`border dark:border-gray-600 rounded px-3 sm:px-4 py-2 text-sm sm:text-base ${
                 profile.gender === g
-                  ? "bg-yellow-400 text-white"
-                  : "bg-white text-black"
+                  ? "bg-yellow-500 dark:bg-yellow-600 text-white"
+                  : "bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
               }`}
             >
               {g}
@@ -176,10 +188,10 @@ const EditProfile = () => {
       </div>
 
       <button
-        className={`font-semibold px-6 py-2 rounded transition ${
+        className={`font-semibold px-6 py-2 rounded transition w-full sm:w-auto text-center ${
           isChanged
-            ? "bg-yellow-500 text-white hover:bg-yellow-600"
-            : "bg-gray-300 text-white cursor-not-allowed"
+            ? "bg-yellow-500 dark:bg-yellow-600 text-white hover:bg-yellow-600 dark:hover:bg-yellow-700"
+            : "bg-gray-300 dark:bg-gray-600 text-white cursor-not-allowed"
         }`}
         disabled={!isChanged}
         onClick={handleSave}

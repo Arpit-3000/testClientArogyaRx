@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import toast from "react-hot-toast";
-import API from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import { X } from 'lucide-react';
+import toast from 'react-hot-toast';
+import API from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
-const SignupPopup = ({ onClose }) => {
+const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
   const navigate = useNavigate();
-  const [isSignup, setIsSignup] = useState(true);
+  const [isSignup, setIsSignup] = useState(initialMode === 'signup');
   const [loading, setLoading] = useState(false);
-
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,53 +20,204 @@ const SignupPopup = ({ onClose }) => {
     contact: "",
   });
 
+  // Handle ESC key to close modal and prevent body scroll
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEsc);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  // Reset form when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      setIsSignup(initialMode === 'signup');
+    }
+  }, [isOpen, initialMode]);
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const toggleAuthMode = () => {
+    setIsSignup(prev => !prev);
+  };
+
+  const showErrorToast = (message) => {
+    toast.error(message, {
+      style: {
+        background: '#fef2f2',
+        color: '#b91c1c',
+        border: '1px solid #fecaca'
+      },
+      iconTheme: {
+        primary: '#dc2626',
+        secondary: '#fef2f2',
+      },
+      duration: 4000
+    });
+  };
+
+  const showSuccessToast = (message) => {
+    toast.success(message, {
+      style: {
+        background: '#ecfdf5',
+        color: '#065f46',
+        border: '1px solid #a7f3d0'
+      },
+      iconTheme: {
+        primary: '#10b981',
+        secondary: '#ecfdf5',
+      }
+    });
   };
 
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+    
+    // Basic client-side validation
+    if (!formData.email || !formData.password) {
+      showErrorToast('Please fill in all required fields');
+      setLoading(false);
+      return;
+    }
+
     try {
-      if (isSignup) {
-        const respons= await API.post("/auth/register", formData);
-        localStorage.setItem("accessToken", respons.data.token);
-        localStorage.setItem("user", JSON.stringify(respons.data.user));
-        toast.success("User registered successfully!");
-      } else {
-        const response = await API.post("/auth/login", {
-          email: formData.email,
-          password: formData.password,
+      let response;
+      let endpoint = isSignup ? '/auth/register' : '/auth/login';
+      
+      const requestData = isSignup 
+        ? {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            role: formData.role || 'patient',
+            ...(formData.age && { age: formData.age }),
+            ...(formData.gender && { gender: formData.gender }),
+            ...(formData.contact && { contact: formData.contact })
+          }
+        : {
+            email: formData.email,
+            password: formData.password
+          };
+      
+      // Add a timeout to the API call
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      
+      try {
+        response = await API.post(endpoint, requestData, {
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json'
+          }
         });
+        clearTimeout(timeoutId);
         
-        // Store token and user data in localStorage
-        localStorage.setItem("accessToken", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        toast.success("Welcome back!");
+        if (response.data?.token) {
+          // Store token and user data
+          localStorage.setItem("accessToken", response.data.token);
+          
+          if (response.data.user) {
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("userName", response.data.user.name || '');
+            if (response.data.user.email) {
+              localStorage.setItem("userEmail", response.data.user.email);
+            }
+          }
+          
+          showSuccessToast(isSignup ? 'Registration successful!' : 'Login successful!');
+          
+          onClose();
+          navigate("/", { replace: true });
+          setTimeout(() => window.location.reload(), 100);
+        } else {
+          throw new Error('Invalid response from server');
+        }
+      } catch (apiError) {
+        clearTimeout(timeoutId);
+        throw apiError;
       }
-  
-      onClose();
-      navigate("/");
-      window.location.reload(); // Refresh to update the navbar
+      
     } catch (err) {
-      const msg = err.response?.data?.message || "Something went wrong";
-      toast.error(msg);
+      console.error('Auth error:', err);
+      
+      if (err.name === 'AbortError') {
+        showErrorToast('Request timed out. Please check your internet connection.');
+      } else if (err.response) {
+        // Handle specific error cases
+        if (err.response.status === 401) {
+          showErrorToast('Invalid email or password. Please try again.');
+        } else if (err.response.status === 400) {
+          showErrorToast('Invalid request. Please check your input.');
+        } else if (err.response.status === 409) {
+          showErrorToast('User already exists with this email.');
+        } else if (err.response.status >= 500) {
+          showErrorToast('Server error. Please try again later.');
+        } else {
+          showErrorToast(err.response.data?.message || 'Authentication failed.');
+        }
+      } else if (err.request) {
+        showErrorToast('No response from server. Please check your connection.');
+      } else {
+        showErrorToast(err.message || 'Something went wrong.');
+      }
     } finally {
       setLoading(false);
     }
   };
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+
+  // Create portal container if it doesn't exist
+  const [portalContainer, setPortalContainer] = React.useState(null);
+
+  useEffect(() => {
+    const portal = document.createElement('div');
+    portal.id = 'modal-portal';
+    document.body.appendChild(portal);
+    setPortalContainer(portal);
+
+    return () => {
+      if (document.body.contains(portal)) {
+        document.body.removeChild(portal);
+      }
+    };
+  }, []);
+
+  if (!isOpen || !portalContainer) return null;
+
+  return ReactDOM.createPortal(
+    <div
+      className="fixed inset-0 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm z-[2147483646]"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div 
+        className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 mx-auto overflow-y-auto border border-gray-200 dark:border-gray-700"
+      >
         <button
           onClick={onClose}
-          className="absolute top-2 right-3 text-xl font-bold text-gray-500 hover:text-red-500"
+          className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors p-1 -mr-1"
+          aria-label="Close modal"
         >
-          ×
+          <X className="w-5 h-5" />
         </button>
 
-        <h2 className="text-2xl font-semibold text-center text-teal-700 mb-4">
+        <h2 className="text-2xl font-semibold text-center text-teal-600 dark:text-teal-400 mb-4">
           {isSignup ? "Sign Up" : "Sign In"}
         </h2>
 
@@ -77,7 +230,7 @@ const SignupPopup = ({ onClose }) => {
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 required
               />
 
@@ -87,7 +240,7 @@ const SignupPopup = ({ onClose }) => {
                 placeholder="Age"
                 value={formData.age}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 required
               />
 
@@ -95,7 +248,7 @@ const SignupPopup = ({ onClose }) => {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 required
               >
                 <option value="">Select Gender</option>
@@ -110,7 +263,7 @@ const SignupPopup = ({ onClose }) => {
                 placeholder="Contact Number"
                 value={formData.contact}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 required
               />
 
@@ -118,7 +271,7 @@ const SignupPopup = ({ onClose }) => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="patient">Patient</option>
                 <option value="doctor">Doctor</option>
@@ -132,7 +285,7 @@ const SignupPopup = ({ onClose }) => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             required
           />
 
@@ -142,30 +295,40 @@ const SignupPopup = ({ onClose }) => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             required
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700 transition-colors duration-200"
+            className="w-full bg-teal-600 dark:bg-teal-700 text-white py-2 rounded-md hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors duration-200 flex items-center justify-center"
           >
-            {loading ? (isSignup ? "Signing Up..." : "Signing In...") : (isSignup ? "Sign Up" : "Sign In")}
+            {loading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {isSignup ? "Signing Up..." : "Signing In..."}
+              </>
+            ) : (isSignup ? "Sign Up" : "Sign In")}
           </button>
         </form>
 
-        <p className="text-center mt-4 text-sm">
+        <p className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
           {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
           <button
-            onClick={() => setIsSignup(!isSignup)}
-            className="text-teal-600 hover:underline"
+            onClick={toggleAuthMode}
+            className="text-teal-600 dark:text-teal-400 hover:underline font-medium"
+            type="button"
           >
-            {isSignup ? "Sign in" : "Sign up"}
+            {isSignup ? "Sign In" : "Sign Up"}
           </button>
         </p>
       </div>
-    </div>
+    </div>,
+    portalContainer
   );
 };
 
