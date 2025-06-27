@@ -1,203 +1,417 @@
-// components/home/Navbar.js
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import logo from "../../assets/logo-Photoroom.png";
-import { ShoppingCart, LogOut } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { ShoppingCart, LogOut, Menu, X, User, Package, Stethoscope, Home, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../context/cartContext'; // Import the hook
+import { useCart } from '../../context/cartContext';
+import { ThemeToggle } from '../theme-toggle';
+import { cn } from '../../lib/utils';
+import logo from "../../assets/logo-Photoroom.png";
+import SignupPopup from './SignupPopup';
 
-const Navbar = ({ onSignUpClick }) => {
+// Custom hook to handle click outside
+function useClickOutside(ref, handler) {
+  useEffect(() => {
+    const listener = (event) => {
+      if (!ref.current || ref.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
+
+    return () => {
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
+    };
+  }, [ref, handler]);
+}
+
+const Navbar = () => {
+  const location = useLocation();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [userName, setUserName] = useState(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const { cartItems } = useCart(); // Access cartItems from the context
-  const navigate=useNavigate();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
+  
+  // Handle auth modal open with proper mobile menu handling
+  const handleAuthModalOpen = (mode) => {
+    setAuthMode(mode);
+    setShowAuthModal(true);
+    setMobileMenuOpen(false);
+  };
+
+  const { cartItems } = useCart();
+  const navigate = useNavigate();
+  const mobileMenuRef = useRef(null);
+  const userMenuRef = useRef(null);
+  
+  useClickOutside(mobileMenuRef, () => setMobileMenuOpen(false));
+  useClickOutside(userMenuRef, () => setIsUserDropdownOpen(false));
+  
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   const handleCartClick = () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      alert("Please login to access your cart.");
+      setAuthMode('login');
+      setShowAuthModal(true);
       return;
     }
     navigate("/cart");
   };
 
-  const linkClasses = "text-black hover:text-teal-600 px-3 py-3 rounded-md text-lg font-thin transition-colors duration-150 whitespace-nowrap";
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userName');
+    setUserName(null);
+    setIsUserDropdownOpen(false);
+    setMobileMenuOpen(false);
+    navigate('/');
+  };
+
+  const linkClasses = (path) => {
+    const isActive = location.pathname === path;
+    return cn(
+      'px-3 py-2 rounded-md text-sm font-medium transition-all duration-150',
+      'whitespace-nowrap flex items-center gap-2',
+      'focus:outline-none focus:ring-2 focus:ring-primary/50',
+      isActive 
+        ? 'text-primary font-semibold' 
+        : 'text-foreground/90 hover:text-primary hover:bg-accent/20'
+    );
+  };
+  
+  const mobileLinkClasses = (path) => {
+    const isActive = location.pathname === path;
+    return cn(
+      'w-full px-4 py-3 rounded-lg text-base font-medium transition-colors',
+      'flex items-center gap-3',
+      'focus:outline-none focus:ring-2 focus:ring-primary/50',
+      isActive 
+        ? 'bg-primary/10 text-primary' 
+        : 'text-foreground hover:bg-accent/20'
+    );
+  };
 
   useEffect(() => {
+    let timeoutId = null;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      if (!timeoutId) {
+        timeoutId = setTimeout(() => {
+          setIsScrolled(window.scrollY > 10);
+          timeoutId = null;
+        }, 10);
+      }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    const user = localStorage.getItem("user");
-
-    if (token && user) {
-      const parsedUser = JSON.parse(user);
-      setUserName(parsedUser.name);
+    const name = localStorage.getItem('userName');
+    if (name) {
+      setUserName(name);
     }
   }, []);
 
-  const handleLogout = (e) => {
-    if (e?.stopPropagation) e.stopPropagation();
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    window.location.reload(); // Or navigate to login: useNavigate()
-  };
-
-  const toggleUserDropdown = () => {
-    setIsUserDropdownOpen(!isUserDropdownOpen);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".user-dropdown")) {
-        setIsUserDropdownOpen(false);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isUserDropdownOpen]);
-
   return (
-    <nav className={`bg-white shadow-sm sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "backdrop-blur-md bg-white/80" : ""}`}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-24">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/">
-              <img className="h-36 w-auto" src={logo} alt="Logo" />
-            </Link>
+    <nav 
+      className={`fixed top-0 w-full z-40 transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-background/95 backdrop-blur-sm border-b border-border/40 shadow-sm' 
+          : 'bg-background/80 backdrop-blur-sm border-b border-transparent'
+      }`}
+      ref={mobileMenuRef}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Left side - Logo and Desktop Navigation */}
+          <div className="flex items-center">
+            {/* Logo */}
+            <Link 
+  to="/" 
+  className="flex-shrink-0 flex items-center mr-10"
+  aria-label="Home"
+>
+  <img 
+    className="h-20 md:h-24 lg:h-28 w-auto transition-transform duration-300 hover:scale-105"
+    src={logo} 
+    alt="Arogya RX"
+    loading="eager"
+    style={{
+      filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+      willChange: 'transform',
+    }}
+  />
+</Link>
+
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:block">
+              <div className="flex items-center space-x-1">
+                <Link to="/" className={linkClasses('/')} aria-current={location.pathname === '/' ? 'page' : undefined}>
+                  <Home className="w-4 h-4" />
+                  <span>Home</span>
+                </Link>
+                <Link to="/medicines" className={linkClasses('/medicines')} aria-current={location.pathname === '/medicines' ? 'page' : undefined}>
+                  <Package className="w-4 h-4" />
+                  <span>Medicines</span>
+                </Link>
+                <Link to="/labtest" className={linkClasses('/labtest')} aria-current={location.pathname === '/labtest' ? 'page' : undefined}>
+                  <Stethoscope className="w-4 h-4" />
+                  <span>Lab Tests</span>
+                </Link>
+                <Link to="/contact" className={linkClasses('/contact')} aria-current={location.pathname === '/contact' ? 'page' : undefined}>
+                  <Phone className="w-4 h-4" />
+                  <span>Contact</span>
+                </Link>
+              </div>
+            </div>
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex md:items-center space-x-4">
-            <Link to="/" className={linkClasses}>Home</Link>
-            {/* <Link to="/pharmacy" className={linkClasses}>Pharmacy</Link> */}
-            <Link to="/medicines" className={linkClasses}>Medicines</Link>
-            <Link to="/labtest" className={linkClasses}>Lab Test</Link>
-            <Link to="/contact" className={linkClasses}>Contact</Link>
-             <Link to="/profilesection" className={linkClasses}>Profile</Link>
-
+          {/* Right side - Actions */}
+          <div className="flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <ThemeToggle className="h-9 w-9 text-foreground/80 hover:text-foreground" />
+            
+            {/* Cart */}
             <button
               onClick={handleCartClick}
-              className="relative text-black hover:text-teal-600 transition-all duration-300"
+              className="relative p-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-accent/20 transition-colors"
+              aria-label={`Shopping Cart ${cartItems.length > 0 ? `(${cartItems.length} items)` : ''}`}
             >
-              <ShoppingCart className="w-6 h-6" />
+              <ShoppingCart className="h-5 w-5" />
               {cartItems.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full">
-                  {cartItems.length}
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItems.length > 9 ? '9+' : cartItems.length}
                 </span>
               )}
             </button>
-            
 
-
-            {/* Auth Button */}
-            {userName ? (
-              <div className="relative user-dropdown">
-                <button
-                  onClick={toggleUserDropdown}
-                  className="ml-4 text-white bg-teal-800 hover:bg-teal-600 px-5 border border-teal-900 py-3 rounded-full text-base font-thin transition-colors duration-150 shadow-sm flex items-center"
-                >
-                  {userName}
-                  <LogOut className="ml-2 w-4 h-4" />
-                </button>
-                {isUserDropdownOpen && (
-                  <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md py-2 z-10">
-                    <button
-                      onClick={handleLogout}
-                      className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
+            {/* User menu */}
+            <div className="relative" ref={userMenuRef}>
               <button
-                onClick={onSignUpClick}
-                className="ml-4 text-white bg-teal-800 hover:bg-teal-600 px-5 border border-teal-900 py-3 rounded-full text-base font-thin transition-colors duration-150 shadow-sm whitespace-nowrap"
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                className="flex items-center justify-center p-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-accent/20 transition-colors"
+                aria-expanded={isUserDropdownOpen}
+                aria-haspopup="true"
+                aria-label={userName ? 'User menu' : 'Account menu'}
               >
-                Get Started
+                <User className="h-5 w-5" />
               </button>
-            )}
-          </div>
-          {/* I change here */}
-          {/* I change here */}
-          {/* I change here */}
-         
-          {/* I change here */}
-          {/* I change here */}
-          {/* I change here */}
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-700 hover:text-gray-900 focus:outline-none"
-            >
-              <div className="w-6 h-6 relative">
-                <span
-                  className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
-                    isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1'
-                  }`}
-                ></span>
-                <span
-                  className={`block absolute h-0.5 w-full bg-black transition-opacity duration-300 ease-in-out ${
-                    isMobileMenuOpen ? 'opacity-0' : 'top-2.5'
-                  }`}
-                ></span>
-                <span
-                  className={`block absolute h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
-                    isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-4'
-                  }`}
-                ></span>
-              </div>
-            </button>
+              {isUserDropdownOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setIsUserDropdownOpen(false)}
+                    aria-hidden="true"
+                  />
+                  <div 
+                    className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-popover text-popover-foreground border border-border z-50 overflow-hidden"
+                    role="menu"
+                  >
+                    <div className="py-1">
+                      {userName ? (
+                        <>
+                          <div className="px-4 py-2 text-sm border-b border-border">
+                            <p className="font-medium truncate">Hi, {userName}</p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {localStorage.getItem('userEmail')}
+                            </p>
+                          </div>
+                          <Link
+                            to="/profilesection"
+                            className="block px-4 py-2 text-sm hover:bg-accent/20"
+                            onClick={() => setIsUserDropdownOpen(false)}
+                          >
+                            Your Profile
+                          </Link>
+                          <Link
+                            to="/orders"
+                            className="block px-4 py-2 text-sm hover:bg-accent/20"
+                            onClick={() => setIsUserDropdownOpen(false)}
+                          >
+                            Your Orders
+                          </Link>
+                          <button
+                            onClick={handleLogout}
+                            className="w-full text-left px-4 py-2 text-sm hover:bg-accent/20 text-destructive"
+                          >
+                            Sign out
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => {
+                              setAuthMode('login');
+                              setShowAuthModal(true);
+                              setIsUserDropdownOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-sm hover:bg-accent/20"
+                          >
+                            Sign in
+                          </button>
+                          <button
+                            onClick={() => {
+                              setAuthMode('signup');
+                              setShowAuthModal(true);
+                              setIsUserDropdownOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-sm hover:bg-accent/20"
+                          >
+                            Create account
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden ml-2">
+              <button
+                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-foreground/80 hover:text-foreground hover:bg-accent/20 focus:outline-none"
+                aria-expanded={isMobileMenuOpen}
+              >
+                <span className="sr-only">
+                  {isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                </span>
+                {isMobileMenuOpen ? (
+                  <X className="block h-5 w-5" />
+                ) : (
+                  <Menu className="block h-5 w-5" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden inset-0 bg-white z-40 pt-20 px-6 space-y-4 ">
-            {/* Add padding-bottom to prevent cutoff */}
-            <Link to="/" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-            {/* <Link to="/pharmacy" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Pharmacy</Link> */}
-            <Link to="/medicines" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Medicines</Link>
-            <Link to="/labtest" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Lab Test</Link>
-            <Link to="/cart" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Cart</Link>
-            <Link to="/profilesection" className="block py-3 border-b border-gray-200" onClick={() => setMobileMenuOpen(false)}>Profile</Link>
-
-            {userName ? (
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full mt-4 py-3 bg-red-600 text-white rounded-lg"
-              >
-                Logout
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  onSignUpClick();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full mt-4 py-3 bg-teal-600 text-white rounded-lg"
-              >
-                Get Started
-              </button>
-            )}
-          </div>
-        )}
       </div>
+
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden bg-background/95 backdrop-blur-md transition-all duration-300 ease-in-out overflow-hidden ${
+          isMobileMenuOpen ? 'max-h-screen border-t border-border' : 'max-h-0'
+        }`}
+      >
+        <div className="px-2 pt-2 pb-4 space-y-1">
+          <Link
+            to="/"
+            className={mobileLinkClasses('/')}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Home className="w-5 h-5" />
+            <span>Home</span>
+          </Link>
+          <Link
+            to="/medicines"
+            className={mobileLinkClasses('/medicines')}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Package className="w-5 h-5" />
+            <span>Medicines</span>
+          </Link>
+          <Link
+            to="/labtest"
+            className={mobileLinkClasses('/labtest')}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Stethoscope className="w-5 h-5" />
+            <span>Lab Tests</span>
+          </Link>
+          <Link
+            to="/contact"
+            className={mobileLinkClasses('/contact')}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Phone className="w-5 h-5" />
+            <span>Contact</span>
+          </Link>
+
+          <div className="border-t border-border my-2"></div>
+
+          {userName ? (
+            <>
+              <Link
+                to="/profilesection"
+                className={mobileLinkClasses('/profilesection')}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <User className="w-5 h-5" />
+                <span>Your Profile</span>
+              </Link>
+              <Link
+                to="/orders"
+                className={mobileLinkClasses('/orders')}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Package className="w-5 h-5" />
+                <span>Your Orders</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-3 text-base font-medium text-destructive hover:bg-accent/20 rounded-lg flex items-center gap-3"
+              >
+                <LogOut className="w-5 h-5" />
+                <span>Sign out</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => handleAuthModalOpen('login')}
+                className={mobileLinkClasses('#')}
+              >
+                <User className="w-5 h-5" />
+                <span>Sign in</span>
+              </button>
+              <button
+                onClick={() => handleAuthModalOpen('signup')}
+                className={mobileLinkClasses('#')}
+              >
+                <User className="w-5 h-5" />
+                <span>Create account</span>
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Auth Modal - Using React Portal to ensure proper stacking context */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50">
+          <SignupPopup 
+            isOpen={showAuthModal}
+            onClose={() => setShowAuthModal(false)}
+            initialMode={authMode}
+          />
+        </div>
+      )}
     </nav>
   );
 };

@@ -1,8 +1,6 @@
-// components/Midinext.js
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
-
 
 const Midinext = () => {
     const { ref, inView } = useInView({
@@ -10,48 +8,36 @@ const Midinext = () => {
         threshold: 0.1,
     });
 
-    
-    const primaryColor = 'text-teal-500'; 
-    const gradientFrom = 'from-teal-500'; 
-    const gradientTo = 'to-green-500';   
-    const underlineBg = 'bg-teal-500';  
-
     return (
         <section
             ref={ref}
             className={`
-                bg-white py-24
-                transition-all duration-1000 ease-out
+                bg-white dark:bg-gray-900 py-16 sm:py-20 lg:py-24
+                transition-all duration-700 ease-out
                 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
             `}
         >
             <div className="container mx-auto text-center px-4 sm:px-6 lg:px-8 max-w-3xl">
-
                 <ShieldCheckIcon 
-                    className={`w-16 h-16 mx-auto mb-6 ${primaryColor}`} 
+                    className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 text-teal-500 dark:text-teal-400" 
                     aria-hidden="true"
                 />
 
-                
-                <h2 className={`text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r ${gradientFrom} ${gradientTo} bg-clip-text text-transparent`}>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-teal-500 to-green-500 dark:from-teal-400 dark:to-green-400 bg-clip-text text-transparent">
                     Providing best medical services
                 </h2>
 
-                
-                <div className={`w-24 h-1 ${underlineBg} mx-auto mb-8`}></div> 
+                <div className="w-20 sm:w-24 h-1 bg-teal-500 dark:bg-teal-400 mx-auto mb-6 sm:mb-8"></div>
 
-                
-                <p className="text-xl text-gray-600 leading-relaxed">
+                <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                     World-class care for everyone. Our health system offers unmatched, expert healthcare.
                 </p>
 
-           
-                <div className="mt-10">
-                    <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                <div className="mt-8 sm:mt-10">
+                    <button className="bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white font-bold py-2.5 px-6 sm:py-3 sm:px-8 rounded-full transition duration-300 text-sm sm:text-base">
                         Learn More
                     </button>
                 </div>
-              
             </div>
         </section>
     );
