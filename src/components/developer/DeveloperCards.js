@@ -28,9 +28,9 @@ const developers = [
         role: "Frontend Developer",
         image: "",
         bio: "Database and API specialist ensuring our platform is fast, secure, and reliable. Loves solving complex technical challenges.",
-        email: "alex.johnson@arogyarx.com",
-        phone: "+91 7654321098",
-        github: "https://github.com/alexjohnson",
+        email: "yashguar9758@gmail.com",
+        phone: "+91 9758123595",
+        github: "https://github.com/The-YashGaur",
         linkedin: "https://linkedin.com/in/alexjohnson"
     }
 ];
