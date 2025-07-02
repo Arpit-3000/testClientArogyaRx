@@ -8,25 +8,67 @@ function Checkout() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    street: '', city: '', state: '', zip: '', country: '', phone: ''
+    street: '', city: '', state: '', zip: '', country: 'India', phone: '',
+    useDefaultAddress: false
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [userAddress, setUserAddress] = useState(null);
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const deliveryFee = 50;
   const total = subtotal + deliveryFee;
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user?.email) {
-      setFormData((prev) => ({ ...prev, email: user.email }));
-    }
+    const fetchUserAddress = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await API.get('/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data?.address) {
+          setUserAddress(response.data.address);
+          if (response.data.address.country === undefined) {
+            setUserAddress(prev => ({ ...prev, country: 'India' }));
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch user address:', err);
+      }
+    };
+
+    fetchUserAddress();
   }, []);
 
+  useEffect(() => {
+    if (formData.useDefaultAddress && userAddress) {
+      setFormData(prev => ({
+        ...prev,
+        street: userAddress.street || '',
+        city: userAddress.city || '',
+        state: userAddress.state || '',
+        zip: userAddress.postalCode || '',
+        country: userAddress.country || 'India'
+      }));
+    } else if (!formData.useDefaultAddress) {
+      setFormData(prev => ({
+        ...prev,
+        street: '',
+        city: '',
+        state: '',
+        zip: '',
+        country: 'India'
+      }));
+    }
+  }, [formData.useDefaultAddress, userAddress]);
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
   };
 
   const validateForm = () => {
@@ -38,7 +80,7 @@ function Checkout() {
       }
     }
     if (formData.phone.length < 10) {
-      setError('Please enter a valid phone number');
+      setError('Please enter a valid phone number (at least 10 digits)');
       return false;
     }
     return true;
@@ -53,7 +95,13 @@ function Checkout() {
 
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const address = `${formData.street}, ${formData.city}, ${formData.state}, ${formData.zip}, ${formData.country}`;
+      const address = {
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.zip,
+        country: formData.country
+      };
 
       const orderData = {
         address,
@@ -65,7 +113,7 @@ function Checkout() {
         }))
       };
 
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('token');
       const response = await API.post('/orders/place', orderData, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -77,7 +125,7 @@ function Checkout() {
           name: user?.name || 'Customer',
           email: user?.email || 'Not provided',
           contact: formData.phone,
-          address,
+          address: `${address.street}, ${address.city}, ${address.state}, ${address.postalCode}, ${address.country}`,
           totalAmount: total,
           status: 'Processing',
           createdAt: new Date().toISOString(),
@@ -118,19 +166,61 @@ function Checkout() {
           {/* Delivery Information */}
           <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Delivery Information</h2>
+            
+            {userAddress && (
+              <div className="mb-4 flex items-center">
+                <input
+                  type="checkbox"
+                  id="useDefaultAddress"
+                  name="useDefaultAddress"
+                  checked={formData.useDefaultAddress}
+                  onChange={handleInputChange}
+                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                />
+                <label htmlFor="useDefaultAddress" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                  Use my default address
+                </label>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <InputField 
                   label="Street" 
                   name="street" 
                   value={formData.street} 
-                  onChange={handleInputChange} 
+                  onChange={handleInputChange}
+                  disabled={formData.useDefaultAddress}
                 />
               </div>
-              <InputField label="City" name="city" value={formData.city} onChange={handleInputChange} />
-              <InputField label="State" name="state" value={formData.state} onChange={handleInputChange} />
-              <InputField label="Zip Code" name="zip" value={formData.zip} onChange={handleInputChange} />
-              <InputField label="Country" name="country" value={formData.country} onChange={handleInputChange} />
+              <InputField 
+                label="City" 
+                name="city" 
+                value={formData.city} 
+                onChange={handleInputChange}
+                disabled={formData.useDefaultAddress}
+              />
+              <InputField 
+                label="State" 
+                name="state" 
+                value={formData.state} 
+                onChange={handleInputChange}
+                disabled={formData.useDefaultAddress}
+              />
+              <InputField 
+                label="Zip Code" 
+                name="zip" 
+                value={formData.zip} 
+                onChange={handleInputChange}
+                disabled={formData.useDefaultAddress}
+              />
+              <InputField 
+                label="Country" 
+                name="country" 
+                value={formData.country} 
+                onChange={handleInputChange}
+                disabled={formData.useDefaultAddress}
+              />
               <div className="md:col-span-2">
                 <InputField 
                   label="Phone Number" 
@@ -147,6 +237,15 @@ function Checkout() {
           <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-200 dark:border-gray-700 h-fit">
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Order Summary</h2>
             <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300">
+              {cartItems.map((item, index) => (
+                <div key={index} className="flex justify-between">
+                  <span>
+                    {item.productName} × {item.quantity}
+                  </span>
+                  <span>₹{(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              ))}
+              <hr className="border-gray-200 dark:border-gray-700" />
               <SummaryLine label="Subtotal:" value={`₹${subtotal.toFixed(2)}`} />
               <SummaryLine label="Delivery Fee:" value={`₹${deliveryFee.toFixed(2)}`} />
               <hr className="border-gray-200 dark:border-gray-700" />
@@ -170,7 +269,7 @@ function Checkout() {
   );
 }
 
-const InputField = ({ label, name, value, onChange, type = 'text' }) => (
+const InputField = ({ label, name, value, onChange, type = 'text', disabled = false }) => (
   <div>
     <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
       {label}
@@ -182,7 +281,12 @@ const InputField = ({ label, name, value, onChange, type = 'text' }) => (
       value={value}
       onChange={onChange}
       required
-      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 dark:focus:ring-green-500 bg-white dark:bg-gray-700 dark:text-white"
+      disabled={disabled}
+      className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 ${
+        disabled 
+          ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600' 
+          : 'bg-white dark:bg-gray-700 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-green-400 dark:focus:ring-green-500'
+      }`}
     />
   </div>
 );
