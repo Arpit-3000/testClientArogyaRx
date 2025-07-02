@@ -8,7 +8,14 @@ const EditProfile = () => {
     email: "",
     phone: "",
     dob: "",
-    gender: ""
+    gender: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      postalCode: "",
+      country: "India"
+    }
   });
 
   const [originalProfile, setOriginalProfile] = useState(null);
@@ -22,7 +29,7 @@ const EditProfile = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        const { firstName, lastName, email, contact, dob, gender } = res.data;
+        const { firstName, lastName, email, contact, dob, gender, address } = res.data;
         const data = {
           firstName,
           lastName,
@@ -30,6 +37,13 @@ const EditProfile = () => {
           phone: contact,
           dob: dob?.split("T")[0] || "",
           gender,
+          address: {
+            street: address?.street || "",
+            city: address?.city || "",
+            state: address?.state || "",
+            postalCode: address?.postalCode || "",
+            country: address?.country || "India"
+          }
         };
         setProfile(data);
         setOriginalProfile(data);
@@ -43,15 +57,24 @@ const EditProfile = () => {
 
   useEffect(() => {
     if (!originalProfile) return;
-    const changed = Object.keys(originalProfile).some(
-      (key) => profile[key] !== originalProfile[key]
-    );
+    const changed = JSON.stringify(profile) !== JSON.stringify(originalProfile);
     setIsChanged(changed);
   }, [profile, originalProfile]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((prev) => ({
+      ...prev,
+      address: {
+        ...prev.address,
+        [name]: value
+      }
+    }));
   };
 
   const handleGenderSelect = (gender) => {
@@ -67,6 +90,13 @@ const EditProfile = () => {
         email: profile.email,
         contact: profile.phone,
         gender: profile.gender,
+        address: {
+          street: profile.address.street,
+          city: profile.address.city,
+          state: profile.address.state,
+          postalCode: profile.address.postalCode,
+          country: profile.address.country
+        }
       };
 
       await API.put("/profile/", payload, {
@@ -80,6 +110,7 @@ const EditProfile = () => {
       setIsChanged(false);
     } catch (err) {
       alert("Failed to update profile.");
+      console.error(err);
     }
   };
 
@@ -127,6 +158,73 @@ const EditProfile = () => {
         />
       </div>
 
+      <div className="mb-4">
+        <h3 className="text-lg font-medium mb-2 text-gray-800 dark:text-white">Address</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Street
+            </label>
+            <input
+              type="text"
+              name="street"
+              value={profile.address.street}
+              onChange={handleAddressChange}
+              className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              City
+            </label>
+            <input
+              type="text"
+              name="city"
+              value={profile.address.city}
+              onChange={handleAddressChange}
+              className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              State
+            </label>
+            <input
+              type="text"
+              name="state"
+              value={profile.address.state}
+              onChange={handleAddressChange}
+              className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Postal Code
+            </label>
+            <input
+              type="text"
+              name="postalCode"
+              value={profile.address.postalCode}
+              onChange={handleAddressChange}
+              className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Country
+            </label>
+            <input
+              type="text"
+              name="country"
+              value={profile.address.country}
+              onChange={handleAddressChange}
+              className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Rest of your existing form fields */}
       <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">

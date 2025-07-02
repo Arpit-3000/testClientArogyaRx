@@ -4,23 +4,23 @@ import { ChevronLeft, User, Package, CreditCard, Home, HelpCircle, Settings } fr
 import API from "../../services/api";
 import EditProfile from "./EditProfile";
 import MyOrders from "./MyOrders";
-import MyAddresses from "./MyAddresses";
+// import MyAddresses from "./MyAddresses";
 
 const MyProfile = () => {
   const [activeSection, setActiveSection] = useState("");
-  const [userProfile, setUserProfile] = useState(null);
+  const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await API.get("/profile/", {
+        const res = await API.get("/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUserProfile(res.data);
+        setProfileData(res.data);
       } catch (err) {
         console.error("Error fetching profile:", err);
       } finally {
@@ -31,6 +31,8 @@ const MyProfile = () => {
     fetchProfile();
   }, []);
 
+  
+
   const handleSidebarClick = (section) => setActiveSection(section);
   const handleCloseSection = () => setActiveSection("");
 
@@ -38,7 +40,7 @@ const MyProfile = () => {
     { label: "My Orders", icon: <Package size={18} />, section: "orders" },
     { label: "My Payments", icon: <CreditCard size={18} /> },
     { label: "My Wallet", icon: <CreditCard size={18} /> },
-    { label: "My Addresses", icon: <Home size={18} />, section: "addresses" },
+    // { label: "My Addresses", icon: <Home size={18} />, section: "addresses" },
     { label: "My Profile", icon: <User size={18} />, section: "profile" },
   ];
 
@@ -50,6 +52,22 @@ const MyProfile = () => {
     { title: "My Profile", subtitle: "Edit Info And Change Password", icon: <User size={24} />, section: "profile" },
     { title: "Help & Support", subtitle: "Reach Out To Us", icon: <HelpCircle size={24} /> },
   ];
+
+  const getInitials = () => {
+    if (!profileData) return "U";
+    if (profileData.firstName) return profileData.firstName[0];
+    if (profileData.name) return profileData.name[0];
+    return "U";
+  };
+
+  const getFullName = () => {
+    if (!profileData) return "";
+    if (profileData.firstName && profileData.lastName) {
+      return `${profileData.firstName} ${profileData.lastName}`;
+    }
+    if (profileData.name) return profileData.name;
+    return "";
+  };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -71,10 +89,7 @@ const MyProfile = () => {
               onClick={() => item.section && handleSidebarClick(item.section)}
             />
           ))}
-          <button className="flex items-center gap-2 text-left px-3 py-2 rounded-lg text-red-500 dark:text-red-400 font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors mt-4">
-            <Settings size={18} />
-            Logout
-          </button>
+         
         </nav>
       </aside>
 
@@ -82,7 +97,7 @@ const MyProfile = () => {
       <main className="flex-1 p-4 sm:p-6 space-y-6 overflow-y-auto">
         {activeSection === "profile" && (
           <SectionWrapper onBack={handleCloseSection}>
-            <EditProfile userProfile={userProfile} />
+            <EditProfile profileData={profileData} />
           </SectionWrapper>
         )}
         {activeSection === "orders" && (
@@ -90,11 +105,12 @@ const MyProfile = () => {
             <MyOrders />
           </SectionWrapper>
         )}
-        {activeSection === "addresses" && (
+         {/* TODO:  add multiple addresses in future */}
+        {/* {activeSection === "addresses" && (
           <SectionWrapper onBack={handleCloseSection}>
             <MyAddresses />
           </SectionWrapper>
-        )}
+        )} */}
 
         {!activeSection && (
           <>
@@ -114,17 +130,17 @@ const MyProfile = () => {
                       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
                     </div>
                   </div>
-                ) : userProfile ? (
+                ) : profileData ? (
                   <div className="flex items-center gap-4 mb-4">
                     <div className="bg-green-500 dark:bg-green-600 rounded-full w-16 h-16 flex items-center justify-center text-white text-2xl font-bold shadow">
-                      {userProfile.firstName?.[0] || "U"}
+                      {getInitials()}
                     </div>
                     <div>
                       <h2 className="text-lg font-bold dark:text-white">
-                        {userProfile.firstName} {userProfile.lastName}
+                        {getFullName()}
                       </h2>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">{userProfile.email}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">{userProfile.contact}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{profileData.email}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{profileData.contact}</p>
                     </div>
                   </div>
                 ) : (
