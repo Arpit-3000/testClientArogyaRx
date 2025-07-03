@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import customerData from '../../data/customerData';
 
 const CARDS_PER_PAGE = 3;
@@ -7,6 +8,7 @@ const CARDS_PER_PAGE = 3;
 const Customer = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [fade, setFade] = useState(true);
+  const { t } = useTranslation();
 
   const totalPages = Math.ceil(customerData.length / CARDS_PER_PAGE);
 
@@ -38,10 +40,10 @@ const Customer = () => {
     <section className="py-20 bg-gradient-to-b from-background to-muted/50 transition-colors duration-300">
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-4xl font-bold text-primary mb-4 tracking-tight">
-          What Our Customers Say
+          {t('customer.title')}
         </h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-10">
-          World-class care for everyone. Our health system offers unmatched, expert healthcare experiences.
+          {t('customer.subtitle')}
         </p>
 
         <div
@@ -89,7 +91,7 @@ const Customer = () => {
                   ? 'bg-primary border-primary scale-110'
                   : 'bg-muted border-border hover:scale-105'
               }`}
-              aria-label={`Go to page ${index + 1}`}
+              aria-label={t('customer.paginationLabel', { page: index + 1 })}
             ></button>
           ))}
         </div>

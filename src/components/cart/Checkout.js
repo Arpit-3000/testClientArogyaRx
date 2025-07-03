@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import API from '../../services/api';
 
 function Checkout() {
+  const { t } = useTranslation();
   const { state } = useLocation();
   const cartItems = state?.cartItems || [];
   const navigate = useNavigate();
@@ -30,16 +32,16 @@ function Checkout() {
         if (response.data?.address) {
           setUserAddress(response.data.address);
           if (response.data.address.country === undefined) {
-            setUserAddress(prev => ({ ...prev, country: 'India' }));
+            setUserAddress(prev => ({ ...prev, country: t('checkout.country') }));
           }
         }
       } catch (err) {
-        console.error('Failed to fetch user address:', err);
+        console.error(t('checkout.errors.fetchAddress'), err);
       }
     };
 
     fetchUserAddress();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (formData.useDefaultAddress && userAddress) {
@@ -49,7 +51,7 @@ function Checkout() {
         city: userAddress.city || '',
         state: userAddress.state || '',
         zip: userAddress.postalCode || '',
-        country: userAddress.country || 'India'
+        country: userAddress.country || t('checkout.country')
       }));
     } else if (!formData.useDefaultAddress) {
       setFormData(prev => ({
@@ -58,10 +60,10 @@ function Checkout() {
         city: '',
         state: '',
         zip: '',
-        country: 'India'
+        country: t('checkout.country')
       }));
     }
-  }, [formData.useDefaultAddress, userAddress]);
+  }, [formData.useDefaultAddress, userAddress, t]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -75,12 +77,12 @@ function Checkout() {
     const requiredFields = ['street', 'city', 'state', 'zip', 'country', 'phone'];
     for (const field of requiredFields) {
       if (!formData[field]) {
-        setError(`Please fill in the ${field} field`);
+        setError(t('checkout.errors.requiredField', { field: t(`checkout.fields.${field}`) }));
         return false;
       }
     }
     if (formData.phone.length < 10) {
-      setError('Please enter a valid phone number (at least 10 digits)');
+      setError(t('checkout.errors.phoneLength'));
       return false;
     }
     return true;
@@ -122,18 +124,18 @@ function Checkout() {
         order: {
           ...response.data.order,
           _id: response.data.order._id,
-          name: user?.name || 'Customer',
-          email: user?.email || 'Not provided',
+          name: user?.name || t('checkout.defaultCustomer'),
+          email: user?.email || t('checkout.notProvided'),
           contact: formData.phone,
           address: `${address.street}, ${address.city}, ${address.state}, ${address.postalCode}, ${address.country}`,
           totalAmount: total,
-          status: 'Processing',
+          status: t('checkout.status.processing'),
           createdAt: new Date().toISOString(),
           cartItems: response.data.order.items.map(item => ({
             ...item,
             medicineId: item.medicineDetails || {
               _id: item.medicineId,
-              productName: item.productName || 'Medicine'
+              productName: item.productName || t('checkout.defaultProductName')
             },
             price: item.price
           }))
@@ -145,7 +147,7 @@ function Checkout() {
       navigate('/order-confirmation', { state: confirmationData });
 
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to place order. Please try again.');
+      setError(err.response?.data?.message || t('checkout.errors.placeOrder'));
     } finally {
       setIsLoading(false);
     }
@@ -153,7 +155,9 @@ function Checkout() {
 
   return (
     <div className="container mx-auto p-4 md:p-10 font-sans animate-fadeIn bg-gray-50 dark:bg-gray-900 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">Checkout</h1>
+      <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+        {t('checkout.title')}
+      </h1>
 
       {error && (
         <div className="mb-4 p-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-700 rounded-lg shadow">
@@ -165,7 +169,9 @@ function Checkout() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Delivery Information */}
           <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Delivery Information</h2>
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
+              {t('checkout.deliveryInfo')}
+            </h2>
             
             {userAddress && (
               <div className="mb-4 flex items-center">
@@ -178,7 +184,7 @@ function Checkout() {
                   className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                 />
                 <label htmlFor="useDefaultAddress" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-                  Use my default address
+                  {t('checkout.useDefaultAddress')}
                 </label>
               </div>
             )}
@@ -186,7 +192,7 @@ function Checkout() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <InputField 
-                  label="Street" 
+                  label={t('checkout.fields.street')} 
                   name="street" 
                   value={formData.street} 
                   onChange={handleInputChange}
@@ -194,28 +200,28 @@ function Checkout() {
                 />
               </div>
               <InputField 
-                label="City" 
+                label={t('checkout.fields.city')} 
                 name="city" 
                 value={formData.city} 
                 onChange={handleInputChange}
                 disabled={formData.useDefaultAddress}
               />
               <InputField 
-                label="State" 
+                label={t('checkout.fields.state')} 
                 name="state" 
                 value={formData.state} 
                 onChange={handleInputChange}
                 disabled={formData.useDefaultAddress}
               />
               <InputField 
-                label="Zip Code" 
+                label={t('checkout.fields.zip')} 
                 name="zip" 
                 value={formData.zip} 
                 onChange={handleInputChange}
                 disabled={formData.useDefaultAddress}
               />
               <InputField 
-                label="Country" 
+                label={t('checkout.fields.country')} 
                 name="country" 
                 value={formData.country} 
                 onChange={handleInputChange}
@@ -223,7 +229,7 @@ function Checkout() {
               />
               <div className="md:col-span-2">
                 <InputField 
-                  label="Phone Number" 
+                  label={t('checkout.fields.phone')} 
                   name="phone" 
                   value={formData.phone} 
                   onChange={handleInputChange} 
@@ -235,7 +241,9 @@ function Checkout() {
 
           {/* Order Summary */}
           <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-200 dark:border-gray-700 h-fit">
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Order Summary</h2>
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
+              {t('checkout.orderSummary')}
+            </h2>
             <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300">
               {cartItems.map((item, index) => (
                 <div key={index} className="flex justify-between">
@@ -246,10 +254,10 @@ function Checkout() {
                 </div>
               ))}
               <hr className="border-gray-200 dark:border-gray-700" />
-              <SummaryLine label="Subtotal:" value={`₹${subtotal.toFixed(2)}`} />
-              <SummaryLine label="Delivery Fee:" value={`₹${deliveryFee.toFixed(2)}`} />
+              <SummaryLine label={`${t('checkout.subtotal')}:`} value={`₹${subtotal.toFixed(2)}`} />
+              <SummaryLine label={`${t('checkout.deliveryFee')}:`} value={`₹${deliveryFee.toFixed(2)}`} />
               <hr className="border-gray-200 dark:border-gray-700" />
-              <SummaryLine label="Total:" value={`₹${total.toFixed(2)}`} bold />
+              <SummaryLine label={`${t('checkout.total')}:`} value={`₹${total.toFixed(2)}`} bold />
             </div>
             <button
               type="submit"
@@ -260,7 +268,7 @@ function Checkout() {
                   : 'bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800'
               }`}
             >
-              {isLoading ? 'Placing Order...' : 'Place Order'}
+              {isLoading ? t('checkout.placingOrder') : t('checkout.placeOrder')}
             </button>
           </div>
         </div>

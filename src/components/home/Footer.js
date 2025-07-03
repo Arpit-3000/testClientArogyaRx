@@ -1,48 +1,50 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Linkedin, Phone, Mail, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import logo from "../../assets/logo-Photoroom.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useTranslation();
   
   const footerLinks = [
     {
-      title: 'Quick Links',
+      title: t('footer.quickLinks.title'),
       links: [
-        { name: 'Home', to: '/' },
-        { name: 'Medicines', to: '/medicines' },
-        { name: 'Lab Tests', to: '/labtest' },
-        { name: 'Contact Us', to: '/contact' },
-        { name: 'Developer Details', to: '/devl' },
+        { name: t('footer.quickLinks.home'), to: '/' },
+        { name: t('footer.quickLinks.medicines'), to: '/medicines' },
+        { name: t('footer.quickLinks.labTests'), to: '/labtest' },
+        { name: t('footer.quickLinks.contact'), to: '/contact' },
+        { name: t('footer.quickLinks.developer'), to: '/devl' },
       ],
     },
     {
-      title: 'Support',
+      title: t('footer.support.title'),
       links: [
-        { name: 'FAQs', to: '/faq' },
-        { name: 'Privacy Policy', to: '/privacy' },
-        { name: 'Terms of Service', to: '/terms' },
-        { name: 'Shipping Policy', to: '/shipping' },
+        { name: t('footer.support.faq'), to: '/faq' },
+        { name: t('footer.support.privacy'), to: '/privacy' },
+        { name: t('footer.support.terms'), to: '/terms' },
+        { name: t('footer.support.shipping'), to: '/shipping' },
       ],
     },
     {
-      title: 'Contact Us',
+      title: t('footer.contact.title'),
       links: [
         { 
-          name: 'support@arogyarx.com', 
+          name: t('footer.contact.email'), 
           to: 'mailto:support@arogyarx.com',
           icon: <Mail className="w-4 h-4 mr-2 inline-block" />,
           isExternal: true
         },
         { 
-          name: '+91 98765 43210', 
+          name: t('footer.contact.phone'), 
           to: 'tel:+919876543210',
           icon: <Phone className="w-4 h-4 mr-2 inline-block" />,
           isExternal: true
         },
         { 
-          name: '123 Health Street, Mumbai, MH 400001', 
+          name: t('footer.contact.address'), 
           to: 'https://maps.google.com',
           icon: <MapPin className="w-4 h-4 mr-2 flex-shrink-0 mt-1" />,
           isExternal: true,
@@ -53,10 +55,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: <Facebook className="w-5 h-5" />, to: 'https://facebook.com' },
-    { icon: <Twitter className="w-5 h-5" />, to: 'https://twitter.com' },
-    { icon: <Instagram className="w-5 h-5" />, to: 'https://instagram.com' },
-    { icon: <Linkedin className="w-5 h-5" />, to: 'https://linkedin.com' },
+    { icon: <Facebook className="w-5 h-5" />, to: 'https://facebook.com', label: 'Facebook' },
+    { icon: <Twitter className="w-5 h-5" />, to: 'https://twitter.com', label: 'Twitter' },
+    { icon: <Instagram className="w-5 h-5" />, to: 'https://instagram.com', label: 'Instagram' },
+    { icon: <Linkedin className="w-5 h-5" />, to: 'https://linkedin.com', label: 'LinkedIn' },
   ];
 
   const renderLink = (link) => {
@@ -94,12 +96,11 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <img src={logo} alt="ArogyaRx" className="h-10 w-auto" />
+              <img src={logo} alt={t('footer.logoAlt')} className="h-10 w-auto" />
               <span className="ml-2 text-2xl font-bold text-primary">ArogyaRx</span>
             </div>
             <p className="text-muted-foreground">
-              Your trusted online pharmacy for genuine medicines and healthcare products.
-              Fast delivery and 24/7 customer support.
+              {t('footer.description')}
             </p>
             <div className="flex space-x-4 pt-2">
               {socialLinks.map((social, index) => (
@@ -109,7 +110,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"
-                  aria-label={`Follow us on ${social.to.split('//')[1]?.split('.')[0]}`}
+                  aria-label={t('footer.socialFollow', { platform: social.label })}
                 >
                   {social.icon}
                 </a>
@@ -135,17 +136,17 @@ const Footer = () => {
         {/* Copyright */}
         <div className="border-t border-border/50 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground text-center md:text-left">
-            &copy; {currentYear} ArogyaRx. All rights reserved.
+            {t('footer.copyright', { year: currentYear })}
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Privacy Policy
+              {t('footer.support.privacy')}
             </Link>
             <Link to="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Terms of Service
+              {t('footer.support.terms')}
             </Link>
             <Link to="/shipping" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Shipping Policy
+              {t('footer.support.shipping')}
             </Link>
           </div>
         </div>

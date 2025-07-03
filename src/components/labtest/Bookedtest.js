@@ -1,16 +1,18 @@
 import React from 'react';
 import bookedtestData from '../../data/bookedtestData';
+import { useTranslation } from 'react-i18next';
 
 const Bookedtest = () => {
+    const { t } = useTranslation();
     return (
         <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-gray-900">
             <div className="container mx-auto px-4 sm:px-6">
                 <div className="text-center mb-10 sm:mb-12 lg:mb-16">
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-500 mb-3">
-                        Frequently Booked Lab Tests
+                        {t('bookedTests.title')}
                     </h2>
                     <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                        Get accurate results with our trusted diagnostic services
+                        {t('bookedTests.subtitle')}
                     </p>
                 </div>
 
@@ -36,7 +38,7 @@ const Bookedtest = () => {
                             <div className="p-4 sm:p-5 space-y-2 sm:space-y-3">
                                 <div className="flex justify-between items-start">
                                     <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white line-clamp-2">
-                                        {test.title}
+                                        {t(test.title)}
                                     </h3>
                                     {test.isPopular && (
                                         <span className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 text-xs font-medium px-2 py-0.5 rounded-full ml-2">
@@ -45,7 +47,7 @@ const Bookedtest = () => {
                                     )}
                                 </div>
                                 <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                                    {test.description}
+                                    {t(test.description)}
                                 </p>
                                 <div className="pt-2 flex items-end justify-between">
                                     <div>
@@ -59,7 +61,7 @@ const Bookedtest = () => {
                                         )}
                                     </div>
                                     <button className="text-sm bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-3 py-1.5 rounded-lg transition-colors">
-                                        Book Now
+                                        {t('bookedTests.bookButton')}
                                     </button>
                                 </div>
                             </div>
@@ -69,7 +71,7 @@ const Bookedtest = () => {
 
                 <div className="text-center mt-12 sm:mt-16">
                     <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all">
-                        View All Tests
+                        {t('bookedTests.viewAllButton')}
                     </button>
                 </div>
             </div>

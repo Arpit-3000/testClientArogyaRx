@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, User, Package, CreditCard, Home, HelpCircle, Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import API from "../../services/api";
 import EditProfile from "./EditProfile";
 import MyOrders from "./MyOrders";
-// import MyAddresses from "./MyAddresses";
 
 const MyProfile = () => {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState("");
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -31,27 +32,24 @@ const MyProfile = () => {
     fetchProfile();
   }, []);
 
-  
-
   const handleSidebarClick = (section) => setActiveSection(section);
   const handleCloseSection = () => setActiveSection("");
 
-  const menuItems = [
-    { label: "My Orders", icon: <Package size={18} />, section: "orders" },
-    { label: "My Payments", icon: <CreditCard size={18} /> },
-    { label: "My Wallet", icon: <CreditCard size={18} /> },
-    // { label: "My Addresses", icon: <Home size={18} />, section: "addresses" },
-    { label: "My Profile", icon: <User size={18} />, section: "profile" },
-  ];
+  const menuItems = t('myProfile.sidebar.menuItems', { returnObjects: true }).map(item => ({
+    ...item,
+    icon: item.label === t('myProfile.sidebar.menuItems[0].label') ? <Package size={18} /> :
+          item.label === t('myProfile.sidebar.menuItems[3].label') ? <User size={18} /> :
+          <CreditCard size={18} />
+  }));
 
-  const infoBoxes = [
-    { title: "My Orders", subtitle: "View, Modify And Track Orders", icon: <Package size={24} />, section: "orders" },
-    { title: "My Payments", subtitle: "View And Modify Payment Methods", icon: <CreditCard size={24} /> },
-    { title: "My Wallet", subtitle: "Wallet History And Redeemed Gift Cards", icon: <CreditCard size={24} /> },
-    { title: "My Addresses", subtitle: "Edit, Add Or Remove Addresses", icon: <Home size={24} />, section: "addresses" },
-    { title: "My Profile", subtitle: "Edit Info And Change Password", icon: <User size={24} />, section: "profile" },
-    { title: "Help & Support", subtitle: "Reach Out To Us", icon: <HelpCircle size={24} /> },
-  ];
+  const infoBoxes = t('myProfile.dashboard.infoBoxes', { returnObjects: true }).map(box => ({
+    ...box,
+    icon: box.title === t('myProfile.dashboard.infoBoxes[0].title') ? <Package size={24} /> :
+          box.title === t('myProfile.dashboard.infoBoxes[3].title') ? <Home size={24} /> :
+          box.title === t('myProfile.dashboard.infoBoxes[4].title') ? <User size={24} /> :
+          box.title === t('myProfile.dashboard.infoBoxes[5].title') ? <HelpCircle size={24} /> :
+          <CreditCard size={24} />
+  }));
 
   const getInitials = () => {
     if (!profileData) return "U";
@@ -76,7 +74,7 @@ const MyProfile = () => {
         <div className="p-6 border-b bg-gradient-to-r from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 text-white rounded-tr-xl">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <span className="inline-block w-4 h-4 bg-white rounded-sm"></span>
-            Overview
+            {t('myProfile.sidebar.overview')}
           </h2>
         </div>
         <nav className="flex flex-col gap-1 p-4">
@@ -89,7 +87,6 @@ const MyProfile = () => {
               onClick={() => item.section && handleSidebarClick(item.section)}
             />
           ))}
-         
         </nav>
       </aside>
 
@@ -105,12 +102,6 @@ const MyProfile = () => {
             <MyOrders />
           </SectionWrapper>
         )}
-         {/* TODO:  add multiple addresses in future */}
-        {/* {activeSection === "addresses" && (
-          <SectionWrapper onBack={handleCloseSection}>
-            <MyAddresses />
-          </SectionWrapper>
-        )} */}
 
         {!activeSection && (
           <>
@@ -151,7 +142,7 @@ const MyProfile = () => {
                   className="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-colors shadow-sm"
                   onClick={() => setActiveSection("profile")}
                 >
-                  EDIT PROFILE
+                  {t('myProfile.dashboard.profileCard.editButton')}
                 </button>
               </motion.div>
 
@@ -162,13 +153,16 @@ const MyProfile = () => {
                 className="bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-green-200 dark:border-green-800 flex-1 text-center"
               >
                 <h2 className="text-xl font-semibold dark:text-white mb-2">
-                  Arogya <span className="text-green-500 dark:text-green-400 font-bold">RX</span>
+                  {t('myProfile.dashboard.premiumCard.title').split(" ")[0]}{" "}
+                  <span className="text-green-500 dark:text-green-400 font-bold">
+                    {t('myProfile.dashboard.premiumCard.title').split(" ")[1]}
+                  </span>
                 </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                  Upgrade to the premium experience now
+                  {t('myProfile.dashboard.premiumCard.subtitle')}
                 </p>
                 <div className="grid grid-cols-3 gap-2 mb-4 text-xs text-gray-700 dark:text-gray-300">
-                  {["🚚 Free Shipping", "⏰ Early Access", "🎁 VIP Support"].map((item, i) => (
+                  {t('myProfile.dashboard.premiumCard.features', { returnObjects: true }).map((item, i) => (
                     <div key={i} className="text-center">
                       <p className="text-sm">{item.split(" ")[0]}</p>
                       <p className="text-xs">{item.split(" ").slice(1).join(" ")}</p>
@@ -176,7 +170,7 @@ const MyProfile = () => {
                   ))}
                 </div>
                 <button className="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition-colors shadow-sm">
-                  GET TRIBE MEMBERSHIP
+                  {t('myProfile.dashboard.premiumCard.button')}
                 </button>
               </motion.div>
             </div>
@@ -200,7 +194,6 @@ const MyProfile = () => {
   );
 };
 
-// Sidebar Button Component
 const SidebarButton = ({ label, icon, isActive, onClick }) => (
   <button
     onClick={onClick}
@@ -215,26 +208,27 @@ const SidebarButton = ({ label, icon, isActive, onClick }) => (
   </button>
 );
 
-// Section Wrapper with Back Button
-const SectionWrapper = ({ children, onBack }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.4 }}
-    className="space-y-6"
-  >
-    <button
-      onClick={onBack}
-      className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
+const SectionWrapper = ({ children, onBack }) => {
+  const { t } = useTranslation();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
     >
-      <ChevronLeft size={18} />
-      Back to Dashboard
-    </button>
-    {children}
-  </motion.div>
-);
+      <button
+        onClick={onBack}
+        className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
+      >
+        <ChevronLeft size={18} />
+        {t('myProfile.sectionWrapper.backButton')}
+      </button>
+      {children}
+    </motion.div>
+  );
+};
 
-// InfoBox Component
 const InfoBox = ({ title, subtitle, icon, onClick }) => (
   <motion.div
     whileHover={{ scale: 1.02 }}

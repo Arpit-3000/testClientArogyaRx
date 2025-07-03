@@ -1,5 +1,6 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useTranslation } from 'react-i18next';
 import a4 from '../../assets/a4.png';
 import a5 from '../../assets/a5.png';
 
@@ -13,6 +14,8 @@ const Midi = () => {
         triggerOnce: true,
         threshold: 0.1,
     });
+
+    const { t } = useTranslation();
 
     return (
         <section className="bg-white dark:bg-gray-900 py-16 sm:py-20 lg:py-24 transition-colors duration-300">
@@ -28,17 +31,17 @@ const Midi = () => {
                 >
                     <div>
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                            High-End Technology Meets Healthcare
+                            {t('midi.section1.title')}
                         </h2>
                         <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4 sm:mb-6">
-                            Leveraging cutting-edge medical technology, we offer virtual consultations with accomplished medical professionals.
+                            {t('midi.section1.description')}
                         </p>
                     </div>
 
                     <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg dark:shadow-gray-800/50">
                         <img
                             src={a4}
-                            alt="High-Tech Healthcare"
+                            alt={t('midi.section1.imageAlt')}
                             className="w-full h-auto object-cover"
                             loading="lazy"
                         />
@@ -57,7 +60,7 @@ const Midi = () => {
                     <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg dark:shadow-gray-800/50 md:order-first">
                         <img
                             src={a5}
-                            alt="Easy Access Healthcare"
+                            alt={t('midi.section2.imageAlt')}
                             className="w-full h-auto object-cover"
                             loading="lazy"
                         />
@@ -65,10 +68,10 @@ const Midi = () => {
                     
                     <div>
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                            Easy Accessibility. Anytime, Anywhere.
+                            {t('midi.section2.title')}
                         </h2>
                         <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                            No more geographical constraints. Get the best healthcare in your hand.
+                            {t('midi.section2.description')}
                         </p>
                     </div>
                 </div>

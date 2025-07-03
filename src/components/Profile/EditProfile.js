@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import API from "../../services/api.js";
+import { useTranslation } from "react-i18next";
+import API from "../../services/api";
+import { toast } from "react-hot-toast";
 
-const EditProfile = () => {
+const EditProfile = ({ profileData }) => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
@@ -20,40 +23,30 @@ const EditProfile = () => {
 
   const [originalProfile, setOriginalProfile] = useState(null);
   const [isChanged, setIsChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await API.get("/profile/", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        const { firstName, lastName, email, contact, dob, gender, address } = res.data;
-        const data = {
-          firstName,
-          lastName,
-          email,
-          phone: contact,
-          dob: dob?.split("T")[0] || "",
-          gender,
-          address: {
-            street: address?.street || "",
-            city: address?.city || "",
-            state: address?.state || "",
-            postalCode: address?.postalCode || "",
-            country: address?.country || "India"
-          }
-        };
-        setProfile(data);
-        setOriginalProfile(data);
-      } catch (err) {
-        alert("Failed to load profile.");
-      }
-    };
-
-    fetchProfile();
-  }, []);
+    if (profileData) {
+      const { firstName, lastName, email, contact, dob, gender, address } = profileData;
+      const data = {
+        firstName,
+        lastName,
+        email,
+        phone: contact,
+        dob: dob?.split("T")[0] || "",
+        gender,
+        address: {
+          street: address?.street || "",
+          city: address?.city || "",
+          state: address?.state || "",
+          postalCode: address?.postalCode || "",
+          country: address?.country || "India"
+        }
+      };
+      setProfile(data);
+      setOriginalProfile(data);
+    }
+  }, [profileData]);
 
   useEffect(() => {
     if (!originalProfile) return;
@@ -82,6 +75,9 @@ const EditProfile = () => {
   };
 
   const handleSave = async () => {
+    if (!isChanged) return;
+    
+    setIsLoading(true);
     try {
       const payload = {
         firstName: profile.firstName,
@@ -105,23 +101,27 @@ const EditProfile = () => {
         },
       });
 
-      alert("Profile updated successfully.");
+      toast.success(t("edt.editProfile.notifications.success"));
       setOriginalProfile(profile);
       setIsChanged(false);
     } catch (err) {
-      alert("Failed to update profile.");
       console.error(err);
+      toast.error(t("edt.editProfile.notifications.error"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-md shadow-md w-full max-w-4xl mx-auto mt-4 sm:mt-6 transition-colors duration-300">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Edit Profile</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+        {t("edt.editProfile.title")}
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-            First Name *
+            {t("edt.editProfile.fields.firstName")} *
           </label>
           <input
             type="text"
@@ -129,11 +129,12 @@ const EditProfile = () => {
             value={profile.firstName}
             onChange={handleChange}
             className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            required
           />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-            Last Name
+            {t("edt.editProfile.fields.lastName")}
           </label>
           <input
             type="text"
@@ -147,7 +148,7 @@ const EditProfile = () => {
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-          Email Id *
+          {t("edt.editProfile.fields.email")} *
         </label>
         <input
           type="email"
@@ -155,15 +156,18 @@ const EditProfile = () => {
           value={profile.email}
           onChange={handleChange}
           className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+          required
         />
       </div>
 
       <div className="mb-4">
-        <h3 className="text-lg font-medium mb-2 text-gray-800 dark:text-white">Address</h3>
+        <h3 className="text-lg font-medium mb-2 text-gray-800 dark:text-white">
+          {t("edt.editProfile.sections.address")}
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-              Street
+              {t("edt.editProfile.fields.street")}
             </label>
             <input
               type="text"
@@ -175,7 +179,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-              City
+              {t("edt.editProfile.fields.city")}
             </label>
             <input
               type="text"
@@ -187,7 +191,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-              State
+              {t("edt.editProfile.fields.state")}
             </label>
             <input
               type="text"
@@ -199,7 +203,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-              Postal Code
+              {t("edt.editProfile.fields.postalCode")}
             </label>
             <input
               type="text"
@@ -211,7 +215,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-              Country
+              {t("edt.editProfile.fields.country")}
             </label>
             <input
               type="text"
@@ -219,16 +223,16 @@ const EditProfile = () => {
               value={profile.address.country}
               onChange={handleAddressChange}
               className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              disabled
             />
           </div>
         </div>
       </div>
 
-      {/* Rest of your existing form fields */}
       <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-            Mobile Number *
+            {t("edt.editProfile.fields.phone")} *
           </label>
           <input
             type="tel"
@@ -236,20 +240,21 @@ const EditProfile = () => {
             value={profile.phone}
             onChange={handleChange}
             className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            required
           />
         </div>
         <button
           type="button"
           className="text-blue-500 dark:text-blue-400 font-semibold sm:mt-6 py-2 sm:py-0"
-          onClick={() => alert("Phone number change flow not implemented")}
+          onClick={() => toast(t("edt.editProfile.notifications.changePhone"))}
         >
-          CHANGE
+          {t("edt.editProfile.buttons.change")}
         </button>
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-          DOB
+          {t("edt.editProfile.fields.dob")}
         </label>
         <input
           type="date"
@@ -259,13 +264,13 @@ const EditProfile = () => {
           className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
         />
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Share your DOB to get special gifts on the 1st day of your birthday month
+          {t("edt.editProfile.description.dob")}
         </p>
       </div>
 
       <div className="mb-6">
         <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-          Gender
+          {t("edt.editProfile.fields.gender")}
         </label>
         <div className="flex flex-wrap gap-2 sm:gap-4">
           {["Male", "Female", "Other"].map((g) => (
@@ -279,7 +284,7 @@ const EditProfile = () => {
                   : "bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
               }`}
             >
-              {g}
+              {t(`edt.editProfile.gender.${g.toLowerCase()}`)}
             </button>
           ))}
         </div>
@@ -291,10 +296,10 @@ const EditProfile = () => {
             ? "bg-yellow-500 dark:bg-yellow-600 text-white hover:bg-yellow-600 dark:hover:bg-yellow-700"
             : "bg-gray-300 dark:bg-gray-600 text-white cursor-not-allowed"
         }`}
-        disabled={!isChanged}
+        disabled={!isChanged || isLoading}
         onClick={handleSave}
       >
-        SAVE CHANGES
+        {isLoading ? t("edt.editProfile.buttons.saving") : t("edt.editProfile.buttons.save")}
       </button>
     </div>
   );

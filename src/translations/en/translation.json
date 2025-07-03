@@ -1,0 +1,770 @@
+{
+  "app": {
+    "title": "ArogyaRx",
+    "description": "Your trusted online pharmacy"
+  },
+  "user": {
+    "menu": "User menu",
+    "accountMenu": "Account menu",
+    "greeting": "Hi, {name}",
+    "profile": "Your Profile",
+    "orders": "Your Orders"
+  },
+  "headerp": {
+  "callToAction": "Order Now!",
+  "description": {
+    "line1": "Experience the ease of accessing quality healthcare and medications without the need to navigate through aisles.",
+    "line2": "brings the convenience of top-notch healthcare directly to your doorstep."
+  },
+  "scrollButton": "Start Scrolling"
+},
+  "navigation": {
+    "home": "Home",
+    "medicines": "Medicines",
+    "labTests": "Lab Tests",
+    "contact": "Contact",
+    "profile": "Profile",
+    "cart": "Cart"
+  },
+  "search": {
+    "title": "What are you looking for?",
+    "placeholder": "Search for medicines and health products...",
+    "ariaLabel": "Search for medicines",
+    "uploadAriaLabel": "Upload prescription",
+    "uploadButton": "Upload Prescription",
+    "popular": "Popular",
+    "popularSearches": ["Paracetamol", "Vitamin C", "Dolo 650", "Azithromycin"]
+  },
+  "auth": {
+  "login": "Sign In",
+  "logout":"Logout",
+  "signup": "Sign Up",
+  "signingIn": "Signing In...",
+  "signingUp": "Signing Up...",
+  "haveAccount": "Already have an account?",
+  "noAccount": "Don't have an account?",
+  "success": {
+    "login": "Login successful!",
+    "signup": "Registration successful!"
+  },
+  "errors": {
+    "requiredFields": "Please fill in all required fields",
+    "invalidCredentials": "Invalid email or password. Please try again.",
+    "invalidRequest": "Invalid request. Please check your input.",
+    "userExists": "User already exists with this email.",
+    "serverError": "Server error. Please try again later.",
+    "timeout": "Request timed out. Please check your internet connection.",
+    "noResponse": "No response from server. Please check your connection.",
+    "invalidResponse": "Invalid response from server",
+    "generic": "Something went wrong."
+  },
+  "form": {
+    "name": "Full Name",
+    "age": "Age",
+    "selectGender": "Select Gender",
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "contact": "Contact Number",
+    "role": {
+      "patient": "Patient",
+      "doctor": "Doctor"
+    },
+    "email": "Email",
+    "password": "Password"
+  }
+},
+"common": {
+  "add": "Add",
+    "addToCart": "Add to Cart",
+    "viewDetails": "View Details",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
+    "quantity": "Quantity",
+    "total": "Total",
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping",
+    "loading": "Loading...",
+    "notAvailable": "N/A",
+    "currencySymbol": "₹",
+    "saveAmount": "Save ₹{{amount}} ({{percentage}}%)",
+    "added": "Added",
+    "close": "Close",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "noImageAvailable": "No image available",
+    "thumbnail": "Thumbnail",
+    "doctorsAdvice": "Doctor's Advice",
+    "maxQuantity": "Max {{max}} units",
+    "prescriptionRequired": "Prescription Required",
+    "prescriptionNotice": "You'll need a valid prescription to purchase this medicine",
+    "productInfo": "Product Information",
+    "faqs": "Frequently Asked Questions",
+    "customerReviews": "Customer Reviews",
+    "viewAll": "View All",
+    "anonymousUser": "Anonymous User",
+    "reviewCount": "{{count}} reviews",
+    "required": "Required",
+    "notRequired": "Not Required",
+    "general": "General",
+    "category": "Category",
+    "adding": "Adding...",
+    "minOrder": "(Min. order: {{quantity}} units)",
+    "expiry": "Expiry"
+  },
+  
+    "products": {
+      "title": "Our Products",
+      "viewAll": "View All Products",
+      "new": "New",
+      "discount": "{discount}% OFF",
+      "items": {
+        "painRelief": "Advanced Pain Relief Tablets",
+        "vitaminC": "Vitamin C Immunity Boosters",
+        "digestiveAid": "Digestive Aid Syrup",
+        "multivitamin": "Daily Multivitamin Capsules",
+        "allergyRelief": "Allergy Relief Medicine",
+        "sleepAid": "Natural Sleep Aid"
+      }
+    },
+  "a11y": {
+    "skipToContent": "Skip to main content"
+  },
+  "medicines": {
+    "prescriptionRequired": "Prescription required",
+    "prescriptionNotice": "You'll need a valid prescription to purchase this medicine",
+    "byBrand": "By {{brand}}",
+    "genericName": "Generic Name",
+    "catalog": "Medicine Catalog",
+    "generic": "Generic",
+    "activeIngredients": "Active",
+    "inactiveIngredients": "Inactive",
+    "dosageForm": "Form",
+    "strength": "Strength",
+    "recommendedDose": "Dosage",
+    "addToCart": "Add to Cart",
+    "addToWishlist": "Add to Wishlist",
+    "removeFromWishlist": "Remove from Wishlist",
+    "share": "Share",
+    "description": "Description",
+    "composition": "Composition",
+    "manufacturer": "Manufacturer",
+    "packSize": "Pack Size",
+    "expiry": "Expiry",
+    "dosage": "Dosage",
+    "prescription": "Prescription",
+    "exclusiveOffers": "Exclusive Offers"
+  },
+  "cart": {
+    "addToCartError": "Failed to add item to cart. Please try again.",
+    "addedToCart": "Added to cart"
+  },
+  "footer": {
+  "logoAlt": "ArogyaRx Logo",
+  "description": "Your trusted online pharmacy for genuine medicines and healthcare products. Fast delivery and 24/7 customer support.",
+  "copyright": "© {{year}} ArogyaRx. All rights reserved.",
+  "socialFollow": "Follow us on {{platform}}",
+  "quickLinks": {
+    "title": "Quick Links",
+    "home": "Home",
+    "medicines": "Medicines",
+    "labTests": "Lab Tests",
+    "contact": "Contact Us",
+    "developer": "Developer Details"
+  },
+  "support": {
+    "title": "Support",
+    "faq": "FAQs",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "shipping": "Shipping Policy"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "email": "support@arogyarx.com",
+    "phone": "+91 98765 43210",
+    "address": "123 Health Street, Mumbai, MH 400001"
+  }
+},
+  "middleSection": {
+    "title": "Your health, made affordable",
+    "description1": "At ",
+    "description2": ", we believe everyone deserves access to quality medication at fair prices. We cut out unnecessary costs and partner directly with manufacturers to bring you the savings you need. Whether you're refilling a prescription or trying a new supplement, you can feel confident knowing you're getting the best value for your health. With ArogyaRx, staying healthy is always within reach."
+  },
+  "lastComp": {
+    "title": "Ask your pharmacist, not the Internet.",
+    "description": "Feeling stressed? Meds a mess? Ditch self-searching, web distress. Visit our site, your Pharm's right there. Expert advice, healthy care.",
+    "buttonText": "ASK YOUR PHARMACIST"
+  },
+  "labTests": {
+  "title": "Frequently Booked Lab Tests"
+},
+
+  "labTestHeader": {
+    "title1": "Book Lab Tests & Get",
+    "title2": "Up to 50% Off",
+    "description": "Save big on diagnostic tests. Book from home and get accurate results with huge discounts.",
+    "shopNowButton": "Book Tests Now",
+    "uploadButton": "Upload Prescription",
+    "imageAlt": "Lab Test Booking",
+    "helpText1": "Need help with booking your test?",
+    "helpTextLink": "Upload a Prescription",
+    "helpText2": "to book a test."
+  },
+  "bookedTests": {
+    "title": "Frequently Booked Lab Tests",
+    "subtitle": "Get accurate results with our trusted diagnostic services",
+    "popularBadge": "Popular",
+    "bookButton": "Book Now",
+    "viewAllButton": "View All Tests"
+  },
+  "healthSection": {
+    "title": "Find Tests by Health Concern",
+    "subtitle": "Get the right diagnostic tests for your specific health needs",
+    "tests": "Tests",
+    "viewAll": "View All",
+    "viewAllConcerns": "View All Health Concerns"
+  },
+  "healthConcerns": {
+    "fever": "Fever",
+    "diabetes": "Diabetes",
+    "skin": "Skin",
+    "kidney": "Kidney",
+    "digestion": "Digestion"
+  },
+
+    "benefits": {
+      "title": "Benefits with Arogya RX",
+      "subtitle": "Get 10% Health Cashback*",
+      "terms": "T&C Apply",
+      "howItWorks": "How does it work?",
+      "whyBook": "Why book lab tests with Arogya RX?",
+      "note": "Note",
+      "noteText": "Our phlebotomists follow strict safety measures including temperature checks before every visit.",
+      "steps": {
+        "vaccinated": {
+          "title": "Vaccinated Phlebotomists",
+          "description": "Only phlebotomists who have been vaccinated are assigned tasks."
+        },
+        "safety": {
+          "title": "Maintains Safety Protocols",
+          "description": "Follows safety protocols: mask, shield, gloves, and sanitization."
+        },
+        "sample": {
+          "title": "Sample Collection",
+          "description": "Samples are collected using barcoded vials for identification."
+        },
+        "reports": {
+          "title": "Accurate Digital Reports",
+          "description": "Digital reports are precise and securely identified via barcodes."
+        }
+      },
+      "benefitsList": {
+        "fast": "Fast & Hassle-Free",
+        "booking": "Book Test with One Click",
+        "homeCollection": "At Home Collection",
+        "safe": "100% Safe & Secure"
+      }
+    },
+    "howItWorks": {
+  "title": "How It Works?",
+  "subtitle": "Simple steps to get your diagnostic tests done from the comfort of your home",
+  "learnMore": "Learn more",
+  "cta": "Book a Test Now",
+  "steps": {
+    "book": {
+      "title": "Book Your Test",
+      "description": "Search for tests and packages and seamlessly book a home sample collection."
+    },
+    "sample": {
+      "title": "Sample Collection",
+      "description": "We send a certified professional to your place for sample collection."
+    },
+    "results": {
+      "title": "Get Results",
+      "description": "Receive reports via email or access them in your account on our app."
+    }
+  }
+},
+"contact": {
+  "title": "Contact Us",
+  "subtitle": "Request A Call Back!",
+  "form": {
+    "name": "Your Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "subject": "Subject",
+    "message": "Your Message...",
+    "submit": "Submit"
+  }
+},
+"hero": {
+  "imageAlt": "Healthcare professionals providing care",
+  "title": {
+    "line1": "Holistic Healthcare",
+    "line2": "Experience"
+  },
+  "subtitle": "Personalized care that treats the whole person - body, mind and spirit",
+  "buttons": {
+    "primary": "Book an Appointment",
+    "secondary": "Learn More"
+  }
+},
+"midcard": {
+  "cards": [
+    {
+      "title": "Medicines",
+      "description": "Get all your prescribed medicines delivered to your doorstep"
+    },
+    {
+      "title": "Lab Tests",
+      "description": "Book diagnostic tests with home sample collection"
+    },
+    {
+      "title": "Healthcare Products",
+      "description": "Essential healthcare products for your daily needs"
+    },
+    {
+      "title": "Health Articles",
+      "description": "Read expert-curated health and wellness articles"
+    }
+  ]
+},
+"middleone": {
+  "cards": {
+    "doctor": {
+      "title": "Find a Doctor",
+      "description": "World-class care for everyone. Our health system offers unmatched, expert healthcare."
+    },
+    "appointment": {
+      "title": "Book Appointments",
+      "description": "World-class care for everyone. Our health System offers unmatched, expert healthcare."
+    },
+    "prescription": {
+      "title": "Upload Prescription",
+      "description": "Upload prescription and connect to a doctor"
+    }
+  }
+},
+"middletwo": {
+  "title": "Get virtual treatment anytime.",
+  "imageAlt": "Virtual Treatment",
+  "buttonText": "LEARN MORE",
+  "listItems": {
+    "item1": "Schedule the appointment directly.",
+    "item2": "Search for your doctor by name, specialty, or location.",
+    "item3": "View our physicians who are accepting new patients; use the online searching tool to select an appointment time."
+  }
+},
+
+"customer": {
+  "title": "What Our Customers Say",
+  "subtitle": "World-class care for everyone. Our health system offers unmatched, expert healthcare experiences.",
+  "paginationLabel": "Go to page {page}"
+},
+
+"midi": {
+  "section1": {
+    "title": "High-End Technology Meets Healthcare",
+    "description": "Leveraging cutting-edge medical technology, we offer virtual consultations with accomplished medical professionals.",
+    "imageAlt": "High-Tech Healthcare"
+  },
+  "section2": {
+    "title": "Easy Accessibility. Anytime, Anywhere.",
+    "description": "No more geographical constraints. Get the best healthcare in your hand.",
+    "imageAlt": "Easy Access Healthcare"
+  }
+},
+
+  "midinext": {
+    "title": "Providing Best Medical Services",
+    "description": "World-class care for everyone. Our health system offers unmatched, expert healthcare.",
+    "buttonText": "Learn More"
+  },
+  "question": {
+    "title": "Most Questions by Our",
+    "highlightedTitle": "Beloved Customers",
+    "subtitle": "Here are some of the most common questions we get. We've got you covered!",
+    "faq": [
+      {
+        "question": "How do I book an appointment?",
+        "answer": "You can book appointments through our website, mobile app, or by calling our customer service."
+      },
+      {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept all major credit cards, digital wallets, and insurance payments."
+      },
+      {
+        "question": "Are your doctors qualified?",
+        "answer": "All our doctors are board-certified and have extensive experience in their fields."
+      },
+      {
+        "question": "Do you offer emergency services?",
+        "answer": "We provide 24/7 emergency consultation services through our telemedicine platform."
+      }
+    ]
+  },
+  "email": {
+  "title": "SUBSCRIBE TO OUR NEWSLETTER",
+  "subtitle": "Exclusive Offer Previews, Announcements, and More.",
+  "placeholder": "Your Email",
+  "buttonText": "Subscribe"
+},
+"explore": {
+  "tagline": "SPECIAL SERVICE",
+  "title": {
+    "line1": "Feel better",
+    "line2": "And Rest Assured"
+  },
+  "description": "With our commitment to providing safe and effective medical and healthcare products, you can rest assured when you buy from HealthSaathi Pharmacy.",
+  "button": "Explore Now",
+  "imageAlt": "Mother and child taking medicine"
+},
+"services": {
+  "medicines": {
+    "title": "Order Medicines",
+    "discount": "FLAT 15% OFF",
+    "alt": "Order Medicines",
+    "button": "Order Now"
+  },
+  "products": {
+    "title": "Healthcare Products",
+    "discount": "UPTO 60% OFF",
+    "alt": "Healthcare Products",
+    "button": "Explore Now"
+  },
+  "tests": {
+    "title": "Lab Tests",
+    "discount": "UPTO 70% OFF",
+    "alt": "Lab Tests",
+    "button": "Book Now"
+  }
+},
+"middle2": 
+{
+  "services": {
+    "medicines": {
+      "title": "Medicines",
+      "discount": "Up to 20% off",
+      "alt": "Medicines and healthcare products",
+      "button": "Order Now"
+    },
+    "midi": {
+      "title": "Shop. Benefit. Evolve.",
+      "description": "Welcome! We bring the pharmacy to your fingertips. Hover over the wellness horizons with our quality healthcare every step of the way!",
+      "buttonText": "Shop Medicines"
+    },
+    "products": {
+      "title": "Healthcare Products",
+      "discount": "Up to 15% off",
+      "alt": "Healthcare products",
+      "button": "Explore"
+    },
+    "tests": {
+      "title": "Lab Tests",
+      "discount": "Up to 30% off",
+      "alt": "Lab test services",
+      "button": "Book Test"
+    }
+  },
+  "features": {
+    "easyOrder": {
+      "title": "Easy-order",
+      "description": "Order medicines with few simple clicks"
+    },
+    "track": {
+      "title": "Track",
+      "description": "Track your medicine dispatch"
+    },
+    "support247": {
+      "title": "24X7",
+      "description": "We are available 24x7 for you"
+    },
+    "discounts": {
+      "title": "Discounts",
+      "description": "Amazing discounts on all products",
+      "description2": "Up to ₹350 cashback On all Medicine / healthcare needs"
+    }
+  }
+},
+"middle3": {
+  "midilethree": {
+    "cards": [
+      {
+        "alt": "Medical Care Interface",
+        "title": "Medicine Box",
+        "description": "All your medications, packed and shipped directly to your doorstep. Convenient, right?"
+      },
+      {
+        "alt": "Health Care Box",
+        "title": "Health Care",
+        "description": "Get the best health care products and boost your well-being. Awesome!"
+      },
+      {
+        "alt": "Instant Delivery Package",
+        "title": "Instant Delivery",
+        "description": "Experience our lightning-fast Instant Delivery option. Sounds like fiction, but it's a fact."
+      }
+    ]
+  }
+},
+"uploadPrescription": {
+    "tabHeader": "Order with Prescription",
+    "uploadBox": {
+      "mainText": "Click to upload prescription",
+      "subText": "JPG, PNG, or PDF (Max. 5MB)"
+    },
+    "orSeparator": "OR",
+    "linkInputPlaceholder": "Enter Prescription Link",
+    "uploadButton": "Upload File"
+  },
+  
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": [
+        {
+          "q": "How does HealthSaathi ensure quality?",
+          "a": "We source our products directly from manufacturers and authorized dealers. Every product undergoes rigorous quality checks and verification processes before being listed to ensure authenticity and effectiveness."
+        },
+        {
+          "q": "What payment methods are accepted?",
+          "a": "We accept various payment methods including major credit cards (Visa, Mastercard), debit cards, net banking, UPI, and popular digital wallets for your convenience."
+        },
+        {
+          "q": "What about non-prescription drugs?",
+          "a": "Yes, we offer a wide range of Over-The-Counter (OTC) medicines, healthcare devices, personal care products, and supplements that do not require a prescription."
+        },
+        {
+          "q": "How to return a product?",
+          "a": "You can initiate a return within 10 days of delivery through your account dashboard, provided the product is unused and in its original packaging. Please refer to our detailed Return Policy page for specific conditions and procedures."
+        },
+        {
+          "q": "Is my personal information secure?",
+          "a": "Absolutely. We use industry-standard encryption and security protocols to protect your personal and payment information. Your privacy and security are our top priorities."
+        }
+      ]
+    },
+
+      "myProfile": {
+        "sidebar": {
+          "overview": "Overview",
+          "menuItems": [
+            { "label": "My Orders", "section": "orders" },
+            { "label": "My Payments" },
+            { "label": "My Wallet" },
+            { "label": "My Profile", "section": "profile" }
+          ]
+        },
+        "dashboard": {
+          "profileCard": {
+            "editButton": "EDIT PROFILE"
+          },
+          "premiumCard": {
+            "title": "Arogya RX",
+            "subtitle": "Upgrade to the premium experience now",
+            "features": ["🚚 Free Shipping", "⏰ Early Access", "🎁 VIP Support"],
+            "button": "GET TRIBE MEMBERSHIP"
+          },
+          "infoBoxes": [
+            { "title": "My Orders", "subtitle": "View, Modify And Track Orders", "section": "orders" },
+            { "title": "My Payments", "subtitle": "View And Modify Payment Methods" },
+            { "title": "My Wallet", "subtitle": "Wallet History And Redeemed Gift Cards" },
+            { "title": "My Addresses", "subtitle": "Edit, Add Or Remove Addresses", "section": "addresses" },
+            { "title": "My Profile", "subtitle": "Edit Info And Change Password", "section": "profile" },
+            { "title": "Help & Support", "subtitle": "Reach Out To Us" }
+          ]
+        },
+        "sectionWrapper": {
+          "backButton": "Back to Dashboard"
+        }
+      },
+
+        "myOrders": {
+          "title": "My Orders",
+          "buttons": {
+            "browseMedicines": "Browse Medicines",
+            "startShopping": "Start Shopping",
+            "cancelOrder": "Cancel Order",
+            "retry": "Retry"
+          },
+          "status": {
+            "order": "Order #",
+            "delivered": "Delivered",
+            "cancelled": "Cancelled",
+            "processing": "Processing",
+            "shipped": "Shipped",
+            "pending": "Pending",
+            "completed": "Completed",
+            "failed": "Failed"
+          },
+          "labels": {
+            "quantity": "Qty",
+            "each": "each",
+            "items": "items",
+            "item": "item",
+            "totalAmount": "Total Amount",
+            "paymentMethod": "Payment Method",
+            "noOrders": "No orders yet",
+            "noOrdersDescription": "You haven't placed any orders yet."
+          },
+          "confirmation": {
+            "cancelOrder": "Are you sure you want to cancel this order?"
+          },
+          "notifications": {
+            "orderCancelled": "Order cancelled successfully",
+            "cancelFailed": "Failed to cancel order",
+            "loadFailed": "Failed to load orders"
+          }
+        },
+
+      "edt": {
+        "editProfile": {
+          "title": "Edit Profile",
+          "sections": {
+            "address": "Address"
+          },
+          "fields": {
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email Id",
+            "phone": "Mobile Number",
+            "dob": "DOB",
+            "gender": "Gender",
+            "street": "Street",
+            "city": "City",
+            "state": "State",
+            "postalCode": "Postal Code",
+            "country": "Country"
+          },
+          "gender": {
+            "male": "Male",
+            "female": "Female",
+            "other": "Other"
+          },
+          "buttons": {
+            "change": "CHANGE",
+            "save": "SAVE CHANGES",
+            "saving": "Saving..."
+          },
+          "description": {
+            "dob": "Share your DOB to get special gifts on the 1st day of your birthday month"
+          },
+          "notifications": {
+            "success": "Profile updated successfully",
+            "error": "Failed to update profile",
+            "changePhone": "Phone number change flow not implemented"
+          }
+        }
+      },
+    
+  "carts": {
+    "cart": {
+      "title": "Your Shopping Cart",
+      "subtitle": "Review and manage your items before checkout",
+      "emptyTitle": "Your cart is empty",
+      "emptyMessage": "Looks like you haven't added any items to your cart yet.",
+      "browseMedicines": "Browse Medicines",
+      "loading": "Loading...",
+      "loadingMessage": "Loading your cart...",
+      "tableHeaders": {
+        "item": "Items",
+        "title": "Title",
+        "price": "Price",
+        "quantity": "Quantity",
+        "total": "Total",
+        "remove": "Remove"
+      },
+      "remove": "Remove",
+      "total": "Total",
+      "decreaseQuantity": "Decrease quantity",
+      "increaseQuantity": "Increase quantity",
+      "orderSummary": "Order Summary",
+      "subtotal": "Subtotal",
+      "deliveryFee": "Delivery Fee",
+      "proceedToCheckout": "Proceed to Checkout",
+      "promoCode": "Promo Code",
+      "promoCodeMessage": "Enter your promo code for discounts",
+      "enterCode": "Enter code",
+      "apply": "Apply",
+      "promoApplied": "Promo code applied!",
+      "freeDelivery": "Free Delivery",
+      "freeDeliveryMessage": "Enjoy free delivery on orders over ₹499",
+      "continueShopping": "Continue Shopping"
+    }
+  },
+
+    "checkout": {
+      "title": "Checkout",
+      "deliveryInfo": "Delivery Information",
+      "orderSummary": "Order Summary",
+      "useDefaultAddress": "Use my default address",
+      "fields": {
+        "street": "Street",
+        "city": "City",
+        "state": "State",
+        "zip": "Zip Code",
+        "country": "Country",
+        "phone": "Phone Number"
+      },
+      "subtotal": "Subtotal",
+      "deliveryFee": "Delivery Fee",
+      "total": "Total",
+      "placeOrder": "Place Order",
+      "placingOrder": "Placing Order...",
+      "country": "India",
+      "defaultCustomer": "Customer",
+      "notProvided": "Not provided",
+      "defaultProductName": "Medicine",
+      "status": {
+        "processing": "Processing"
+      },
+      "errors": {
+        "fetchAddress": "Failed to fetch user address:",
+        "requiredField": "Please fill in the {field} field",
+        "phoneLength": "Please enter a valid phone number (at least 10 digits)",
+        "placeOrder": "Failed to place order. Please try again."
+      }
+    },
+
+      "orderConfirmation": {
+        "orderNotFound": "Order Not Found",
+        "orderNotFoundMessage": "We couldn't find your order details.",
+        "goToHome": "Go to Home",
+        "invoiceTitle": "Order Invoice",
+        "thankYouMessage": "Thank you for your purchase!",
+        "orderId": "Order ID",
+        "notAvailable": "N/A",
+        "date": "Date",
+        "billedTo": "Billed To",
+        "customer": "Customer",
+        "notProvided": "Not provided",
+        "paymentMethod": "Payment Method",
+        "cashOnDelivery": "Cash on Delivery",
+        "status": "Status",
+        "statuses": {
+          "completed": "Completed",
+          "cancelled": "Cancelled",
+          "processing": "Processing"
+        },
+        "items": "Items",
+        "item": "Item",
+        "quantity": "Qty",
+        "price": "Price",
+        "total": "Total",
+        "medicine": "Medicine",
+        "subtotal": "Subtotal",
+        "deliveryFee": "Delivery Fee",
+        "totalAmount": "Total Amount",
+        "footerNote": "This is a system generated invoice. For any queries, contact our support.",
+        "locale": "en-US"
+      }
+    
+  
+    
+    
+  
+
+  
+}

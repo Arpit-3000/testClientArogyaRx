@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShoppingCart, Plus, Check } from 'lucide-react';
 
 const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
+  const { t, i18n } = useTranslation();
   const [addedToCart, setAddedToCart] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -27,6 +29,11 @@ const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
     }
   };
 
+  // Function to change language
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   return (
     <div 
       className="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md dark:hover:shadow-gray-700/50 transition-all duration-200 cursor-pointer h-full flex flex-col"
@@ -49,7 +56,7 @@ const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
         {/* Prescription Badge */}
         {medicine.prescriptionRequired && (
           <span className="text-xs text-red-600 dark:text-red-400 font-medium mb-1">
-            Prescription required
+            {t('medicines.prescriptionRequired')}
           </span>
         )}
 
@@ -60,25 +67,28 @@ const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
 
         {/* Manufacturer */}
         <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-          By {medicine.brandName || 'Generic'}
+          {t('medicines.byBrand', { brand: medicine.brandName || t('medicines.generic') })}
         </p>
 
         {/* Price Section */}
         <div className="mt-auto">
           <div className="flex items-baseline gap-2 mb-1">
             <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
-              ₹{finalPrice?.toFixed(2)}
+              {t('common.currencySymbol')}{finalPrice?.toFixed(2)}
             </span>
             {discountPercentage > 0 && (
               <span className="text-xs text-gray-500 dark:text-gray-400 line-through">
-                ₹{medicine.pricing?.mrp?.toFixed(2)}
+                {t('common.currencySymbol')}{medicine.pricing?.mrp?.toFixed(2)}
               </span>
             )}
           </div>
           
           {discountPercentage > 0 && (
             <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-2 sm:mb-3">
-              Save ₹{medicine.pricing?.discount?.toFixed(2)} ({discountPercentage}%)
+              {t('common.saveAmount', { 
+                amount: medicine.pricing?.discount?.toFixed(2),
+                percentage: discountPercentage
+              })}
             </div>
           )}
 
@@ -94,12 +104,12 @@ const MedicineCard = ({ medicine, onSeeMore, onAddToCart }) => {
             {addedToCart ? (
               <>
                 <Check size={14} className="shrink-0" />
-                <span>Added</span>
+                <span>{t('common.added')}</span>
               </>
             ) : (
               <>
                 <ShoppingCart size={14} className="shrink-0" />
-                <span>Add to Cart</span>
+                <span>{t('medicines.addToCart')}</span>
               </>
             )}
           </button>

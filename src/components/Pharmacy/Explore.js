@@ -1,7 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import exploreImage from '../../assets/pharmacyimages/feel.png';
 
 const Explore = React.memo(() => {
+    const { t } = useTranslation();
+
     return (
         <section className="bg-white dark:bg-gray-900 py-14 sm:py-16 lg:py-20 transition-colors duration-300">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 items-center gap-10 lg:gap-12">
@@ -9,16 +12,18 @@ const Explore = React.memo(() => {
                 {/* Left Content */}
                 <div className="text-left md:pr-6 lg:pr-8 order-2 md:order-1">
                     <h2 className="text-xs sm:text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 sm:mb-3">
-                        SPECIAL SERVICE
+                        {t('explore.tagline')}
                     </h2>
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-teal-800 dark:text-teal-500 mb-3 sm:mb-4 leading-tight">
-                        Feel better <br className="hidden sm:block" /> And Rest Assured
-                    </h3>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-teal-800 dark:text-teal-500 mb-3 sm:mb-4 leading-[2.3rem] sm:leading-[2.5rem] lg:leading-[2.8rem]">
+  {t('explore.title.line1')}<br className="hidden sm:block" />
+  <span className="mt-2 pl-2 inline-block">{t('explore.title.line2')}</span>
+</h3>
+
                     <p className="text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base">
-                        With our commitment to providing safe and effective medical and healthcare products, you can rest assured when you buy from HealthSaathi Pharmacy.
+                        {t('explore.description')}
                     </p>
                     <button className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-colors duration-300 ease-in-out text-xs sm:text-sm shadow-sm hover:shadow-md">
-                        Explore Now
+                        {t('explore.button')}
                     </button>
                 </div>
 
@@ -34,7 +39,7 @@ const Explore = React.memo(() => {
                     <img
                         loading="lazy"
                         src={exploreImage}
-                        alt="Mother and child taking medicine"
+                        alt={t('explore.imageAlt')}
                         decoding="async"
                         className="relative z-10 w-4/5 sm:w-3/4 md:w-11/12 max-w-md h-auto rounded-lg object-cover shadow-lg dark:shadow-gray-800/50"
                     />
