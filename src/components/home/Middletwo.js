@@ -1,6 +1,7 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
-import { CheckCircleIcon } from '@heroicons/react/24/solid'; 
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
 import virtualTreatmentImage from '../../assets/doctorimg.png';
 
 const Middletwo = () => {
@@ -9,10 +10,12 @@ const Middletwo = () => {
         triggerOnce: true
     });
 
+    const { t } = useTranslation();
+
     const listItems = [
-        "Schedule the appointment directly.",
-        "Search for your doctor by name, specialty, or location.",
-        "View our physicians who are accepting new patients; use the online searching tool to select an appointment time.",
+        t('middletwo.listItems.item1'),
+        t('middletwo.listItems.item2'),
+        t('middletwo.listItems.item3'),
     ];
 
     return (
@@ -29,7 +32,7 @@ const Middletwo = () => {
                     {/* Left Column: Text Content */}
                     <div className="order-2 md:order-1">
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
-                            Get virtual treatment anytime.
+                            {t('middletwo.title')}
                         </h2>
 
                         <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
@@ -44,7 +47,7 @@ const Middletwo = () => {
                         </ul>
 
                         <button className="bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white font-medium sm:font-bold py-2.5 px-6 sm:py-3 sm:px-8 rounded-full transition duration-300 text-sm sm:text-base tracking-wide">
-                            LEARN MORE
+                            {t('middletwo.buttonText')}
                         </button>
                     </div>
 
@@ -52,7 +55,7 @@ const Middletwo = () => {
                     <div className="order-1 md:order-2 relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg dark:shadow-gray-800/50">
                         <img
                             src={virtualTreatmentImage}
-                            alt="Virtual Treatment"
+                            alt={t('middletwo.imageAlt')}
                             className="w-full h-auto object-cover"
                             loading="lazy"
                         />

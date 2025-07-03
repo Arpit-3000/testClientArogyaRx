@@ -1,39 +1,42 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ArrowRight } from 'lucide-react'; 
+import { useTranslation } from 'react-i18next';
 import doctorIllustration from '../../assets/icon01.png';
 import appointmentIllustration from '../../assets/icon02.png'; 
 import locationIllustration from '../../assets/icon03.png'; 
-
-const itemsData = [
-    {
-        id: 1,
-        title: "Find a Doctor",
-        description: "World-class care for everyone. Our health system offers unmatched, expert healthcare.",
-        imageUrl: doctorIllustration, 
-        linkUrl: "/find-doctor" 
-    },
-    {
-        id: 2,
-        title: "Book Appointments",
-        description: "World-class care for everyone. Our health System offers unmatched, expert healthcare.", 
-        imageUrl: appointmentIllustration, 
-        linkUrl: "/appointments" 
-    },
-    {
-        id: 3,
-        title: "Upload Prescription",
-        description: "Upload prescription and connect to a doctor", 
-        imageUrl: locationIllustration,
-        linkUrl: "/locations" 
-    },
-];
 
 const Middileone = () => {
     const { ref: sectionRef, inView: sectionInView } = useInView({
         threshold: 0.3,
         triggerOnce: true
     });
+
+    const { t } = useTranslation();
+
+    const itemsData = [
+        {
+            id: 1,
+            title: t('middleone.cards.doctor.title'),
+            description: t('middleone.cards.doctor.description'),
+            imageUrl: doctorIllustration, 
+            linkUrl: "/find-doctor" 
+        },
+        {
+            id: 2,
+            title: t('middleone.cards.appointment.title'),
+            description: t('middleone.cards.appointment.description'), 
+            imageUrl: appointmentIllustration, 
+            linkUrl: "/appointments" 
+        },
+        {
+            id: 3,
+            title: t('middleone.cards.prescription.title'),
+            description: t('middleone.cards.prescription.description'), 
+            imageUrl: locationIllustration,
+            linkUrl: "/locations" 
+        },
+    ];
 
     return (
         <section 

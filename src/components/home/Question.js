@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { PlusCircle, MinusCircle } from 'lucide-react';
-import questionData from '../../data/questionData';
+import { useTranslation } from 'react-i18next';
 import sideDoc1 from '../../assets/sideDoc1.png';
 
 const Question = () => {
     const [activeIndex, setActiveIndex] = useState(null);
+    const { t } = useTranslation();
 
     const toggleAnswer = (index) => {
         setActiveIndex((prev) => (prev === index ? null : index));
@@ -17,7 +18,7 @@ const Question = () => {
                 <div className="w-full rounded-xl overflow-hidden shadow-lg dark:shadow-gray-700/50 order-1 md:order-none">
                     <img
                         src={sideDoc1}
-                        alt="Frequently Asked Questions"
+                        alt={t('question.imageAlt')}
                         className="w-full h-auto object-cover rounded-xl"
                         loading="lazy"
                     />
@@ -26,14 +27,14 @@ const Question = () => {
                 {/* FAQ Section */}
                 <div className="space-y-6">
                     <h2 className="text-3xl sm:text-4xl font-bold text-blue-700 dark:text-blue-500 mb-4 sm:mb-6 leading-tight">
-                        Most Questions by Our <span className="text-indigo-600 dark:text-indigo-400">Beloved Customers</span>
+                        {t('question.title')} <span className="text-indigo-600 dark:text-indigo-400">{t('question.highlightedTitle')}</span>
                     </h2>
                     <p className="text-gray-600 dark:text-gray-300 mb-6 sm:mb-8">
-                        Here are some of the most common questions we get. We've got you covered!
+                        {t('question.subtitle')}
                     </p>
 
                     <div className="space-y-4">
-                        {questionData.map((item, index) => {
+                        {t('question.faq', { returnObjects: true }).map((item, index) => {
                             const isOpen = activeIndex === index;
                             return (
                                 <div

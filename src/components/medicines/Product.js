@@ -1,12 +1,15 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import productData from '../../data/productData';
 
 const Product = () => {
+    const { t } = useTranslation();
+    
     return (
         <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-gray-900">
             <div className="container mx-auto px-4 sm:px-6">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-900 dark:text-white mb-8 sm:mb-12">
-                    Explore Our Products
+                    {t('products.title')}
                 </h2>
                 
                 <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
@@ -27,12 +30,12 @@ const Product = () => {
                                 {/* Badges */}
                                 {product.discount && (
                                     <span className="absolute top-2 right-2 bg-red-500 dark:bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                        {product.discount}
+                                        {t('products.discount', { discount: product.discount })}
                                     </span>
                                 )}
                                 {product.isNew && (
                                     <span className="absolute top-2 left-2 bg-blue-500 dark:bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                        New
+                                        {t('products.new')}
                                     </span>
                                 )}
                             </div>
@@ -69,8 +72,11 @@ const Product = () => {
 
                 {/* View All Button */}
                 <div className="flex justify-center mt-10 sm:mt-12">
-                    <button className="px-6 py-2.5 sm:px-8 sm:py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg">
-                        View All Products
+                    <button 
+                        className="px-6 py-2.5 sm:px-8 sm:py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
+                        aria-label={t('products.viewAll')}
+                    >
+                        {t('products.viewAll')}
                     </button>
                 </div>
             </div>

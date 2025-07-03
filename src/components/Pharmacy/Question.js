@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const ChevronIcon = ({ isOpen }) => (
     <motion.svg
@@ -16,30 +17,10 @@ const ChevronIcon = ({ isOpen }) => (
 );
 
 const Question = () => {
+    const { t } = useTranslation();
     const [openIndex, setOpenIndex] = useState(null);
 
-    const faqData = [
-        {
-            q: "How does HealthSaathi ensure quality?",
-            a: "We source our products directly from manufacturers and authorized dealers. Every product undergoes rigorous quality checks and verification processes before being listed to ensure authenticity and effectiveness.",
-        },
-        {
-            q: "What payment methods are accepted?",
-            a: "We accept various payment methods including major credit cards (Visa, Mastercard), debit cards, net banking, UPI, and popular digital wallets for your convenience.",
-        },
-        {
-            q: "What about non-prescription drugs?",
-            a: "Yes, we offer a wide range of Over-The-Counter (OTC) medicines, healthcare devices, personal care products, and supplements that do not require a prescription.",
-        },
-        {
-            q: "How to return a product?",
-            a: "You can initiate a return within 10 days of delivery through your account dashboard, provided the product is unused and in its original packaging. Please refer to our detailed Return Policy page for specific conditions and procedures.",
-        },
-        {
-            q: "Is my personal information secure?",
-            a: "Absolutely. We use industry-standard encryption and security protocols to protect your personal and payment information. Your privacy and security are our top priorities.",
-        }
-    ];
+    const faqData = t('faq.questions', { returnObjects: true });
 
     const sectionVariants = {
         hidden: { opacity: 0 },
@@ -89,7 +70,7 @@ const Question = () => {
         >
             <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-teal-800 dark:text-teal-500 mb-8 sm:mb-10 text-center">
-                    Frequently Asked Questions
+                    {t('faq.title')}
                 </h2>
                 <div className="space-y-3 sm:space-y-4">
                     {faqData.map((item, index) => {

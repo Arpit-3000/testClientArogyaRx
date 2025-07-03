@@ -6,25 +6,29 @@ import DiabetesImg from '../../assets/labtestimages/f4.png';
 import SkinImg from '../../assets/labtestimages/f3.png';
 import KidneyImg from '../../assets/labtestimages/f2.png';
 import DigestionImg from '../../assets/labtestimages/f1.png';
+import { useTranslation } from 'react-i18next';
 
-const healthConcerns = [
-  { name: 'Fever', image: FeverImg, tests: 42 },
-  { name: 'Diabetes', image: DiabetesImg, tests: 36 },
-  { name: 'Skin', image: SkinImg, tests: 28 },
-  { name: 'Kidney', image: KidneyImg, tests: 31 },
-  { name: 'Digestion', image: DigestionImg, tests: 45 },
-];
 
 const Health = () => {
+    const { t } = useTranslation();
+    const healthConcerns = [
+      { name: t('healthConcerns.fever'), image: FeverImg, tests: 42 },
+      { name: t('healthConcerns.diabetes'), image: DiabetesImg, tests: 36 },
+      { name: t('healthConcerns.skin'), image: SkinImg, tests: 28 },
+      { name: t('healthConcerns.kidney'), image: KidneyImg, tests: 31 },
+      { name: t('healthConcerns.digestion'), image: DigestionImg, tests: 45 },
+    ];
+    
+
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center lg:text-left mb-10 sm:mb-12 lg:mb-16">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-500 mb-2">
-            Find Tests by Health Concern
+            {t('healthSection.title')}
           </h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto lg:mx-0">
-            Get the right diagnostic tests for your specific health needs
+            {t('healthSection.subtitle')}
           </p>
         </div>
 
@@ -51,10 +55,10 @@ const Health = () => {
               </div>
               <div className="mt-4 text-center">
                 <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">
-                  {item.name}
+                  {t(item.name)}
                 </p>
                 <button className="mt-2 text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:underline focus:outline-none">
-                  View All
+                  {t('healthSection.viewAll')}
                 </button>
               </div>
             </div>
@@ -63,7 +67,7 @@ const Health = () => {
 
         <div className="text-center mt-12 sm:mt-16">
           <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-            View All Health Concerns
+            {t('healthSection.viewAllConcerns')}
           </button>
         </div>
       </div>

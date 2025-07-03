@@ -8,7 +8,7 @@ const Profilesection = () => {
   const [showPopup, setShowPopup] = useState(false);
   return (
     <CartProvider> 
-      <div className="pt-20 px-4 md:px-8">
+      <div className="pt-0 px-4 md:px-8">
         <MyProfile/>
         {showPopup && <SignupPopup onClose={() => setShowPopup(false)} />}
       </div>

@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import API from '../../services/api';
 import MedicineCard from '../medicines/MedicineCard';
 import MedicineDetailsModal from './MedicineDetailsModal';
+import { useTranslation } from 'react-i18next';
 
 const MedicineList = () => {
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -49,7 +51,7 @@ const MedicineList = () => {
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
-        Medicine Catalog
+        {t('medicines.catalog')}
       </h1>
 
       {loading ? (

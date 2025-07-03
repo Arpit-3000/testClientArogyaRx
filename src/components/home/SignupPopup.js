@@ -4,9 +4,11 @@ import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import API from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isSignup, setIsSignup] = useState(initialMode === 'signup');
   const [loading, setLoading] = useState(false);
   
@@ -20,7 +22,6 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
     contact: "",
   });
 
-  // Handle ESC key to close modal and prevent body scroll
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') {
@@ -39,7 +40,6 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
     };
   }, [isOpen, onClose]);
 
-  // Reset form when modal opens/closes
   useEffect(() => {
     if (isOpen) {
       setIsSignup(initialMode === 'signup');
@@ -87,9 +87,8 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
     e.preventDefault();
     setLoading(true);
     
-    // Basic client-side validation
     if (!formData.email || !formData.password) {
-      showErrorToast('Please fill in all required fields');
+      showErrorToast(t('auth.errors.requiredFields'));
       setLoading(false);
       return;
     }
@@ -113,7 +112,6 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
             password: formData.password
           };
       
-      // Add a timeout to the API call
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
       
@@ -127,7 +125,6 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
         clearTimeout(timeoutId);
         
         if (response.data?.token) {
-          // Store token and user data
           localStorage.setItem("accessToken", response.data.token);
           
           if (response.data.user) {
@@ -138,13 +135,12 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
             }
           }
           
-          showSuccessToast(isSignup ? 'Registration successful!' : 'Login successful!');
-          
+          showSuccessToast(t(isSignup ? 'auth.success.signup' : 'auth.success.login'));
           onClose();
           navigate("/", { replace: true });
           setTimeout(() => window.location.reload(), 100);
         } else {
-          throw new Error('Invalid response from server');
+          throw new Error(t('auth.errors.invalidResponse'));
         }
       } catch (apiError) {
         clearTimeout(timeoutId);
@@ -155,31 +151,29 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
       console.error('Auth error:', err);
       
       if (err.name === 'AbortError') {
-        showErrorToast('Request timed out. Please check your internet connection.');
+        showErrorToast(t('auth.errors.timeout'));
       } else if (err.response) {
-        // Handle specific error cases
         if (err.response.status === 401) {
-          showErrorToast('Invalid email or password. Please try again.');
+          showErrorToast(t('auth.errors.invalidCredentials'));
         } else if (err.response.status === 400) {
-          showErrorToast('Invalid request. Please check your input.');
+          showErrorToast(t('auth.errors.invalidRequest'));
         } else if (err.response.status === 409) {
-          showErrorToast('User already exists with this email.');
+          showErrorToast(t('auth.errors.userExists'));
         } else if (err.response.status >= 500) {
-          showErrorToast('Server error. Please try again later.');
+          showErrorToast(t('auth.errors.serverError'));
         } else {
-          showErrorToast(err.response.data?.message || 'Authentication failed.');
+          showErrorToast(err.response.data?.message || t('auth.errors.generic'));
         }
       } else if (err.request) {
-        showErrorToast('No response from server. Please check your connection.');
+        showErrorToast(t('auth.errors.noResponse'));
       } else {
-        showErrorToast(err.message || 'Something went wrong.');
+        showErrorToast(err.message || t('auth.errors.generic'));
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // Create portal container if it doesn't exist
   const [portalContainer, setPortalContainer] = React.useState(null);
 
   useEffect(() => {
@@ -212,13 +206,13 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors p-1 -mr-1"
-          aria-label="Close modal"
+          aria-label={t('common.close')}
         >
           <X className="w-5 h-5" />
         </button>
 
         <h2 className="text-2xl font-semibold text-center text-teal-600 dark:text-teal-400 mb-4">
-          {isSignup ? "Sign Up" : "Sign In"}
+          {t(isSignup ? 'auth.signup' : 'auth.login')}
         </h2>
 
         <form onSubmit={handleAuth} className="space-y-4">
@@ -227,7 +221,7 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
               <input
                 type="text"
                 name="name"
-                placeholder="Full Name"
+                placeholder={t('auth.form.name')}
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -237,7 +231,7 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
               <input
                 type="number"
                 name="age"
-                placeholder="Age"
+                placeholder={t('auth.form.age')}
                 value={formData.age}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -251,16 +245,16 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 required
               >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">{t('auth.form.selectGender')}</option>
+                <option value="Male">{t('auth.form.gender.male')}</option>
+                <option value="Female">{t('auth.form.gender.female')}</option>
+                <option value="Other">{t('auth.form.gender.other')}</option>
               </select>
 
               <input
                 type="text"
                 name="contact"
-                placeholder="Contact Number"
+                placeholder={t('auth.form.contact')}
                 value={formData.contact}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -273,8 +267,8 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
-                <option value="patient">Patient</option>
-                <option value="doctor">Doctor</option>
+                <option value="patient">{t('auth.form.role.patient')}</option>
+                <option value="doctor">{t('auth.form.role.doctor')}</option>
               </select>
             </>
           )}
@@ -282,7 +276,7 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder={t('auth.form.email')}
             value={formData.email}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -292,7 +286,7 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder={t('auth.form.password')}
             value={formData.password}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -310,20 +304,20 @@ const SignupPopup = ({ isOpen, onClose, initialMode = 'login' }) => {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                {isSignup ? "Signing Up..." : "Signing In..."}
+                {t(isSignup ? 'auth.signingUp' : 'auth.signingIn')}
               </>
-            ) : (isSignup ? "Sign Up" : "Sign In")}
+            ) : t(isSignup ? 'auth.signup' : 'auth.login')}
           </button>
         </form>
 
         <p className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
-          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+          {t(isSignup ? 'auth.haveAccount' : 'auth.noAccount')}{" "}
           <button
             onClick={toggleAuthMode}
             className="text-teal-600 dark:text-teal-400 hover:underline font-medium"
             type="button"
           >
-            {isSignup ? "Sign In" : "Sign Up"}
+            {t(isSignup ? 'auth.login' : 'auth.signup')}
           </button>
         </p>
       </div>

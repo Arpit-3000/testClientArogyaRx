@@ -2,6 +2,7 @@ import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import midcardData from '../../data/midcardData';
+import { useTranslation } from 'react-i18next';
 
 const Midcard = () => {
     const { ref, inView } = useInView({
@@ -10,6 +11,7 @@ const Midcard = () => {
     });
 
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleCardClick = (index) => {
         if (index === 0) {
@@ -40,7 +42,7 @@ const Midcard = () => {
                         <div className="relative overflow-hidden aspect-w-16 aspect-h-9">
                             <img
                                 src={item.imageUrl}
-                                alt={item.title}
+                                alt={t(`midcard.cards.${index}.title`)}
                                 className="w-full h-48 sm:h-52 md:h-60 object-cover rounded-t-2xl 
                                           transition-transform duration-300 ease-in-out group-hover:scale-105"
                                 loading="lazy"
@@ -48,10 +50,10 @@ const Midcard = () => {
                         </div>
                         <div className="p-4 sm:p-5">
                             <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">
-                                {item.title}
+                                {t(`midcard.cards.${index}.title`)}
                             </h2>
                             <p className="text-gray-600 dark:text-gray-300 text-sm">
-                                {item.description}
+                                {t(`midcard.cards.${index}.description`)}
                             </p>
                         </div>
                     </div>

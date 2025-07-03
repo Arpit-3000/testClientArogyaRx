@@ -1,49 +1,46 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, ChevronLeft, ChevronRight, ShoppingCart, Plus, Minus, Star, Heart, Share2, AlertTriangle, Check } from 'lucide-react';
 import API from '../../services/api';
 
-// Helper function to format composition
-const formatComposition = (composition) => {
-  if (!composition) return 'N/A';
-  if (typeof composition === 'string') return composition;
-  
-  const { activeIngredients = [], inactiveIngredients = [] } = composition;
-  const active = activeIngredients.length > 0 ? `Active: ${activeIngredients.join(', ')}` : '';
-  const inactive = inactiveIngredients.length > 0 ? `Inactive: ${inactiveIngredients.join(', ')}` : '';
-  return [active, inactive].filter(Boolean).join(' • ');
-};
-
-// Helper function to format dosage
-const formatDosage = (dosage) => {
-  if (!dosage) return 'N/A';
-  if (typeof dosage === 'string') return dosage;
-  
-  const parts = [];
-  if (dosage.form) parts.push(`Form: ${dosage.form}`);
-  if (dosage.strength) parts.push(`Strength: ${dosage.strength}`);
-  if (dosage.recommendedDosage) parts.push(`Dosage: ${dosage.recommendedDosage}`);
-  
-  return parts.join(' • ');
-};
-
-// Function to generate random rating between min and max (inclusive)
-const getRandomRating = (min = 3.5, max = 5) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-// Function to generate random review count
-const getRandomReviewCount = (min = 10, max = 100) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
 const MedicineDetailsModal = ({ medicine, onClose }) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showAddedToCart, setShowAddedToCart] = useState(false);
+  
+  // Function to change language
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
+  // Helper function to format composition
+  const formatComposition = (composition) => {
+    if (!composition) return t('common.notAvailable');
+    if (typeof composition === 'string') return composition;
+    
+    const { activeIngredients = [], inactiveIngredients = [] } = composition;
+    const active = activeIngredients.length > 0 ? `${t('medicines.activeIngredients')}: ${activeIngredients.join(', ')}` : '';
+    const inactive = inactiveIngredients.length > 0 ? `${t('medicines.inactiveIngredients')}: ${inactiveIngredients.join(', ')}` : '';
+    return [active, inactive].filter(Boolean).join(' • ');
+  };
+
+  // Helper function to format dosage
+  const formatDosage = (dosage) => {
+    if (!dosage) return t('common.notAvailable');
+    if (typeof dosage === 'string') return dosage;
+    
+    const parts = [];
+    if (dosage.form) parts.push(`${t('medicines.dosageForm')}: ${dosage.form}`);
+    if (dosage.strength) parts.push(`${t('medicines.strength')}: ${dosage.strength}`);
+    if (dosage.recommendedDosage) parts.push(`${t('medicines.recommendedDose')}: ${dosage.recommendedDosage}`);
+    
+    return parts.join(' • ');
+  };
 
   const discountPercentage = medicine.pricing?.mrp && medicine.pricing?.discount
     ? Math.round((medicine.pricing.discount / medicine.pricing.mrp) * 100)
@@ -56,7 +53,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
   const handleAddToCart = async () => {
     const isLoggedIn = !!localStorage.getItem('accessToken');
     if (!isLoggedIn) {
-      alert('Please login to add items to your cart');
+      alert(t('auth.loginRequired'));
       return;
     }
 
@@ -70,7 +67,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
       setTimeout(() => setShowAddedToCart(false), 2000);
     } catch (err) {
       console.error('Error adding to cart:', err);
-      alert('Failed to add item to cart. Please try again.');
+      alert(t('cart.addToCartError'));
     } finally {
       setIsAddingToCart(false);
     }
@@ -98,16 +95,35 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
     >
       <div 
         className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn shadow-xl dark:shadow-gray-800/50"
+        aria-label={t('medicines.medicineDetails')}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
+        {/* Header with language selector */}
         <div className="sticky top-0 bg-white dark:bg-gray-900 z-10 border-b dark:border-gray-800">
           <div className="flex justify-between items-center p-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Medicine Details</h2>
+            <div className="flex items-center space-x-2">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                {medicine.productName}
+              </h2>
+              <div className="flex">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); changeLanguage('en'); }}
+                  className={`px-2 py-1 text-xs rounded-l-md ${i18n.language === 'en' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'}`}
+                >
+                  EN
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); changeLanguage('hi'); }}
+                  className={`px-2 py-1 text-xs rounded-r-md ${i18n.language === 'hi' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'}`}
+                >
+                  HI
+                </button>
+              </div>
+            </div>
             <button 
               onClick={onClose}
               className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Close"
+              aria-label={t('common.close')}
             >
               <X size={24} />
             </button>
@@ -133,12 +149,14 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                           <button 
                             onClick={(e) => { e.stopPropagation(); prevImage(); }}
                             className="absolute left-2 bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-600 rounded-full p-2 shadow-md transition-colors"
+                            aria-label={t('common.previousImage')}
                           >
                             <ChevronLeft size={20} className="text-gray-800 dark:text-white" />
                           </button>
                           <button 
                             onClick={(e) => { e.stopPropagation(); nextImage(); }}
                             className="absolute right-2 bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-600 rounded-full p-2 shadow-md transition-colors"
+                            aria-label={t('common.nextImage')}
                           >
                             <ChevronRight size={20} className="text-gray-800 dark:text-white" />
                           </button>
@@ -146,7 +164,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                       )}
                     </>
                   ) : (
-                    <div className="text-gray-400 dark:text-gray-500">No image available</div>
+                    <div className="text-gray-400 dark:text-gray-500">{t('common.noImageAvailable')}</div>
                   )}
                 </div>
 
@@ -165,7 +183,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                       >
                         <img
                           src={img}
-                          alt={`Thumbnail ${idx + 1}`}
+                          alt={`${t('common.thumbnail')} ${idx + 1}`}
                           className="w-full h-full object-cover"
                         />
                       </button>
@@ -180,7 +198,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                   {/* Title and Brand */}
                   <div>
                     <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{medicine.productName}</h1>
-                    <p className="text-gray-500 dark:text-gray-400">{medicine.brandName}</p>
+                    <p className="text-gray-500 dark:text-gray-400">{t('medicines.byBrand', { brand: medicine.brandName || t('medicines.generic') })}</p>
                     
                     {/* Rating */}
                     <div className="flex items-center mt-2">
@@ -194,28 +212,35 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                           />
                         ))}
                       </div>
-                      <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">(42 reviews)</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
+                        ({t('common.reviewCount', { count: 42 })})
+                      </span>
                     </div>
                   </div>
 
                   {/* Price Section */}
                   <div className="bg-blue-50 dark:bg-blue-900/20 p-3 sm:p-4 rounded-lg">
                     <div className="flex items-baseline gap-3">
-                      <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">₹{finalPrice}</span>
+                      <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                        {t('common.currencySymbol')}{finalPrice}
+                      </span>
                       {discountPercentage > 0 && (
                         <>
                           <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                            ₹{medicine.pricing?.mrp?.toFixed(2)}
+                            {t('common.currencySymbol')}{medicine.pricing?.mrp?.toFixed(2)}
                           </span>
                           <span className="text-sm font-medium text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
-                            {discountPercentage}% OFF
+                            {t('products.discount', { discount: discountPercentage })}
                           </span>
                         </>
                       )}
                     </div>
                     {discountPercentage > 0 && (
                       <p className="text-sm text-green-600 dark:text-green-400 font-medium mt-1">
-                        Save ₹{medicine.pricing?.discount?.toFixed(2)}
+                        {t('common.saveAmount', { 
+                          amount: medicine.pricing?.discount?.toFixed(2),
+                          percentage: discountPercentage
+                        })}
                       </p>
                     )}
                   </div>
@@ -223,20 +248,22 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                   {/* Key Details */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
                     <div>
-                      <p className="text-gray-500 dark:text-gray-400">Manufacturer</p>
-                      <p className="font-medium dark:text-gray-200">{medicine.brandName || 'Not specified'}</p>
+                      <p className="text-gray-500 dark:text-gray-400">{t('medicines.manufacturer')}</p>
+                      <p className="font-medium dark:text-gray-200">{medicine.brandName || t('common.notAvailable')}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 dark:text-gray-400">Category</p>
-                      <p className="font-medium dark:text-gray-200 capitalize">{medicine.category?.toLowerCase() || 'General'}</p>
+                      <p className="text-gray-500 dark:text-gray-400">{t('common.category')}</p>
+                      <p className="font-medium dark:text-gray-200 capitalize">{medicine.category?.toLowerCase() || t('common.general')}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 dark:text-gray-400">Generic Name</p>
-                      <p className="font-medium dark:text-gray-200">{medicine.genericName || 'N/A'}</p>
+                      <p className="text-gray-500 dark:text-gray-400">{t('medicines.genericName')}</p>
+                      <p className="font-medium dark:text-gray-200">{medicine.genericName || t('common.notAvailable')}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 dark:text-gray-400">Prescription</p>
-                      <p className="font-medium dark:text-gray-200">{medicine.prescriptionRequired ? 'Required' : 'Not Required'}</p>
+                      <p className="text-gray-500 dark:text-gray-400">{t('medicines.prescription')}</p>
+                      <p className="font-medium dark:text-gray-200">
+                        {medicine.prescriptionRequired ? t('common.required') : t('common.notRequired')}
+                      </p>
                     </div>
                   </div>
 
@@ -246,16 +273,18 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                       <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
                     </div>
                     <div>
-                      <p className="font-medium text-green-800 dark:text-green-400">In Stock</p>
-                      <p className="text-sm text-green-700 dark:text-green-300">
-                        {medicine.stock?.minQuantity > 0 && ` (Min. order: ${medicine.stock.minQuantity} units)`}
-                      </p>
+                      <p className="font-medium text-green-800 dark:text-green-400">{t('common.inStock')}</p>
+                      {medicine.stock?.minQuantity > 0 && (
+                        <p className="text-sm text-green-700 dark:text-green-300">
+                          {t('common.minOrder', { quantity: medicine.stock.minQuantity })}
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   {/* Quantity Selector */}
                   <div>
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quantity</p>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.quantity')}</p>
                     <div className="flex items-center gap-4">
                       <div className="flex items-center border dark:border-gray-700 rounded-lg overflow-hidden">
                         <button 
@@ -274,7 +303,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Max 10 units</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">{t('common.maxQuantity', { max: 10 })}</span>
                     </div>
                   </div>
 
@@ -287,7 +316,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                         </div>
                         <div className="ml-3">
                           <p className="text-sm text-amber-700 dark:text-amber-400">
-                            <span className="font-medium">Prescription Required</span> - You'll need a valid prescription to purchase this medicine.
+                            <span className="font-medium">{t('medicines.prescriptionRequired')}</span> - {t('medicines.prescriptionNotice')}
                           </p>
                         </div>
                       </div>
@@ -308,19 +337,19 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                       {showAddedToCart ? (
                         <>
                           <Check size={18} />
-                          <span>Added to Cart</span>
+                          <span>{t('cart.addedToCart')}</span>
                         </>
                       ) : (
                         <>
                           <ShoppingCart size={18} />
-                          <span>{isAddingToCart ? 'Adding...' : 'Add to Cart'}</span>
+                          <span>{isAddingToCart ? t('common.adding') : t('medicines.addToCart')}</span>
                         </>
                       )}
                     </button>
                     <button 
                       onClick={(e) => { e.stopPropagation(); setIsWishlisted(!isWishlisted); }}
                       className="p-3 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                      aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                      aria-label={isWishlisted ? t('medicines.removeFromWishlist') : t('medicines.addToWishlist')}
                     >
                       <Heart 
                         size={20} 
@@ -331,28 +360,28 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
 
                   {/* Additional Info */}
                   <div className="pt-4 border-t dark:border-gray-800">
-                    <h3 className="font-medium text-gray-900 dark:text-white mb-3">Product Information</h3>
+                    <h3 className="font-medium text-gray-900 dark:text-white mb-3">{t('common.productInfo')}</h3>
                     <div className="space-y-3 text-sm">
                       <div className="flex flex-col sm:flex-row">
-                        <span className="text-gray-500 dark:text-gray-400 w-32 flex-shrink-0">Composition</span>
+                        <span className="text-gray-500 dark:text-gray-400 w-32 flex-shrink-0">{t('medicines.composition')}</span>
                         <span className="text-gray-700 dark:text-gray-300">
                           {formatComposition(medicine.composition)}
                         </span>
                       </div>
                       <div className="flex flex-col sm:flex-row">
-                        <span className="text-gray-500 dark:text-gray-400 w-32 flex-shrink-0">Dosage</span>
+                        <span className="text-gray-500 dark:text-gray-400 w-32 flex-shrink-0">{t('medicines.dosage')}</span>
                         <span className="text-gray-700 dark:text-gray-300">
                           {formatDosage(medicine.dosage)}
                         </span>
                       </div>
                       {medicine.packaging?.packSize && (
                         <div className="flex flex-col sm:flex-row">
-                          <span className="text-gray-500 dark:text-gray-400 w-32 flex-shrink-0">Packaging</span>
+                          <span className="text-gray-500 dark:text-gray-400 w-32 flex-shrink-0">{t('medicines.packSize')}</span>
                           <span className="text-gray-700 dark:text-gray-300">
                             {medicine.packaging.packSize}
                             {medicine.packaging.expiryDate && (
                               <span className="text-red-500 dark:text-red-400 ml-2">
-                                (Exp: {new Date(medicine.packaging.expiryDate).toLocaleDateString()})
+                                ({t('medicines.expiry')}: {new Date(medicine.packaging.expiryDate).toLocaleDateString()})
                               </span>
                             )}
                           </span>
@@ -364,7 +393,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                   {/* FAQs */}
                   {medicine.additionalFeatures?.faqs?.length > 0 && (
                     <div className="border-t dark:border-gray-800 pt-4">
-                      <h3 className="font-medium text-gray-900 dark:text-white mb-3">Frequently Asked Questions</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-white mb-3">{t('common.faqs')}</h3>
                       <div className="space-y-4">
                         {medicine.additionalFeatures.faqs.map((faq, i) => (
                           <div key={i} className="border dark:border-gray-700 rounded-lg overflow-hidden">
@@ -383,7 +412,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                   {/* Doctor's Advice */}
                   {medicine.additionalFeatures?.doctorAdvice && (
                     <div className="border-t dark:border-gray-800 pt-4">
-                      <h3 className="font-medium text-gray-900 dark:text-white mb-3">Doctor's Advice</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-white mb-3">{t('common.doctorsAdvice')}</h3>
                       <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                         <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{medicine.additionalFeatures.doctorAdvice}</p>
                       </div>
@@ -394,9 +423,9 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                   {medicine.additionalFeatures?.reviews?.length > 0 && (
                     <div className="border-t dark:border-gray-800 pt-4">
                       <div className="flex justify-between items-center mb-3">
-                        <h3 className="font-medium text-gray-900 dark:text-white">Customer Reviews</h3>
+                        <h3 className="font-medium text-gray-900 dark:text-white">{t('common.customerReviews')}</h3>
                         <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                          View All
+                          {t('common.viewAll')}
                         </button>
                       </div>
                       <div className="space-y-4">
@@ -407,25 +436,19 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                                 {(review.user?.charAt(0) || 'U').toUpperCase()}
                               </div>
                               <div className="ml-3">
-                                <p className="font-medium text-gray-900 dark:text-white">{review.user || 'Anonymous User'}</p>
+                                <p className="font-medium text-gray-900 dark:text-white">{review.user || t('common.anonymousUser')}</p>
                                 <div className="flex items-center">
-                                  {[1, 2, 3, 4, 5].map((star) => {
-                                    const rating = review.rating || getRandomRating();
-                                    return (
-                                      <Star
-                                        key={star}
-                                        size={14}
-                                        className={`${
-                                          star <= rating 
-                                            ? 'text-amber-400 fill-amber-400' 
-                                            : 'text-gray-300 dark:text-gray-600'
-                                        }`}
-                                      />
-                                    );
-                                  })}
-                                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                    ({getRandomReviewCount()} reviews)
-                                  </span>
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <Star
+                                      key={star}
+                                      size={14}
+                                      className={`${
+                                        star <= (review.rating || 4)
+                                          ? 'text-amber-400 fill-amber-400' 
+                                          : 'text-gray-300 dark:text-gray-600'
+                                      }`}
+                                    />
+                                  ))}
                                 </div>
                               </div>
                             </div>

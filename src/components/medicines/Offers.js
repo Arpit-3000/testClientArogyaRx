@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import offersData from '../../data/offersData';
+import { useTranslation } from 'react-i18next';
 
 const Offers = () => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -9,6 +10,7 @@ const Offers = () => {
     const touchStartX = useRef(null);
     const touchEndX = useRef(null);
     const sliderRef = useRef(null);
+    const { t } = useTranslation();
 
     const getCurrentOffers = () => {
         const start = currentPage * cardsPerPage;
@@ -61,7 +63,7 @@ const Offers = () => {
         <section className="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
             <div className="container mx-auto px-4 sm:px-6">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-8 sm:mb-12">
-                    Exclusive Offers
+                    {t('medicines.exclusiveOffers')}
                 </h2>
 
                 <div

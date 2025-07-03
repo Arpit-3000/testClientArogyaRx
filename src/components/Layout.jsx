@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Navbar from './home/Navbar';
 import Footer from './home/Footer';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -39,6 +40,8 @@ const Layout = ({ children }) => {
     };
   }, [location.pathname, isMobile]);
 
+  const { t } = useTranslation();
+  
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Skip to main content link for better accessibility */}
@@ -46,7 +49,7 @@ const Layout = ({ children }) => {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
       >
-        Skip to main content
+        {t('a11y.skipToContent')}
       </a>
       
       {/* Header with Navbar */}
@@ -57,7 +60,7 @@ const Layout = ({ children }) => {
       <ScrollToTop>
         <main 
           id="main-content"
-          className={`flex-grow pt-4 pb-8 px-3 sm:px-4 md:px-6 lg:px-8 w-full mx-auto ${
+          className={`flex-grow w-full mx-auto pt-20 pb-8 px-3 sm:px-4 md:px-6 lg:px-8 ${
             isMobile ? 'max-w-full' : 'max-w-7xl'
           }`}
         >

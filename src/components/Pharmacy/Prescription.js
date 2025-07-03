@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const UploadPrescription = () => {
+    const { t } = useTranslation();
     const fileInputRef = useRef(null);
 
     const handleUploadClick = () => {
@@ -40,7 +42,7 @@ const UploadPrescription = () => {
 
                 {/* Tab Header */}
                 <div className="bg-black dark:bg-gray-900 text-white dark:text-gray-100 px-4 py-2 rounded-t-md w-fit mb-3 sm:mb-4">
-                    Order with Prescription
+                    {t('uploadPrescription.tabHeader')}
                 </div>
 
                 {/* Upload Box */}
@@ -64,10 +66,10 @@ const UploadPrescription = () => {
                             />
                         </svg>
                         <span className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
-                            Click to upload prescription
+                            {t('uploadPrescription.uploadBox.mainText')}
                         </span>
                         <span className="text-xs text-gray-500 dark:text-gray-400">
-                            JPG, PNG, or PDF (Max. 5MB)
+                            {t('uploadPrescription.uploadBox.subText')}
                         </span>
                     </div>
                 </div>
@@ -75,14 +77,16 @@ const UploadPrescription = () => {
                 {/* Or Separator */}
                 <div className="flex items-center my-3 sm:my-4">
                     <hr className="flex-grow border-gray-300 dark:border-gray-600" />
-                    <span className="mx-3 text-gray-400 dark:text-gray-500 text-sm">OR</span>
+                    <span className="mx-3 text-gray-400 dark:text-gray-500 text-sm">
+                        {t('uploadPrescription.orSeparator')}
+                    </span>
                     <hr className="flex-grow border-gray-300 dark:border-gray-600" />
                 </div>
 
                 {/* Link Input */}
                 <input
                     type="text"
-                    placeholder="Enter Prescription Link"
+                    placeholder={t('uploadPrescription.linkInputPlaceholder')}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-700 dark:text-gray-100 mb-3 sm:mb-4 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
                 />
 
@@ -106,7 +110,7 @@ const UploadPrescription = () => {
                             d="M7 16V4m0 0l-4 4m4-4l4 4m4 4v8m0 0l-4-4m4 4l4-4"
                         />
                     </svg>
-                    Upload File
+                    {t('uploadPrescription.uploadButton')}
                 </button>
             </div>
         </div>

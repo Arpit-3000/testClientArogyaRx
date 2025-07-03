@@ -1,39 +1,42 @@
 import React from 'react';
 import { ShieldCheck, Syringe, FileText, UserCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Middleone = () => {
+    const { t } = useTranslation();
     const steps = [
         {
             icon: <UserCheck className="w-5 h-5" />,
-            title: "Vaccinated Phlebotomists",
-            description: "Only phlebotomists who have been vaccinated are assigned tasks.",
+            title: t('benefits.steps.vaccinated.title'),
+            description: t('benefits.steps.vaccinated.description'),
             color: "blue"
         },
         {
             icon: <ShieldCheck className="w-5 h-5" />,
-            title: "Maintains Safety Protocols",
-            description: "Follows safety protocols: mask, shield, gloves, and sanitization.",
+            title: t('benefits.steps.safety.title'),
+            description: t('benefits.steps.safety.description'),
             color: "green"
         },
         {
             icon: <Syringe className="w-5 h-5" />,
-            title: "Sample Collection",
-            description: "Samples are collected using barcoded vials for identification.",
+            title: t('benefits.steps.sample.title'),
+            description: t('benefits.steps.sample.description'),
             color: "red"
         },
         {
             icon: <FileText className="w-5 h-5" />,
-            title: "Accurate Digital Reports",
-            description: "Digital reports are precise and securely identified via barcodes.",
+            title: t('benefits.steps.reports.title'),
+            description: t('benefits.steps.reports.description'),
             color: "purple"
         },
     ];
 
+
     const benefits = [
-        { text: "Fast & Hassle-Free", icon: "⚡" },
-        { text: "Book Test with One Click", icon: "🖱️" },
-        { text: "At Home Collection", icon: "🏠" },
-        { text: "100% Safe & Secure", icon: "🔒" },
+        { text: t('benefits.benefitsList.fast'), icon: "⚡" },
+        { text: t('benefits.benefitsList.booking'), icon: "🖱️" },
+        { text: t('benefits.benefitsList.homeCollection'), icon: "🏠" },
+        { text: t('benefits.benefitsList.safe'), icon: "🔒" },
     ];
 
     const getColorClasses = (color) => {
@@ -67,10 +70,10 @@ const Middleone = () => {
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-10 sm:mb-12 lg:mb-16">
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                        Benefits with Arogya RX
+                        {t('benefits.title')}
                     </h2>
                     <p className="text-sm sm:text-base text-blue-600 dark:text-blue-400">
-                        Get 10% Health Cashback* <span className="text-xs">T&C Apply</span>
+                    {t('benefits.subtitle')} <span className="text-xs">{t('benefits.terms')}</span>
                     </p>
                 </div>
 
@@ -78,7 +81,7 @@ const Middleone = () => {
                     {/* Left side: How it works */}
                     <div className="space-y-6 sm:space-y-8">
                         <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
-                            How does it work?
+                            {t('benefits.howItWorks')}
                         </h3>
                         <div className="space-y-4 sm:space-y-6">
                             {steps.map((step, index) => {
@@ -108,7 +111,7 @@ const Middleone = () => {
                     {/* Right side: Why book lab tests */}
                     <div className="space-y-6 sm:space-y-8">
                         <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
-                            Why book lab tests with Arogya RX?
+                            {t('benefits.whyBook')}
                         </h3>
                         <div className="grid grid-cols-2 gap-4 sm:gap-6">
                             {benefits.map((benefit, index) => (
@@ -129,7 +132,7 @@ const Middleone = () => {
                         {/* Additional Info */}
                         <div className="mt-6 sm:mt-8 p-4 sm:p-5 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                             <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
-                                <span className="font-semibold text-blue-600 dark:text-blue-400">Note:</span> Our phlebotomists follow strict safety measures including temperature checks before every visit.
+                                <span className="font-semibold text-blue-600 dark:text-blue-400">{t('benefits.note')}:</span> {t('benefits.noteText')}
                             </p>
                         </div>
                     </div>
