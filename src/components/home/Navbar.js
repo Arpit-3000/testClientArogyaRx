@@ -97,6 +97,8 @@ const Navbar = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
+    // Dispatch a storage event to update other tabs/windows
+    window.dispatchEvent(new Event('storage'));
     setUserName(null);
     setIsUserDropdownOpen(false);
     setMobileMenuOpen(false);
@@ -125,12 +127,25 @@ const Navbar = () => {
     };
   }, []);
 
-  // Check user login status
+  // Check user login status and listen for storage changes
   useEffect(() => {
-    const name = localStorage.getItem('userName');
-    if (name) {
+    const updateUserName = () => {
+      const name = localStorage.getItem('userName');
       setUserName(name);
-    }
+    };
+
+    // Initial load
+    updateUserName();
+
+    // Listen for storage events to update name when changed in other tabs/windows
+    const handleStorageChange = (e) => {
+      if (e.key === 'userName') {
+        updateUserName();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   // Body overflow control for mobile menu

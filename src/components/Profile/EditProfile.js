@@ -101,6 +101,12 @@ const EditProfile = ({ profileData }) => {
         },
       });
 
+      // Update localStorage with the new name
+      const fullName = `${profile.firstName} ${profile.lastName}`.trim();
+      localStorage.setItem('userName', fullName);
+      // Trigger storage event to update other components
+      window.dispatchEvent(new Event('storage'));
+
       toast.success(t("edt.editProfile.notifications.success"));
       setOriginalProfile(profile);
       setIsChanged(false);
