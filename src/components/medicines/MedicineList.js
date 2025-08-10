@@ -41,7 +41,7 @@ const MedicineList = () => {
         quantity,
       });
       alert(`"${medicine.productName}" added to cart successfully!`);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       console.error('Error adding to cart:', err);
       alert('Failed to add item to cart. Please try again.');

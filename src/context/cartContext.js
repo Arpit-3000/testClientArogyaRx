@@ -51,6 +51,16 @@ export const CartProvider = ({ children }) => {
       alert('Failed to update cart. Please try again.');
     }
   };
+  const addToCart = async (medicineId, quantity = 1) => {
+    try {
+      await API.post('/cart/add', { medicineId, quantity });
+      await updateCart(); // refresh the cart
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      alert('Failed to add item to cart. Please try again.');
+    }
+  };
+  
 
   const handleQuantityChange = async (itemId, change) => {
     try {
@@ -94,6 +104,7 @@ export const CartProvider = ({ children }) => {
         loading,
         handleQuantityChange,
         handleRemoveItem,
+        addToCart,
       }}
     >
       {children}

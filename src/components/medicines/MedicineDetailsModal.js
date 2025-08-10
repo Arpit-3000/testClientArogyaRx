@@ -1,22 +1,30 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, ChevronLeft, ChevronRight, ShoppingCart, Plus, Minus, Star, Heart, Share2, AlertTriangle, Check } from 'lucide-react';
 import API from '../../services/api';
+import { useCart } from '../../context/cartContext';
 
 const MedicineDetailsModal = ({ medicine, onClose }) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showAddedToCart, setShowAddedToCart] = useState(false);
+  const { cartItems, addToCart, handleQuantityChange, handleRemoveItem } = useCart();
   
   // Function to change language
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
+
+  useEffect(() => {
+    const cartItem = cartItems.find(item => item.medicineId?._id === medicine._id);
+    setQuantity(cartItem ? cartItem.quantity : 0);
+  }, [cartItems, medicine._id]);
+  
 
   // Helper function to format composition
   const formatComposition = (composition) => {
@@ -50,29 +58,24 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
     ? (medicine.pricing.mrp - medicine.pricing.discount).toFixed(2)
     : (medicine.pricing?.mrp || 0).toFixed(2);
 
-  const handleAddToCart = async () => {
-    const isLoggedIn = !!localStorage.getItem('accessToken');
-    if (!isLoggedIn) {
-      alert(t('auth.loginRequired'));
-      return;
-    }
-
-    try {
-      setIsAddingToCart(true);
-      await API.post('/cart/add', {
-        medicineId: medicine._id,
-        quantity,
-      });
-      setShowAddedToCart(true);
-      setTimeout(() => setShowAddedToCart(false), 2000);
-    } catch (err) {
-      console.error('Error adding to cart:', err);
-      alert(t('cart.addToCartError'));
-    } finally {
-      setIsAddingToCart(false);
-    }
-  };
-
+    const handleAddToCart = async () => {
+      const isLoggedIn = !!localStorage.getItem('accessToken');
+      if (!isLoggedIn) {
+        alert(t('auth.loginRequired'));
+        return;
+      }
+      try {
+        setIsAddingToCart(true);
+        await addToCart(medicine._id, 1); 
+        setShowAddedToCart(true);
+        setTimeout(() => setShowAddedToCart(false), 2000);
+      } catch (err) {
+        console.error('Error adding to cart:', err);
+      } finally {
+        setIsAddingToCart(false);
+      }
+    };
+  
   const nextImage = () => {
     setCurrentImageIndex(prev => 
       prev === (medicine.images?.length - 1 || 0) ? 0 : prev + 1
@@ -85,9 +88,21 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
     );
   };
 
-  const increaseQuantity = () => setQuantity(prev => Math.min(prev + 1, 10));
-  const decreaseQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
-
+  const increaseQuantity = async () => {
+    if (quantity > 0) {
+      await handleQuantityChange(medicine._id, 1);
+    } else {
+      await addToCart(medicine._id, 1);
+    }
+  };
+  
+  const decreaseQuantity = async () => {
+    if (quantity > 1) {
+      await handleQuantityChange(medicine._id, -1);
+    } else if (quantity === 1) {
+      await handleRemoveItem(medicine._id);
+    }
+  };
   return (
     <div 
       className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-50 flex justify-center items-start p-2 sm:p-4 overflow-y-auto"
@@ -230,7 +245,7 @@ const MedicineDetailsModal = ({ medicine, onClose }) => {
                             {t('common.currencySymbol')}{medicine.pricing?.mrp?.toFixed(2)}
                           </span>
                           <span className="text-sm font-medium text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
-                            {t('products.discount', { discount: discountPercentage })}
+                            {t('products.discount', { percentage: discountPercentage })}
                           </span>
                         </>
                       )}

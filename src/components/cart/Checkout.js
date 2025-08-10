@@ -28,7 +28,7 @@ function Checkout() {
         const response = await API.get('/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        
+
         if (response.data?.address) {
           setUserAddress(response.data.address);
           if (response.data.address.country === undefined) {
@@ -172,7 +172,7 @@ function Checkout() {
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
               {t('checkout.deliveryInfo')}
             </h2>
-            
+
             {userAddress && (
               <div className="mb-4 flex items-center">
                 <input
@@ -191,49 +191,49 @@ function Checkout() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
-                <InputField 
-                  label={t('checkout.fields.street')} 
-                  name="street" 
-                  value={formData.street} 
+                <InputField
+                  label={t('checkout.fields.street')}
+                  name="street"
+                  value={formData.street}
                   onChange={handleInputChange}
                   disabled={formData.useDefaultAddress}
                 />
               </div>
-              <InputField 
-                label={t('checkout.fields.city')} 
-                name="city" 
-                value={formData.city} 
+              <InputField
+                label={t('checkout.fields.city')}
+                name="city"
+                value={formData.city}
                 onChange={handleInputChange}
                 disabled={formData.useDefaultAddress}
               />
-              <InputField 
-                label={t('checkout.fields.state')} 
-                name="state" 
-                value={formData.state} 
+              <InputField
+                label={t('checkout.fields.state')}
+                name="state"
+                value={formData.state}
                 onChange={handleInputChange}
                 disabled={formData.useDefaultAddress}
               />
-              <InputField 
-                label={t('checkout.fields.zip')} 
-                name="zip" 
-                value={formData.zip} 
+              <InputField
+                label={t('checkout.fields.zip')}
+                name="zip"
+                value={formData.zip}
                 onChange={handleInputChange}
                 disabled={formData.useDefaultAddress}
               />
-              <InputField 
-                label={t('checkout.fields.country')} 
-                name="country" 
-                value={formData.country} 
+              <InputField
+                label={t('checkout.fields.country')}
+                name="country"
+                value={formData.country}
                 onChange={handleInputChange}
                 disabled={formData.useDefaultAddress}
               />
               <div className="md:col-span-2">
-                <InputField 
-                  label={t('checkout.fields.phone')} 
-                  name="phone" 
-                  value={formData.phone} 
-                  onChange={handleInputChange} 
-                  type="tel" 
+                <InputField
+                  label={t('checkout.fields.phone')}
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  type="tel"
                 />
               </div>
             </div>
@@ -246,13 +246,30 @@ function Checkout() {
             </h2>
             <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300">
               {cartItems.map((item, index) => (
-                <div key={index} className="flex justify-between">
-                  <span>
-                    {item.productName} × {item.quantity}
+                <div
+                  key={index}
+                  className="grid grid-cols-3 gap-4 items-center py-2 border-b border-gray-200 dark:border-gray-700"
+                >
+                  {/* Product Name */}
+                  <span
+                    className="truncate"
+                    title={item.medicineId.productName}
+                  >
+                    {item.medicineId.productName}
                   </span>
-                  <span>₹{(item.price * item.quantity).toFixed(2)}</span>
+
+                  {/* Price x Quantity */}
+                  <span className="text-center">
+                    ₹ {item.price} x {item.quantity}
+                  </span>
+
+                  {/* Total Price */}
+                  <span className="text-right font-semibold">
+                    ₹ {(item.price * item.quantity).toFixed(2)}
+                  </span>
                 </div>
               ))}
+
               <hr className="border-gray-200 dark:border-gray-700" />
               <SummaryLine label={`${t('checkout.subtotal')}:`} value={`₹${subtotal.toFixed(2)}`} />
               <SummaryLine label={`${t('checkout.deliveryFee')}:`} value={`₹${deliveryFee.toFixed(2)}`} />
@@ -262,11 +279,10 @@ function Checkout() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`mt-6 w-full py-3 rounded-xl font-medium transition duration-300 text-white ${
-                isLoading 
-                  ? 'bg-orange-300 dark:bg-orange-600 cursor-not-allowed' 
+              className={`mt-6 w-full py-3 rounded-xl font-medium transition duration-300 text-white ${isLoading
+                  ? 'bg-orange-300 dark:bg-orange-600 cursor-not-allowed'
                   : 'bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800'
-              }`}
+                }`}
             >
               {isLoading ? t('checkout.placingOrder') : t('checkout.placeOrder')}
             </button>
@@ -290,11 +306,10 @@ const InputField = ({ label, name, value, onChange, type = 'text', disabled = fa
       onChange={onChange}
       required
       disabled={disabled}
-      className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 ${
-        disabled 
-          ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600' 
+      className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 ${disabled
+          ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600'
           : 'bg-white dark:bg-gray-700 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-green-400 dark:focus:ring-green-500'
-      }`}
+        }`}
     />
   </div>
 );
